@@ -1,0 +1,362 @@
+/* stylelint-disable */
+
+/*
+ * Australia Post Newsroom — Global Styles
+ * Design system matched to ptest.npe.auspost.com.au
+ * Tokens extracted from auspost-aemaacs-program clientlib-site.css
+ */
+
+/* ===== FONT FACE DECLARATIONS ===== */
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-RegularItalic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-MediumItalic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'APTypeProText';
+  src: url('/fonts/APTypeProText-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  /* ---- Brand: Auspost Red ---- */
+  --auspost-red-100: #fff4f4;
+  --auspost-red-200: #fbe8e9;
+  --auspost-red-500: #dc1928;
+  --auspost-red-600: #b01420;
+
+  /* ---- Ink (text hierarchy) ---- */
+  --ink-600: #31313d;
+  --ink-700: #212129;
+  --ink-800: #202027;
+  --ink-900: #0d0d10;
+
+  /* ---- Neutral scale ---- */
+  --neutral-0: #fff;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #f4f4f4;
+  --neutral-300: #eee;
+  --neutral-400: #e2e2e2;
+  --neutral-500: #919194;
+  --neutral-600: #6d6d72;
+  --neutral-700: #4d4d54;
+  --neutral-800: #2b2b32;
+  --neutral-900: #000;
+
+  /* ---- Secondary accents ---- */
+  --eucalyptus-100: #f1f1ef;
+  --eucalyptus-200: #e7e7e4;
+  --eucalyptus-500: #4e4e46;
+  --dusty-blue-100: #e6edf2;
+  --dusty-blue-200: #d4dee7;
+  --dusty-blue-500: #748fa4;
+  --mint-100: #edf2ef;
+  --mint-200: #dce5e0;
+  --mint-500: #6f8b7b;
+  --wattle-100: #fcf3d6;
+  --wattle-200: #f9e4a5;
+  --wattle-500: #e4b011;
+  --orange-500: #d36831;
+  --ruby-red-500: #952425;
+
+  /* ---- System colors ---- */
+  --system-red-100: #f2d0d5;
+  --system-red-700: #bd152e;
+  --system-green-100: #d2eadc;
+  --system-green-700: #158744;
+  --system-blue-100: #d7e7f7;
+  --system-blue-700: #1e76ce;
+  --system-yellow-100: #fbedd2;
+  --system-yellow-700: #b25f00;
+  --system-purple-100: #e5dff8;
+  --system-purple-700: #7d5fde;
+
+  /* ---- Semantic: Background ---- */
+  --bg-primary: var(--neutral-0);
+  --bg-secondary: var(--neutral-200);
+  --bg-surface: var(--neutral-200);
+  --bg-brand: var(--auspost-red-500);
+  --bg-brand-alternate: var(--auspost-red-600);
+  --bg-inverted: var(--ink-700);
+  --bg-disabled: var(--neutral-400);
+  --bg-primary-button: var(--auspost-red-500);
+  --bg-primary-button-hover: var(--auspost-red-600);
+  --bg-secondary-button: var(--neutral-300);
+  --bg-secondary-button-hover: var(--neutral-400);
+
+  /* ---- Semantic: Text ---- */
+  --text-primary: var(--ink-700);
+  --text-secondary: var(--ink-600);
+  --text-tertiary: var(--neutral-700);
+  --text-link: var(--auspost-red-500);
+  --text-link-hover: var(--auspost-red-500);
+  --text-inverted: var(--neutral-0);
+  --text-disabled: var(--neutral-500);
+  --text-error: var(--system-red-700);
+  --text-success: var(--system-green-700);
+
+  /* ---- Semantic: Border ---- */
+  --border-primary: var(--neutral-400);
+  --border-secondary: var(--neutral-500);
+  --border-accent: var(--auspost-red-500);
+  --border-input: var(--neutral-500);
+  --border-input-active: var(--ink-600);
+  --border-focus: var(--neutral-900);
+  --border-disabled: var(--neutral-300);
+
+  /* ---- Typography ---- */
+  --body-font-family: 'APTypeProText', -apple-system, sans-serif;
+  --heading-font-family: 'APTypeProText', -apple-system, sans-serif;
+  --fixed-font-family: 'Roboto Mono', menlo, consolas, monospace;
+
+  /* ---- Font sizes ---- */
+  --body-font-size-m: 1rem;
+  --body-font-size-s: 0.875rem;
+  --body-font-size-xs: 0.75rem;
+  --heading-font-size-xxl: 2rem;
+  --heading-font-size-xl: 1.75rem;
+  --heading-font-size-l: 1.5rem;
+  --heading-font-size-m: 1.25rem;
+  --heading-font-size-s: 1.125rem;
+  --heading-font-size-xs: 1rem;
+
+  /* ---- Layout ---- */
+  --max-content-width: 1200px;
+  --section-spacing: 2rem;
+  --nav-height: 64px;
+
+  /* ---- Radii & shadows ---- */
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 12px;
+  --radius-xl: 16px;
+  --card-shadow: 0 1px 3px rgb(0 0 0 / 8%), 0 1px 2px rgb(0 0 0 / 12%);
+  --card-shadow-hover: 0 4px 12px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 8%);
+}
+
+/* ===== RESET ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: none;
+}
+
+body.appear {
+  display: block;
+}
+
+header {
+  height: var(--nav-height);
+}
+
+/* ===== HEADINGS ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  scroll-margin: calc(var(--nav-height) + 1em);
+}
+
+h1 { font-size: var(--heading-font-size-xxl); }
+h2 { font-size: var(--heading-font-size-xl); }
+h3 { font-size: var(--heading-font-size-l); }
+h4 { font-size: var(--heading-font-size-m); }
+h5 { font-size: var(--heading-font-size-s); }
+h6 { font-size: var(--heading-font-size-xs); }
+
+/* ===== BODY TEXT ===== */
+p, dl, ol, ul, pre, blockquote {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* ===== LINKS ===== */
+a:any-link {
+  color: var(--text-link);
+  text-decoration: underline;
+}
+
+a:hover {
+  color: var(--text-link-hover);
+  text-decoration: none;
+}
+
+/* ===== BUTTONS (Auspost pattern) ===== */
+a.button:any-link,
+button.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.75em 1.5em;
+  min-height: 48px;
+  border: 2px solid var(--auspost-red-500);
+  border-radius: var(--radius-m);
+  background-color: var(--bg-primary-button);
+  color: var(--text-inverted);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+a.button:hover,
+button.button:hover {
+  background-color: var(--bg-primary-button-hover);
+  border-color: var(--bg-primary-button-hover);
+  text-decoration: none;
+}
+
+/* Secondary button */
+a.button.secondary:any-link,
+button.button.secondary {
+  background-color: transparent;
+  border-color: var(--ink-600);
+  color: var(--text-primary);
+}
+
+a.button.secondary:hover,
+button.button.secondary:hover {
+  background-color: var(--bg-secondary-button-hover);
+  border-color: var(--ink-800);
+}
+
+/* ===== IMAGES ===== */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== SECTIONS ===== */
+main .section {
+  padding: var(--section-spacing) 1rem;
+}
+
+main .section > div {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+main .section.highlight {
+  background-color: var(--bg-secondary);
+}
+
+main .section.dark {
+  background-color: var(--bg-inverted);
+  color: var(--text-inverted);
+}
+
+main .section.dark h1,
+main .section.dark h2,
+main .section.dark h3,
+main .section.dark h4 {
+  color: var(--text-inverted);
+}
+
+main .section.dark a:any-link {
+  color: var(--text-inverted);
+}
+
+/* ===== ARTICLE PAGE AUTO-DECORATION ===== */
+main .article-date {
+  color: var(--text-tertiary);
+  font-size: var(--body-font-size-s);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+main .article-category {
+  display: inline-block;
+  color: var(--auspost-red-500);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Default content: image captions */
+main .section p > em:only-child {
+  display: block;
+  font-size: var(--body-font-size-s);
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (width >= 600px) {
+  :root {
+    --nav-height: 82px;
+    --heading-font-size-xxl: 2.5rem;
+    --heading-font-size-xl: 2rem;
+    --heading-font-size-l: 1.75rem;
+  }
+}
+
+@media (width >= 900px) {
+  :root {
+    --nav-height: 96px;
+    --heading-font-size-xxl: 3rem;
+    --section-spacing: 3rem;
+  }
+
+  main .section {
+    padding: var(--section-spacing) 2rem;
+  }
+}

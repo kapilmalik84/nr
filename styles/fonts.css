@@ -1,0 +1,47 @@
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/APTypeProText-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/APTypeProText-RegularItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/APTypeProText-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: italic;
+  font-weight: 500;
+  src: url('/fonts/APTypeProText-MediumItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/APTypeProText-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: APTypeProText;
+  font-style: italic;
+  font-weight: 700;
+  src: url('/fonts/APTypeProText-BoldItalic.woff2') format('woff2');
+}

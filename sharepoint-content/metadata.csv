@@ -1,0 +1,5 @@
+URL,title,description,image,og:type
+/**,Australia Post Newsroom,Latest news media releases and updates from Australia Post,https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg,website
+/section/news/**,News | Australia Post Newsroom,Latest news from Australia Post,,website
+/section/stamps/**,Stamps | Australia Post Newsroom,Stamp releases and collectables from Australia Post,,website
+/articles/**,,,, article

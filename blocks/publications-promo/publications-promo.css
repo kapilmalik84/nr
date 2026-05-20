@@ -1,0 +1,33 @@
+/* Publications Promo — ptest design */
+main .publications-promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  background: var(--neutral-100);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+main .publications-promo .promo-image {
+  max-width: 300px;
+}
+
+main .publications-promo .promo-image img {
+  width: 100%;
+  border-radius: var(--radius-l);
+}
+
+main .publications-promo .promo-text h4 {
+  margin-top: 0;
+  font-size: var(--heading-font-size-m);
+  color: var(--ink-900);
+}
+
+@media (width >= 600px) {
+  main .publications-promo {
+    flex-direction: row;
+    text-align: left;
+  }
+}
