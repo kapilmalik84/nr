@@ -106,6 +106,10 @@ async function loadEager(doc) {
   setup();
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+
+  // Load critical CSS
+  const styles = loadCSS(`${window.hlx.codeBasePath}/styles/styles.css`);
+
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
@@ -113,6 +117,8 @@ async function loadEager(doc) {
     await loadBlock(document.querySelector('.block'));
     await waitForFirstImage(main);
   }
+
+  await styles;
 }
 
 /**
