@@ -112,7 +112,16 @@ async function loadEager(doc) {
 
   const main = doc.querySelector('main');
   if (main) {
-    decorateMain(main);
+    // Auto-load homepage template for root path
+    const { pathname } = window.location;
+    if (pathname === '/' || pathname === '/index') {
+      const templateCSS = loadCSS(`${window.hlx.codeBasePath}/templates/homepage/homepage.css`);
+      const mod = await import(`${window.hlx.codeBasePath}/templates/homepage/homepage.js`);
+      if (mod.default) await mod.default(doc);
+      await templateCSS;
+    } else {
+      decorateMain(main);
+    }
     document.body.classList.add('appear');
     await loadBlock(document.querySelector('.block'));
     await waitForFirstImage(main);
