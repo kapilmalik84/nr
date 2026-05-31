@@ -1,26 +1,20 @@
-/**
- * Publications Promo block — CTA panel with image + heading + button.
- * Content model (Standalone):
- *   | Publications Promo |
- *   | ![image](tablet.jpg) | **View our latest publications** [Read more](url) |
- *
- * @param {Element} block the publications-promo block element
- */
-export default async function decorate(block) {
-  const cols = [...block.children][0]?.children;
-  if (!cols || cols.length < 2) return;
+export default function decorate(block) {
+  const row = block.children[0];
+  if (!row) return;
+  const cols = [...row.children];
 
   const imageCol = document.createElement('div');
   imageCol.className = 'promo-image';
-  const picture = cols[0].querySelector('picture');
-  if (picture) imageCol.append(picture);
+  const pic = cols[0] ? cols[0].querySelector('picture') : null;
+  if (pic) imageCol.append(pic);
 
   const textCol = document.createElement('div');
   textCol.className = 'promo-text';
-  textCol.append(...cols[1].childNodes);
+  if (cols[1]) textCol.append(...[...cols[1].childNodes]);
 
   const cta = textCol.querySelector('a');
   if (cta) cta.classList.add('button');
 
-  block.replaceChildren(imageCol, textCol);
+  block.textContent = '';
+  block.append(imageCol, textCol);
 }

@@ -1,14 +1,12 @@
-/* Quick Links — ptest design */
 main .quick-links .links-panel {
-  background: var(--neutral-100);
-  padding: var(--space-xl);
-  border-radius: var(--radius-xl);
+  background: var(--neutral-100, #f5f5f5);
+  padding: 1.5rem;
+  border-radius: var(--radius-xl, 24px);
 }
 
 main .quick-links .links-title {
-  margin: 0 0 var(--space-m);
-  font-size: var(--heading-font-size-m);
-  color: var(--ink-900);
+  margin: 0 0 1rem;
+  color: var(--ink-900, #0d0d10);
 }
 
 main .quick-links .links-list {
@@ -18,8 +16,8 @@ main .quick-links .links-list {
 }
 
 main .quick-links .links-list li {
-  padding: var(--space-s) 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color, #e2e2e2);
 }
 
 main .quick-links .links-list li:last-child {
@@ -27,21 +25,13 @@ main .quick-links .links-list li:last-child {
 }
 
 main .quick-links .links-list a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--link-color);
+  color: var(--link-color, #dc1928);
   font-weight: 500;
-  font-size: var(--body-font-size-s);
+  font-size: 0.875rem;
 }
 
 main .quick-links .links-list a[target="_blank"]::after {
-  content: '↗';
+  content: ' ↗';
   font-size: 0.75em;
-  margin-left: var(--space-s);
   opacity: 0.5;
-}
-
-main .quick-links .links-list a:hover {
-  text-decoration: underline;
 }

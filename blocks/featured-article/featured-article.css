@@ -1,44 +1,36 @@
-/* Featured Article — ptest design */
 main .featured-article {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xl);
+  gap: 1.5rem;
 }
 
 main .featured-article .feature-image {
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-xl, 24px);
   overflow: hidden;
 }
 
-main .featured-article .feature-image picture,
 main .featured-article .feature-image img {
   width: 100%;
   display: block;
 }
 
-main .featured-article .feature-text {
-  display: flex;
-  flex-direction: column;
-}
-
 main .featured-article .feature-text h2,
 main .featured-article .feature-text h3 {
   margin-top: 0;
-  font-size: var(--heading-font-size-l);
 }
 
 main .featured-article .feature-text h2 a,
 main .featured-article .feature-text h3 a {
-  color: var(--ink-900);
+  color: var(--ink-900, #212129);
 }
 
 main .featured-article .feature-text h2 a:hover,
 main .featured-article .feature-text h3 a:hover {
-  color: var(--link-color);
+  color: var(--link-color, #dc1928);
 }
 
 main .featured-article .feature-text p {
-  color: var(--text-color-muted);
+  color: var(--text-color-muted, #6d6d72);
   line-height: 1.7;
 }
 

@@ -1,15 +1,5 @@
-/**
- * Quick Links block — sidebar panel with list of links.
- * Content model (Standalone):
- *   | Quick Links |
- *   | **Quick links** |
- *   | [About Us](https://auspost.com.au/about-us) |
- *   | [Fast facts](https://auspost.com.au/...) |
- *
- * @param {Element} block the quick-links block element
- */
-export default async function decorate(block) {
-  const heading = block.querySelector('h2, h3, h4, strong');
+export default function decorate(block) {
+  const heading = block.querySelector('strong, h3, h4');
   const links = block.querySelectorAll('a');
 
   const panel = document.createElement('div');
@@ -25,12 +15,12 @@ export default async function decorate(block) {
   if (links.length) {
     const list = document.createElement('ul');
     list.className = 'links-list';
-    links.forEach((link) => {
+    [...links].forEach((link) => {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = link.href;
       a.textContent = link.textContent;
-      if (link.hostname !== window.location.hostname) {
+      if (link.hostname && link.hostname !== window.location.hostname) {
         a.target = '_blank';
         a.rel = 'noopener';
       }
@@ -40,5 +30,6 @@ export default async function decorate(block) {
     panel.append(list);
   }
 
-  block.replaceChildren(panel);
+  block.textContent = '';
+  block.append(panel);
 }

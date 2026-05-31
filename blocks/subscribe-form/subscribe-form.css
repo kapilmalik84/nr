@@ -1,6 +1,5 @@
-/* Subscribe Form — ptest design */
 main .subscribe-form-wrapper {
-  background: var(--neutral-100);
+  background: var(--neutral-100, #f5f5f5);
 }
 
 main .subscribe-form .subscribe-container {
@@ -11,37 +10,35 @@ main .subscribe-form .subscribe-container {
 
 main .subscribe-form .subscribe-text h3 {
   margin-top: 0;
-  font-size: var(--heading-font-size-l);
-  color: var(--ink-900);
 }
 
 main .subscribe-form .subscribe-text p {
-  color: var(--text-color-muted);
+  color: var(--text-color-muted, #6d6d72);
 }
 
-main .subscribe-form .subscribe-form {
+main .subscribe-form .subscribe-inputs {
   display: flex;
-  gap: var(--space-s);
-  margin-top: var(--space-l);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }
 
-main .subscribe-form .subscribe-form input[type="email"] {
+main .subscribe-form .subscribe-inputs input[type="email"] {
   flex: 1;
-  padding: 0.75rem var(--space-m);
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-pill);
-  font-family: var(--body-font-family);
-  font-size: var(--body-font-size-m);
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color, #e2e2e2);
+  border-radius: 1000px;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
-main .subscribe-form .subscribe-form input[type="email"]:focus {
+main .subscribe-form .subscribe-inputs input[type="email"]:focus {
   outline: none;
-  border-color: var(--auspost-red-500);
+  border-color: var(--link-color, #dc1928);
 }
 
 main .subscribe-form .subscribe-status {
-  font-size: var(--body-font-size-s);
-  margin-top: var(--space-m);
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
   min-height: 1.5em;
 }
 
@@ -50,11 +47,11 @@ main .subscribe-form .subscribe-status.success {
 }
 
 main .subscribe-form .subscribe-status.error {
-  color: var(--auspost-red-500);
+  color: var(--auspost-red-500, #dc1928);
 }
 
 @media (width < 600px) {
-  main .subscribe-form .subscribe-form {
+  main .subscribe-form .subscribe-inputs {
     flex-direction: column;
   }
 }

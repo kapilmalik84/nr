@@ -1,8 +1,7 @@
-/* Image Gallery — ptest design */
 main .image-gallery .gallery-viewport {
   overflow: hidden;
-  border-radius: var(--radius-l);
-  background: var(--neutral-100);
+  border-radius: var(--radius-l, 16px);
+  background: var(--neutral-100, #f5f5f5);
 }
 
 main .image-gallery .gallery-track {
@@ -16,52 +15,46 @@ main .image-gallery .gallery-slide {
   margin: 0;
 }
 
-main .image-gallery .gallery-slide picture,
 main .image-gallery .gallery-slide img {
   width: 100%;
   display: block;
 }
 
 main .image-gallery .gallery-slide figcaption {
-  padding: var(--space-m);
-  font-size: var(--body-font-size-s);
-  color: var(--text-color-muted);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-color-muted, #6d6d72);
   font-style: italic;
-  background: var(--neutral-0);
 }
 
 main .image-gallery .gallery-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-m);
-  padding: var(--space-m) 0;
+  gap: 1rem;
+  padding: 0.75rem 0;
 }
 
 main .image-gallery .gallery-controls button {
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-pill);
-  background: var(--neutral-0);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-color, #e2e2e2);
+  border-radius: 50%;
+  background: var(--neutral-0, #fff);
   font-size: 1.25rem;
-  line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s, border-color 0.15s;
 }
 
 main .image-gallery .gallery-controls button:hover {
-  background-color: var(--neutral-100);
-  border-color: var(--neutral-500);
+  background: var(--neutral-100, #f5f5f5);
 }
 
 main .image-gallery .gallery-counter {
-  font-size: var(--body-font-size-s);
-  color: var(--text-color-muted);
-  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-color-muted, #6d6d72);
   min-width: 4rem;
   text-align: center;
 }

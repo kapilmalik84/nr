@@ -1,15 +1,6 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-/**
- * Image Gallery block — scrollable image carousel with captions.
- * Content model (Collection):
- *   | Image Gallery |
- *   | ![photo](img1.jpg) | Caption for image 1 |
- *   | ![photo](img2.jpg) | Caption for image 2 |
- *
- * @param {Element} block the image-gallery block element
- */
-export default async function decorate(block) {
+export default function decorate(block) {
   const rows = [...block.children];
   if (rows.length === 0) return;
 
@@ -17,6 +8,11 @@ export default async function decorate(block) {
   track.className = 'gallery-track';
 
   const slides = [];
+  let currentIndex = 0;
+
+  const counter = document.createElement('span');
+  counter.className = 'gallery-counter';
+  counter.textContent = `1 / ${rows.length}`;
 
   rows.forEach((row, i) => {
     const cols = [...row.children];
@@ -24,21 +20,14 @@ export default async function decorate(block) {
     slide.className = 'gallery-slide';
     if (i === 0) slide.classList.add('active');
 
-    // Image
-    const picture = cols[0]?.querySelector('picture');
-    if (picture) {
-      const img = picture.querySelector('img');
-      const optimized = createOptimizedPicture(
-        img.src,
-        img.alt || '',
-        i === 0,
-        [{ width: '800' }],
-      );
+    const pic = cols[0] ? cols[0].querySelector('picture') : null;
+    if (pic) {
+      const img = pic.querySelector('img');
+      const optimized = createOptimizedPicture(img.src, img.alt || '', i === 0, [{ width: '800' }]);
       slide.append(optimized);
     }
 
-    // Caption
-    const captionText = cols[1]?.textContent?.trim();
+    const captionText = cols[1] ? cols[1].textContent.trim() : '';
     if (captionText) {
       const caption = document.createElement('figcaption');
       caption.textContent = captionText;
@@ -49,17 +38,11 @@ export default async function decorate(block) {
     track.append(slide);
   });
 
-  // Only add navigation if more than 1 image
   if (slides.length <= 1) {
-    block.replaceChildren(track);
+    block.textContent = '';
+    block.append(track);
     return;
   }
-
-  let currentIndex = 0;
-
-  const counter = document.createElement('span');
-  counter.className = 'gallery-counter';
-  counter.textContent = `1 / ${slides.length}`;
 
   function goTo(index) {
     slides[currentIndex].classList.remove('active');
@@ -69,7 +52,6 @@ export default async function decorate(block) {
     counter.textContent = `${currentIndex + 1} / ${slides.length}`;
   }
 
-  // Navigation controls
   const controls = document.createElement('div');
   controls.className = 'gallery-controls';
 
@@ -77,14 +59,14 @@ export default async function decorate(block) {
   prevBtn.type = 'button';
   prevBtn.className = 'gallery-prev';
   prevBtn.setAttribute('aria-label', 'Previous image');
-  prevBtn.textContent = '‹';
+  prevBtn.textContent = '\u2039';
   prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
 
   const nextBtn = document.createElement('button');
   nextBtn.type = 'button';
   nextBtn.className = 'gallery-next';
   nextBtn.setAttribute('aria-label', 'Next image');
-  nextBtn.textContent = '›';
+  nextBtn.textContent = '\u203A';
   nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
 
   controls.append(prevBtn, counter, nextBtn);
@@ -93,5 +75,6 @@ export default async function decorate(block) {
   viewport.className = 'gallery-viewport';
   viewport.append(track);
 
-  block.replaceChildren(viewport, controls);
+  block.textContent = '';
+  block.append(viewport, controls);
 }

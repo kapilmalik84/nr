@@ -1,15 +1,10 @@
-/* Hero block — matched to ptest.npe.auspost.com.au */
 main .hero-wrapper {
   padding: 0;
 }
 
-main .hero-wrapper .hero-container {
-  max-width: none;
-}
-
 main .hero {
   position: relative;
-  min-height: 380px;
+  min-height: 400px;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -20,69 +15,37 @@ main .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgb(13 13 16 / 55%) 0%,
-    rgb(13 13 16 / 20%) 100%
-  );
+  background: linear-gradient(135deg, rgb(13 13 16 / 55%) 0%, rgb(13 13 16 / 20%) 100%);
 }
 
 main .hero .hero-inner {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: var(--max-content-width);
+  max-width: var(--max-content-width, 1200px);
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-m);
+  padding: 3rem 1rem;
 }
 
 main .hero .hero-content {
   max-width: 520px;
-  background: var(--neutral-0);
-  padding: var(--space-xl);
-  border-radius: var(--radius-xl);
+  background: var(--neutral-0, #fff);
+  padding: 2rem;
+  border-radius: var(--radius-xl, 24px);
 }
 
 main .hero h1,
 main .hero h2 {
   margin-top: 0;
-  font-size: var(--heading-font-size-xl);
-  color: var(--ink-900);
+  color: var(--ink-900, #0d0d10);
 }
 
 main .hero p {
-  color: var(--text-color-muted);
-  line-height: 1.6;
+  color: var(--text-color-muted, #6d6d72);
 }
 
 main .hero .hero-cta {
-  margin-top: var(--space-l);
   margin-bottom: 0;
-}
-
-main .hero.dark .hero-content {
-  background: transparent;
-  padding: var(--space-xl) 0;
-}
-
-main .hero.dark h1,
-main .hero.dark h2,
-main .hero.dark p {
-  color: var(--neutral-0);
-}
-
-@media (width >= 600px) {
-  main .hero {
-    min-height: 460px;
-  }
-
-  main .hero .hero-inner {
-    padding: var(--space-3xl) var(--space-xl);
-  }
-
-  main .hero .hero-content {
-    padding: var(--space-2xl);
-  }
 }
 
 @media (width >= 900px) {
@@ -90,8 +53,7 @@ main .hero.dark p {
     min-height: 520px;
   }
 
-  main .hero h1,
-  main .hero h2 {
-    font-size: var(--heading-font-size-xxl);
+  main .hero .hero-inner {
+    padding: 4rem 2rem;
   }
 }
