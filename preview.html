@@ -51,6 +51,7 @@
                     <li><a href="/news/">General</a></li>
                     <li><a href="/news/">Executives</a></li>
                     <li><a href="/news/">Speeches</a></li>
+                    <li><a href="/news/">News Archive</a></li>
                   </ul>
                 </li>
                 <li class="nav-drop" aria-expanded="false"><a href="/stamps/">Stamps</a>
@@ -59,6 +60,12 @@
                     <li><a href="/stamps/">Sport</a></li>
                     <li><a href="/stamps/">Arts and Culture</a></li>
                     <li><a href="/stamps/">History</a></li>
+                    <li><a href="/stamps/">Indigenous</a></li>
+                    <li><a href="/stamps/">Industry</a></li>
+                    <li><a href="/stamps/">Legends</a></li>
+                    <li><a href="/stamps/">Military</a></li>
+                    <li><a href="/stamps/">Natural World</a></li>
+                    <li><a href="/stamps/">Stamps Archive</a></li>
                   </ul>
                 </li>
                 <li><a href="/video/">Video</a></li>
@@ -187,5 +194,21 @@
       </div>
     </div>
   </footer>
+  <script>
+    document.querySelectorAll('.nav-drop').forEach((drop) => {
+      drop.addEventListener('click', (e) => {
+        if (e.target.closest('ul ul')) return;
+        e.preventDefault();
+        const expanded = drop.getAttribute('aria-expanded') === 'true';
+        document.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('aria-expanded', 'false'));
+        drop.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-sections')) {
+        document.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('aria-expanded', 'false'));
+      }
+    });
+  </script>
 </body>
 </html>
