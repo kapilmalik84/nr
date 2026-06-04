@@ -21,23 +21,28 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   if (button) button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
 }
 
+function fixHref(href) {
+  if (!href) return '/';
+  return href.replace(/^http:\/\/\//, '/').replace(/^http:\/\/(?!\/)/, '/');
+}
+
 /**
- * Parses a flat paragraph with links separated by <br> into a nested <ul> structure.
- * Links are top-level items; plain text items following a link are sub-items of that link.
+ * Parses a flat paragraph with links separated by <br> into a nested <ul>.
+ * Links = top-level items; plain text after a link = sub-items (dropdown).
  */
 function buildNavList(paragraph) {
   const ul = document.createElement('ul');
   let currentLi = null;
   let currentSubUl = null;
 
-  const nodes = [...paragraph.childNodes];
-  nodes.forEach((node) => {
+  [...paragraph.childNodes].forEach((node) => {
     if (node.nodeName === 'BR') return;
 
     if (node.nodeName === 'A') {
       currentLi = document.createElement('li');
-      const a = node.cloneNode(true);
-      a.href = a.href.replace(/^http:\/\/\//, '/').replace(/^http:\/\/(?!\/)/, '/');
+      const a = document.createElement('a');
+      a.href = fixHref(node.href);
+      a.textContent = node.textContent;
       currentLi.append(a);
       ul.append(currentLi);
       currentSubUl = null;
@@ -50,8 +55,8 @@ function buildNavList(paragraph) {
           currentLi.setAttribute('aria-expanded', 'false');
         }
         const subLi = document.createElement('li');
-        const parentLink = currentLi.querySelector(':scope > a');
         const a = document.createElement('a');
+        const parentLink = currentLi.querySelector(':scope > a');
         a.href = parentLink ? parentLink.href : '#';
         a.textContent = node.textContent.trim();
         subLi.append(a);
@@ -73,20 +78,27 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  const sections = [...nav.children];
+  // Get all paragraphs from the fragment (may be in one div or multiple divs)
+  const allParagraphs = [...nav.querySelectorAll('p')];
+  const navUl = nav.querySelector('ul');
 
-  // Build top bar (brand + contact)
+  // Identify paragraphs by content pattern:
+  // p[0] = brand link, p[1] = nav links (with <br>), p[2+] = contact info
+  const brandP = allParagraphs[0];
+  const navP = allParagraphs[1];
+  const contactPs = allParagraphs.slice(2);
+
+  // Build top bar
   const topBar = document.createElement('div');
   topBar.className = 'nav-top-bar';
 
   const logoDiv = document.createElement('div');
   logoDiv.className = 'nav-logo';
-  if (sections[0]) {
-    const brandLink = sections[0].querySelector('a');
+  if (brandP) {
+    const brandLink = brandP.querySelector('a');
     if (brandLink) {
-      brandLink.href = brandLink.href.replace(/^http:\/\/\//, '/');
       const a = document.createElement('a');
-      a.href = brandLink.href;
+      a.href = fixHref(brandLink.href);
       a.textContent = 'Australia Post';
       logoDiv.append(a);
     }
@@ -95,21 +107,21 @@ export default async function decorate(block) {
 
   const contactDiv = document.createElement('div');
   contactDiv.className = 'nav-contact';
-  if (sections[2]) {
-    sections[2].querySelectorAll('p').forEach((p) => {
-      const a = p.querySelector('a');
-      if (a) {
-        contactDiv.append(a.cloneNode(true));
-      } else if (p.textContent.trim()) {
-        const span = document.createElement('span');
-        span.textContent = p.textContent.trim();
-        contactDiv.append(span);
-      }
-    });
-  }
+  contactPs.forEach((p) => {
+    const a = p.querySelector('a');
+    if (a) {
+      const clone = a.cloneNode(true);
+      clone.href = fixHref(a.href);
+      contactDiv.append(clone);
+    } else if (p.textContent.trim()) {
+      const span = document.createElement('span');
+      span.textContent = p.textContent.trim();
+      contactDiv.append(span);
+    }
+  });
   topBar.append(contactDiv);
 
-  // Build bottom bar (Newsroom + nav + search)
+  // Build bottom bar
   const bottomBar = document.createElement('div');
   bottomBar.className = 'nav-bottom-bar';
 
@@ -125,19 +137,20 @@ export default async function decorate(block) {
   const navSections = document.createElement('div');
   navSections.className = 'nav-sections';
 
-  if (sections[1]) {
-    const navP = sections[1].querySelector('p');
-    const existingUl = sections[1].querySelector('ul');
-
-    if (existingUl) {
-      navSections.append(existingUl);
-    } else if (navP) {
-      const ul = buildNavList(navP);
-      navSections.append(ul);
-    }
+  if (navUl) {
+    navSections.append(navUl);
+    navUl.querySelectorAll(':scope > li').forEach((li) => {
+      if (li.querySelector('ul')) {
+        li.classList.add('nav-drop');
+        li.setAttribute('aria-expanded', 'false');
+      }
+    });
+  } else if (navP && navP.querySelector('a')) {
+    const ul = buildNavList(navP);
+    navSections.append(ul);
   }
 
-  // Add click handlers for dropdowns
+  // Dropdown click handlers
   navSections.querySelectorAll('.nav-drop').forEach((drop) => {
     drop.addEventListener('click', (e) => {
       if (e.target.closest('ul ul')) return;
@@ -155,7 +168,7 @@ export default async function decorate(block) {
   // Search box
   const searchDiv = document.createElement('div');
   searchDiv.className = 'nav-search';
-  searchDiv.innerHTML = `<input type="text" placeholder="Search..." aria-label="Search the newsroom">
+  searchDiv.innerHTML = `<input type="text" placeholder="Search..." aria-label="Search">
     <button type="button" aria-label="Search">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>`;
@@ -169,7 +182,7 @@ export default async function decorate(block) {
   </button>`;
   hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
 
-  // Assemble nav
+  // Assemble
   nav.textContent = '';
   nav.append(topBar);
   bottomBar.prepend(hamburger);
@@ -179,7 +192,6 @@ export default async function decorate(block) {
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
-  // Close dropdowns on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-sections')) {
       toggleAllNavSections(navSections, false);
