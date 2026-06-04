@@ -1,14 +1,3 @@
-main .quick-links-wrapper {
-  width: 100%;
-}
-
-@media (width >= 900px) {
-  main .quick-links-wrapper {
-    width: 320px;
-    flex-shrink: 0;
-  }
-}
-
 main .quick-links .links-panel {
   background: var(--neutral-0, #fff);
   border: 1px solid var(--neutral-300, #eee);

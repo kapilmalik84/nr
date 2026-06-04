@@ -1,16 +1,33 @@
 /* featured section: article + quick-links side by side */
-main .featured-section > div {
+main .section.featured-section {
+  max-width: var(--max-content-width, 1200px);
+  margin: 0 auto;
+  padding: var(--section-spacing, 2rem) 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+main .section.featured-section .featured-article-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+main .section.featured-section .quick-links-wrapper {
+  width: 100%;
+}
+
 @media (width >= 900px) {
-  main .featured-section > div {
-    display: grid;
-    grid-template-columns: 1fr auto;
+  main .section.featured-section {
+    flex-direction: row;
     gap: 2rem;
-    align-items: start;
+    align-items: flex-start;
+    padding: var(--section-spacing, 3rem) 2rem;
+  }
+
+  main .section.featured-section .quick-links-wrapper {
+    width: 320px;
+    flex-shrink: 0;
   }
 }
 
