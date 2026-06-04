@@ -22,16 +22,28 @@
     <div class="header block" data-block-name="header" data-block-status="loaded">
       <div class="nav-wrapper">
         <nav id="nav" aria-expanded="false">
-          <div class="nav-hamburger">
-            <button type="button" aria-controls="nav" aria-label="Open navigation">
-              <span class="nav-hamburger-icon"></span>
-            </button>
+          <div class="nav-top-bar">
+            <div class="nav-logo">
+              <a href="/">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#dc1928"/><text x="16" y="21" text-anchor="middle" fill="white" font-size="14" font-weight="bold">P</text></svg>
+                Australia Post
+              </a>
+            </div>
+            <div class="nav-contact">
+              <a href="tel:+61391066666">📞 +61 3 9106 6666 (24/7 National Media Line)</a>
+              <a href="mailto:media@auspost.com.au">✉ media@auspost.com.au</a>
+            </div>
           </div>
-          <div class="nav-brand">
-            <p><a href="/">Australia Post Newsroom</a></p>
-          </div>
-          <div class="nav-sections">
-            <div class="default-content-wrapper">
+          <div class="nav-bottom-bar">
+            <div class="nav-hamburger">
+              <button type="button" aria-controls="nav" aria-label="Open navigation">
+                <span class="nav-hamburger-icon"></span>
+              </button>
+            </div>
+            <div class="nav-brand">
+              <a href="/">Newsroom</a>
+            </div>
+            <div class="nav-sections">
               <ul>
                 <li><a href="/">Home</a></li>
                 <li class="nav-drop" aria-expanded="false"><a href="/news/">News</a>
@@ -53,10 +65,12 @@
                 <li><a href="/photos/">Photos</a></li>
               </ul>
             </div>
-          </div>
-          <div class="nav-tools">
-            <p><a href="tel:+61391066666">+61 3 9106 6666</a> (24/7 National Media Line)</p>
-            <p><a href="mailto:media@auspost.com.au">media@auspost.com.au</a></p>
+            <div class="nav-search">
+              <input type="text" placeholder="Search..." aria-label="Search the newsroom">
+              <button type="button" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
           </div>
         </nav>
       </div>

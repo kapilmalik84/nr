@@ -9,13 +9,14 @@ main .hero {
   background-position: center;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 main .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgb(13 13 16 / 55%) 0%, rgb(13 13 16 / 20%) 100%);
+  background: linear-gradient(90deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 30%) 100%);
 }
 
 main .hero .hero-inner {
@@ -25,18 +26,22 @@ main .hero .hero-inner {
   max-width: var(--max-content-width, 1200px);
   margin: 0 auto;
   padding: 3rem 1rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
 main .hero .hero-content {
   max-width: 520px;
   background: var(--neutral-0, #fff);
-  padding: 2rem;
-  border-radius: var(--radius-xl, 24px);
+  padding: 2.5rem;
+  border-radius: var(--radius-m, 8px);
+  border-left: 4px solid var(--auspost-red-500, #dc1928);
 }
 
 main .hero h1,
 main .hero h2 {
   margin-top: 0;
+  font-size: var(--heading-font-size-xxl);
   color: var(--ink-900, #0d0d10);
 }
 
@@ -50,7 +55,7 @@ main .hero .hero-cta {
 
 @media (width >= 900px) {
   main .hero {
-    min-height: 520px;
+    min-height: 560px;
   }
 
   main .hero .hero-inner {

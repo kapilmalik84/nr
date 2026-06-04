@@ -197,7 +197,7 @@ body.appear {
 }
 
 header {
-  height: var(--nav-height);
+  height: calc(var(--nav-height) + 48px);
 }
 
 /* ===== HEADINGS ===== */
