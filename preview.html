@@ -5,101 +5,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#dc1928">
   <title>Australia Post Newsroom</title>
-  <link rel="stylesheet" href="/styles/fonts.css">
-  <script src="/scripts/aem.js" type="module"></script>
-  <script src="/scripts/scripts.js" type="module"></script>
+  <link rel="stylesheet" href="/styles/styles.css">
+  <link rel="stylesheet" href="/blocks/header/header.css">
+  <link rel="stylesheet" href="/blocks/hero/hero.css">
+  <link rel="stylesheet" href="/blocks/featured-article/featured-article.css">
+  <link rel="stylesheet" href="/blocks/quick-links/quick-links.css">
+  <link rel="stylesheet" href="/blocks/article-cards/article-cards.css">
+  <link rel="stylesheet" href="/blocks/publications-promo/publications-promo.css">
+  <link rel="stylesheet" href="/blocks/footer/footer.css">
+  <style>
+    body { display: block; }
+  </style>
 </head>
-<body>
-  <header></header>
+<body class="appear">
+  <header>
+    <div class="header block" data-block-name="header" data-block-status="loaded">
+      <div class="nav-wrapper">
+        <nav id="nav" aria-expanded="false">
+          <div class="nav-hamburger">
+            <button type="button" aria-controls="nav" aria-label="Open navigation">
+              <span class="nav-hamburger-icon"></span>
+            </button>
+          </div>
+          <div class="nav-brand">
+            <p><a href="/">Australia Post Newsroom</a></p>
+          </div>
+          <div class="nav-sections">
+            <div class="default-content-wrapper">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li class="nav-drop" aria-expanded="false"><a href="/news/">News</a>
+                  <ul>
+                    <li><a href="/news/">General</a></li>
+                    <li><a href="/news/">Executives</a></li>
+                    <li><a href="/news/">Speeches</a></li>
+                  </ul>
+                </li>
+                <li class="nav-drop" aria-expanded="false"><a href="/stamps/">Stamps</a>
+                  <ul>
+                    <li><a href="/stamps/">Royal</a></li>
+                    <li><a href="/stamps/">Sport</a></li>
+                    <li><a href="/stamps/">Arts and Culture</a></li>
+                    <li><a href="/stamps/">History</a></li>
+                  </ul>
+                </li>
+                <li><a href="/video/">Video</a></li>
+                <li><a href="/photos/">Photos</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="nav-tools">
+            <p><a href="tel:+61391066666">+61 3 9106 6666</a> (24/7 National Media Line)</p>
+            <p><a href="mailto:media@auspost.com.au">media@auspost.com.au</a></p>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
   <main>
-    <div>
-      <div class="hero">
-        <div>
-          <div><img src="/media/hero-bg.jpg" alt="Australia Post Express Post parcel delivery"></div>
-        </div>
-        <div>
-          <div>
-            <h2>Welcome to the Australia Post Newsroom</h2>
-            <p>Get the latest news, media releases, video, audio and images from Australia Post.</p>
-            <p>To subscribe click button below.</p>
-            <p><strong><a href="/signup">Subscribe</a></strong></p>
+    <div class="section hero-container">
+      <div class="hero-wrapper">
+        <div class="hero block" data-block-name="hero" data-block-status="loaded" style="background-image: url('/media/hero-bg.jpg'); background-size: cover; background-position: center;">
+          <div class="hero-inner">
+            <div class="hero-content">
+              <h2>Welcome to the Australia Post Newsroom</h2>
+              <p>Get the latest news, media releases, video, audio and images from Australia Post.</p>
+              <p>To subscribe click button below.</p>
+              <p class="hero-cta"><a class="button" href="/signup">Subscribe</a></p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <div class="featured-article">
-        <div>
-          <div><img src="/media/beyond-blue.jpg" alt="Australia Post Beyond Blue Mental Health Postcard"></div>
-          <div>
+    <div class="section">
+      <div class="featured-article-wrapper">
+        <div class="featured-article block" data-block-name="featured-article" data-block-status="loaded">
+          <div class="feature-image">
+            <picture><img src="/media/beyond-blue.jpg" alt="Australia Post Beyond Blue Mental Health Postcard" loading="lazy" width="600" height="400"></picture>
+          </div>
+          <div class="feature-text">
             <h3><a href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</a></h3>
             <p>Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</p>
-            <p><strong><a href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Read more</a></strong></p>
+            <p><a class="button" href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Read more</a></p>
           </div>
         </div>
       </div>
-      <div class="quick-links">
-        <div>
-          <div>
-            <h4><strong>Quick links</strong></h4>
-            <p><a href="https://auspost.com.au/about-us">About Us</a></p>
-            <p><a href="https://auspost.com.au/service-updates">Important updates</a></p>
-            <p><a href="https://auspost.com.au/about-us/corporate-information/executive-leadership-team">Executive Profiles</a></p>
-            <p><a href="https://auspost.com.au/about-us/news-media/fast-facts-about-australia-post">Fast facts</a></p>
-            <p><a href="https://auspost.com.au/">auspost.com.au</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <h3>Latest:</h3>
-      <div class="article-cards">
-        <div>
-          <div><img src="/media/bluey.jpg" alt="Bluey coin collection at Australia Post"></div>
-          <div>
-            <p><strong>Bluey is back at Australia Post – for real life</strong></p>
-            <p>Dust off your coin purses Bluey fans - Bluey is back at Australia Post with the very first $2 Bluey Dollarbuck coin collection.</p>
-            <p><a href="/articles/news/2026/bluey-is-back-at-australia-post-for-real-life">Read more</a></p>
-          </div>
-        </div>
-        <div>
-          <div><img src="/media/parcel-facility.jpg" alt="Australia Post parcel facility"></div>
-          <div>
-            <p><strong>Australia Post statement regarding fuel surcharge - 1 May 2026</strong></p>
-            <p>Along with many other businesses, Australia Post is regularly reviewing and updating its fuel surcharge to help recover the recent significant increase in fuel costs.</p>
-            <p><a href="/articles/news/2026/australia-post-statement-regarding-fuel-surcharge-1-may-2026">Read more</a></p>
-          </div>
-        </div>
-        <div>
-          <div><img src="/media/alpha-level.jpg" alt="Alpha Level AI partnership with Australia Post"></div>
-          <div>
-            <p><strong>Australia Post taps global AI expertise to supercharge cyber threat detection</strong></p>
-            <p>Australia Post is partnering with Alpha Level, a next generation AI security company, to sharpen its cyber defences and speed up threat detection across its network.</p>
-            <p><a href="/articles/news/2026/australia-post-taps-global-ai-expertise-to-supercharge-cyber-threat-detection">Read more</a></p>
-          </div>
-        </div>
-        <div>
-          <div><img src="/media/beyond-blue.jpg" alt="Beyond Blue Connection Postcard"></div>
-          <div>
-            <p><strong>Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</strong></p>
-            <p>Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</p>
-            <p><a href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Read more</a></p>
+      <div class="quick-links-wrapper">
+        <div class="quick-links block" data-block-name="quick-links" data-block-status="loaded">
+          <div class="links-panel">
+            <h4 class="links-title">Quick links</h4>
+            <ul class="links-list">
+              <li><a href="https://auspost.com.au/about-us" target="_blank" rel="noopener">About Us</a></li>
+              <li><a href="https://auspost.com.au/service-updates" target="_blank" rel="noopener">Important updates</a></li>
+              <li><a href="https://auspost.com.au/about-us/corporate-information/executive-leadership-team" target="_blank" rel="noopener">Executive Profiles</a></li>
+              <li><a href="https://auspost.com.au/about-us/news-media/fast-facts-about-australia-post" target="_blank" rel="noopener">Fast facts</a></li>
+              <li><a href="https://auspost.com.au/" target="_blank" rel="noopener">auspost.com.au</a></li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <div class="publications-promo">
-        <div>
-          <div><img src="/media/publications.jpg" alt="Man reading Australia Post publications on tablet"></div>
-          <div>
+    <div class="section">
+      <div class="default-content-wrapper">
+        <h3>Latest:</h3>
+      </div>
+      <div class="article-cards-wrapper">
+        <div class="article-cards block" data-block-name="article-cards" data-block-status="loaded">
+          <ul class="cards-grid">
+            <li class="card">
+              <div class="card-image"><a href="/articles/news/2026/bluey-is-back-at-australia-post-for-real-life"><picture><img src="/media/bluey.jpg" alt="Bluey coin collection" loading="lazy" width="480"></picture></a></div>
+              <div class="card-text">
+                <h4 class="card-title"><a href="/articles/news/2026/bluey-is-back-at-australia-post-for-real-life">Bluey is back at Australia Post – for real life</a></h4>
+                <p class="card-excerpt">Dust off your coin purses Bluey fans - Bluey is back at Australia Post with the very first $2 Bluey Dollarbuck coin collection.</p>
+                <a class="card-cta" href="/articles/news/2026/bluey-is-back-at-australia-post-for-real-life">Read more</a>
+              </div>
+            </li>
+            <li class="card">
+              <div class="card-image"><a href="/articles/news/2026/australia-post-statement-regarding-fuel-surcharge-1-may-2026"><picture><img src="/media/parcel-facility.jpg" alt="Australia Post parcel facility" loading="lazy" width="480"></picture></a></div>
+              <div class="card-text">
+                <h4 class="card-title"><a href="/articles/news/2026/australia-post-statement-regarding-fuel-surcharge-1-may-2026">Australia Post statement regarding fuel surcharge - 1 May 2026</a></h4>
+                <p class="card-excerpt">Along with many other businesses, Australia Post is regularly reviewing and updating its fuel surcharge to help recover the recent significant increase in fuel costs.</p>
+                <a class="card-cta" href="/articles/news/2026/australia-post-statement-regarding-fuel-surcharge-1-may-2026">Read more</a>
+              </div>
+            </li>
+            <li class="card">
+              <div class="card-image"><a href="/articles/news/2026/australia-post-taps-global-ai-expertise-to-supercharge-cyber-threat-detection"><picture><img src="/media/alpha-level.jpg" alt="Alpha Level AI partnership" loading="lazy" width="480"></picture></a></div>
+              <div class="card-text">
+                <h4 class="card-title"><a href="/articles/news/2026/australia-post-taps-global-ai-expertise-to-supercharge-cyber-threat-detection">Australia Post taps global AI expertise to supercharge cyber threat detection</a></h4>
+                <p class="card-excerpt">Australia Post is partnering with Alpha Level, a next generation AI security company, to sharpen its cyber defences and speed up threat detection across its network.</p>
+                <a class="card-cta" href="/articles/news/2026/australia-post-taps-global-ai-expertise-to-supercharge-cyber-threat-detection">Read more</a>
+              </div>
+            </li>
+            <li class="card">
+              <div class="card-image"><a href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue"><picture><img src="/media/beyond-blue.jpg" alt="Beyond Blue Connection Postcard" loading="lazy" width="480"></picture></a></div>
+              <div class="card-text">
+                <h4 class="card-title"><a href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</a></h4>
+                <p class="card-excerpt">Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</p>
+                <a class="card-cta" href="/articles/news/2026/australia-post-to-deliver-its-25-millionth-connection-postcard-with-beyond-blue">Read more</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section highlight">
+      <div class="publications-promo-wrapper">
+        <div class="publications-promo block" data-block-name="publications-promo" data-block-status="loaded">
+          <div class="promo-image">
+            <picture><img src="/media/publications.jpg" alt="Man reading Australia Post publications on tablet" loading="lazy"></picture>
+          </div>
+          <div class="promo-text">
             <h4>View our latest publications</h4>
-            <p><strong><a href="https://auspost.com.au/about-us/news-media/publications">Read more</a></strong></p>
+            <p><a class="button" href="https://auspost.com.au/about-us/news-media/publications">Read more</a></p>
           </div>
         </div>
       </div>
     </div>
   </main>
-  <footer></footer>
+  <footer>
+    <div class="footer block" data-block-name="footer" data-block-status="loaded">
+      <div>
+        <div class="default-content-wrapper">
+          <p><em>As Australia's postal service for more than 216 years, we're at the heart of every community. Last financial year we delivered 2.2 billion items to 12.8 million delivery points. Australia Post has one of the largest retail networks nationally, with more than 4,000 Post Offices. Australia Post employs people of all ages, genders, and abilities in our extended workforce of more than 64,000 team members, reflective of the diverse communities we operate in. We are proud to be included in the inaugural Indigenous Employment Index with 3% of our workforce identifying as Aboriginal or Torres Strait Islander and we are one of the largest Australian employers to be certified as a Disability Confident Recruiter.</em></p>
+          <p>Copyright © 2026 Australia Post. All Rights Reserved. Our <a href="https://auspost.com.au/privacy">privacy policy</a></p>
+          <p>Australia Post acknowledges the Traditional Custodians of the land on which we operate, live and gather as employees, and recognise their continuing connection to land, water and community. We pay respect to Elders past, present and emerging.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

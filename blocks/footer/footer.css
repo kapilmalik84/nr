@@ -1,5 +1,6 @@
 footer {
-  background-color: var(--light-color);
+  background-color: var(--neutral-800, #2b2b32);
+  color: var(--neutral-300, #eee);
   font-size: var(--body-font-size-xs);
 }
 
@@ -10,7 +11,16 @@ footer .footer > div {
 }
 
 footer .footer p {
-  margin: 0;
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+footer .footer a:any-link {
+  color: var(--neutral-300, #eee);
+}
+
+footer .footer a:hover {
+  color: var(--neutral-0, #fff);
 }
 
 @media (width >= 900px) {
