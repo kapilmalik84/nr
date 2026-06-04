@@ -1,0 +1,98 @@
+main .photo-grid .photo-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+main .photo-grid .photo-card {
+  background: var(--neutral-0, #fff);
+  border-radius: var(--radius-m, 8px);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+main .photo-grid .photo-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+main .photo-grid .photo-card-image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+main .photo-grid .photo-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+main .photo-grid .photo-card-info {
+  padding: 0.75rem 1rem;
+}
+
+main .photo-grid .photo-card-meta {
+  margin: 0 0 0.25rem;
+  font-size: var(--body-font-size-xs, 0.75rem);
+  color: var(--text-tertiary, #6d6d72);
+}
+
+main .photo-grid .photo-card-caption {
+  margin: 0;
+  font-size: var(--body-font-size-s, 0.875rem);
+  color: var(--text-primary, #212129);
+  font-weight: 500;
+}
+
+main .photo-grid .photo-card-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: var(--body-font-size-s, 0.875rem);
+  color: var(--auspost-red-500, #dc1928);
+  font-weight: 500;
+}
+
+main .photo-grid .photo-grid-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+main .photo-grid .photo-grid-pagination button {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-primary, #e2e2e2);
+  border-radius: var(--radius-s, 4px);
+  background: var(--bg-primary, #fff);
+  cursor: pointer;
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-family: var(--body-font-family);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+main .photo-grid .photo-grid-pagination button:hover {
+  background: var(--neutral-100, #f5f5f5);
+  border-color: var(--border-secondary, #919194);
+}
+
+main .photo-grid .photo-grid-pagination button.active {
+  background: var(--auspost-red-500, #dc1928);
+  border-color: var(--auspost-red-500, #dc1928);
+  color: var(--neutral-0, #fff);
+  font-weight: 700;
+}
+
+@media (width >= 600px) {
+  main .photo-grid .photo-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  main .photo-grid .photo-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,22 @@
+main .embed .embed-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+}
+
+main .embed .embed-wrapper iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: var(--radius-m, 8px);
+}
+
+main .embed .embed-download {
+  margin-top: 0.75rem;
+}
+
+main .embed .embed-download a {
+  color: var(--auspost-red-500, #dc1928);
+  font-weight: 500;
+  font-size: var(--body-font-size-s, 0.875rem);
+}

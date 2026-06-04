@@ -1,5 +1,7 @@
 import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
 
+const PAGE_SIZE = 12;
+
 function renderCard(article) {
   const card = document.createElement('li');
   card.className = 'card';
@@ -24,6 +26,9 @@ function renderCard(article) {
     meta.className = 'card-meta';
     const d = new Date(article.date * 1000);
     meta.textContent = d.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (article.category) {
+      meta.textContent += ` | ${article.category}`;
+    }
     text.append(meta);
   }
 
@@ -42,15 +47,60 @@ function renderCard(article) {
     text.append(desc);
   }
 
+  const cta = document.createElement('a');
+  cta.href = article.path;
+  cta.className = 'card-cta';
+  cta.textContent = 'Read more';
+  text.append(cta);
+
   card.append(text);
   return card;
+}
+
+function renderPagination(totalPages, currentPage, onPageChange) {
+  const nav = document.createElement('nav');
+  nav.className = 'article-list-pagination';
+  nav.setAttribute('aria-label', 'Page navigation');
+
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  const end = Math.min(totalPages, start + maxVisible - 1);
+  start = Math.max(1, end - maxVisible + 1);
+
+  if (currentPage > 1) {
+    const prev = document.createElement('button');
+    prev.textContent = '‹';
+    prev.setAttribute('aria-label', 'Previous page');
+    prev.addEventListener('click', () => onPageChange(currentPage - 1));
+    nav.append(prev);
+  }
+
+  for (let i = start; i <= end; i += 1) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.className = i === currentPage ? 'active' : '';
+    btn.setAttribute('aria-label', `Page ${i}`);
+    if (i === currentPage) btn.setAttribute('aria-current', 'page');
+    btn.addEventListener('click', () => onPageChange(i));
+    nav.append(btn);
+  }
+
+  if (currentPage < totalPages) {
+    const next = document.createElement('button');
+    next.textContent = '›';
+    next.setAttribute('aria-label', 'Next page');
+    next.addEventListener('click', () => onPageChange(currentPage + 1));
+    nav.append(next);
+  }
+
+  return nav;
 }
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const source = config.source || '/query-index.json';
-  const limit = parseInt(config.limit, 10) || 12;
   const category = (config.category || '').toLowerCase();
+  const pageSize = parseInt(config.limit, 10) || PAGE_SIZE;
 
   block.textContent = 'Loading…';
 
@@ -65,7 +115,6 @@ export default async function decorate(block) {
     }
 
     articles.sort((a, b) => (b.date || 0) - (a.date || 0));
-    articles = articles.slice(0, limit);
 
     block.textContent = '';
 
@@ -74,10 +123,34 @@ export default async function decorate(block) {
       return;
     }
 
+    const totalPages = Math.ceil(articles.length / pageSize);
     const grid = document.createElement('ul');
     grid.className = 'cards-grid';
-    articles.forEach((article) => grid.append(renderCard(article)));
+    const resultCount = document.createElement('p');
+    resultCount.className = 'article-list-count';
+
+    block.append(resultCount);
     block.append(grid);
+
+    const showPage = (page) => {
+      const start = (page - 1) * pageSize;
+      const pageArticles = articles.slice(start, start + pageSize);
+
+      resultCount.textContent = `${start + 1}-${Math.min(start + pageSize, articles.length)} of ${articles.length} results.`;
+
+      grid.innerHTML = '';
+      pageArticles.forEach((article) => grid.append(renderCard(article)));
+
+      const existingNav = block.querySelector('.article-list-pagination');
+      if (existingNav) existingNav.remove();
+      if (totalPages > 1) {
+        block.append(renderPagination(totalPages, page, showPage));
+      }
+
+      block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    showPage(1);
   } catch (e) {
     block.textContent = 'Unable to load articles.';
   }

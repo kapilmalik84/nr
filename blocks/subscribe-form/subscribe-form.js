@@ -1,63 +1,103 @@
 export default function decorate(block) {
-  const heading = block.querySelector('strong, h2, h3');
-  const desc = block.querySelector('p:not(:has(strong))');
+  const heading = block.querySelector('strong, h1, h2, h3');
+  block.textContent = '';
 
   const container = document.createElement('div');
   container.className = 'subscribe-container';
 
-  const textSection = document.createElement('div');
-  textSection.className = 'subscribe-text';
+  const h1 = document.createElement('h1');
+  h1.textContent = heading ? heading.textContent : 'Media sign up';
+  container.append(h1);
 
-  if (heading) {
-    const h3 = document.createElement('h3');
-    h3.textContent = heading.textContent;
-    textSection.append(h3);
-  }
+  const form = document.createElement('form');
+  form.className = 'subscribe-form';
+  form.setAttribute('novalidate', '');
 
-  if (desc && desc.textContent.trim()) {
-    const p = document.createElement('p');
-    p.textContent = desc.textContent;
-    textSection.append(p);
-  }
+  const fields = [
+    {
+      name: 'firstName', label: 'First Name', type: 'text', required: true,
+    },
+    {
+      name: 'lastName', label: 'Last Name', type: 'text', required: true,
+    },
+    {
+      name: 'email', label: 'Email', type: 'email', required: true,
+    },
+  ];
 
-  container.append(textSection);
+  fields.forEach((field) => {
+    const group = document.createElement('div');
+    group.className = 'form-group';
 
-  const formEl = document.createElement('div');
-  formEl.className = 'subscribe-inputs';
+    const input = document.createElement('input');
+    input.type = field.type;
+    input.name = field.name;
+    input.id = field.name;
+    input.placeholder = field.label;
+    input.required = field.required;
+    input.setAttribute('aria-label', field.label);
 
-  const emailInput = document.createElement('input');
-  emailInput.type = 'email';
-  emailInput.placeholder = 'Enter your email address';
-  emailInput.required = true;
-  emailInput.setAttribute('aria-label', 'Email address');
+    const label = document.createElement('label');
+    label.htmlFor = field.name;
+    label.textContent = field.label;
 
-  const submitBtn = document.createElement('button');
-  submitBtn.type = 'button';
-  submitBtn.className = 'button';
-  submitBtn.textContent = 'Subscribe';
+    group.append(label, input);
+    form.append(group);
+  });
+
+  const privacyGroup = document.createElement('div');
+  privacyGroup.className = 'form-group form-checkbox';
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.id = 'privacy';
+  checkbox.name = 'privacy';
+  checkbox.required = true;
+  const privacyLabel = document.createElement('label');
+  privacyLabel.htmlFor = 'privacy';
+  privacyLabel.innerHTML = 'Accept our <a href="https://auspost.com.au/privacy" target="_blank" rel="noopener">privacy policy</a>';
+  privacyGroup.append(checkbox, privacyLabel);
+  form.append(privacyGroup);
 
   const status = document.createElement('p');
   status.className = 'subscribe-status';
 
-  submitBtn.addEventListener('click', () => {
-    const email = emailInput.value.trim();
-    if (!email || !emailInput.validity.valid) {
+  const submitBtn = document.createElement('button');
+  submitBtn.type = 'submit';
+  submitBtn.className = 'button';
+  submitBtn.textContent = 'Sign Up';
+
+  form.append(submitBtn, status);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = form.querySelector('#email');
+    const firstName = form.querySelector('#firstName');
+    const privacy = form.querySelector('#privacy');
+
+    if (!firstName.value.trim()) {
+      status.textContent = 'Please enter your first name.';
+      status.className = 'subscribe-status error';
+      return;
+    }
+
+    if (!email.value.trim() || !email.validity.valid) {
       status.textContent = 'Please enter a valid email address.';
       status.className = 'subscribe-status error';
       return;
     }
-    status.textContent = 'Thank you for subscribing!';
+
+    if (!privacy.checked) {
+      status.textContent = 'Please accept the privacy policy.';
+      status.className = 'subscribe-status error';
+      return;
+    }
+
+    status.textContent = 'Thank you for signing up!';
     status.className = 'subscribe-status success';
-    emailInput.value = '';
+    form.reset();
   });
 
-  emailInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') submitBtn.click();
-  });
-
-  formEl.append(emailInput, submitBtn);
-  container.append(formEl, status);
-
-  block.textContent = '';
+  container.append(form);
   block.append(container);
 }

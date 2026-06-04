@@ -88,3 +88,49 @@ main .article-list .card-excerpt {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+main .article-list .card-cta {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--auspost-red-500, #dc1928);
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+main .article-list .article-list-count {
+  font-size: var(--body-font-size-s, 0.875rem);
+  color: var(--text-tertiary, #6d6d72);
+  margin: 0 0 1rem;
+}
+
+main .article-list .article-list-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+main .article-list .article-list-pagination button {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-primary, #e2e2e2);
+  border-radius: var(--radius-s, 4px);
+  background: var(--bg-primary, #fff);
+  cursor: pointer;
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-family: var(--body-font-family);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+main .article-list .article-list-pagination button:hover {
+  background: var(--neutral-100, #f5f5f5);
+  border-color: var(--border-secondary, #919194);
+}
+
+main .article-list .article-list-pagination button.active {
+  background: var(--auspost-red-500, #dc1928);
+  border-color: var(--auspost-red-500, #dc1928);
+  color: var(--neutral-0, #fff);
+  font-weight: 700;
+}

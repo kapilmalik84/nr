@@ -1,57 +1,71 @@
-main .subscribe-form-wrapper {
-  background: var(--neutral-100, #f5f5f5);
-}
-
 main .subscribe-form .subscribe-container {
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
-  text-align: center;
 }
 
-main .subscribe-form .subscribe-text h3 {
+main .subscribe-form .subscribe-container h1 {
   margin-top: 0;
+  font-size: var(--heading-font-size-xl, 2rem);
 }
 
-main .subscribe-form .subscribe-text p {
-  color: var(--text-color-muted, #6d6d72);
+main .subscribe-form .form-group {
+  margin-bottom: 1.25rem;
 }
 
-main .subscribe-form .subscribe-inputs {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
+main .subscribe-form .form-group label {
+  display: block;
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+  color: var(--text-secondary, #31313d);
 }
 
-main .subscribe-form .subscribe-inputs input[type="email"] {
-  flex: 1;
+main .subscribe-form .form-group input[type="text"],
+main .subscribe-form .form-group input[type="email"] {
+  width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--border-color, #e2e2e2);
-  border-radius: 1000px;
-  font-family: inherit;
-  font-size: 1rem;
+  border: 1px solid var(--border-input, #919194);
+  border-radius: var(--radius-s, 4px);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m, 1rem);
+  transition: border-color 0.2s;
 }
 
-main .subscribe-form .subscribe-inputs input[type="email"]:focus {
+main .subscribe-form .form-group input:focus {
   outline: none;
-  border-color: var(--link-color, #dc1928);
+  border-color: var(--border-input-active, #31313d);
+  box-shadow: 0 0 0 1px var(--border-input-active, #31313d);
+}
+
+main .subscribe-form .form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+main .subscribe-form .form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--auspost-red-500, #dc1928);
+}
+
+main .subscribe-form .form-checkbox label {
+  margin-bottom: 0;
+  font-weight: 400;
 }
 
 main .subscribe-form .subscribe-status {
-  font-size: 0.875rem;
+  font-size: var(--body-font-size-s, 0.875rem);
   margin-top: 0.75rem;
   min-height: 1.5em;
 }
 
 main .subscribe-form .subscribe-status.success {
-  color: #158744;
+  color: var(--system-green-700, #158744);
 }
 
 main .subscribe-form .subscribe-status.error {
-  color: var(--auspost-red-500, #dc1928);
-}
-
-@media (width < 600px) {
-  main .subscribe-form .subscribe-inputs {
-    flex-direction: column;
-  }
+  color: var(--system-red-700, #bd152e);
 }
