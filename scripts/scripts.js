@@ -114,7 +114,8 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadBlock(document.querySelector('.block'));
+    const firstBlock = document.querySelector('.block');
+    if (firstBlock) await loadBlock(firstBlock);
     await waitForFirstImage(main);
   }
 
@@ -138,7 +139,7 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   sampleRUM('lazy');
-  sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
+  if (sampleRUM.observe) sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
 }
 
 /**
