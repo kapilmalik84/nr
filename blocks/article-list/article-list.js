@@ -100,6 +100,7 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
   const source = config.source || '/query-index.json';
   const category = (config.category || '').toLowerCase();
+  const year = config.year ? parseInt(config.year, 10) : null;
   const pageSize = parseInt(config.limit, 10) || PAGE_SIZE;
 
   block.textContent = 'Loading…';
@@ -112,6 +113,13 @@ export default async function decorate(block) {
 
     if (category) {
       articles = articles.filter((a) => (a.category || '').toLowerCase().includes(category));
+    }
+
+    if (year) {
+      articles = articles.filter((a) => {
+        if (!a.date) return false;
+        return new Date(a.date * 1000).getFullYear() === year;
+      });
     }
 
     articles.sort((a, b) => (b.date || 0) - (a.date || 0));
