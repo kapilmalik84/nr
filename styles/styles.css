@@ -167,9 +167,10 @@
   --radius-s: 4px;
   --radius-m: 8px;
   --radius-l: 12px;
-  --radius-xl: 16px;
-  --card-shadow: 0 1px 3px rgb(0 0 0 / 8%), 0 1px 2px rgb(0 0 0 / 12%);
-  --card-shadow-hover: 0 4px 12px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 8%);
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+  --card-shadow: 0 2px 8px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 6%);
+  --card-shadow-hover: 0 8px 24px rgb(0 0 0 / 12%), 0 2px 6px rgb(0 0 0 / 8%);
 }
 
 /* ===== RESET ===== */
@@ -235,17 +236,17 @@ a:hover {
   text-decoration: none;
 }
 
-/* ===== BUTTONS (Auspost pattern) ===== */
+/* ===== BUTTONS (Auspost pattern — pill shape) ===== */
 a.button:any-link,
 button.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  padding: 0.75em 1.5em;
+  padding: 0.75em 1.75em;
   min-height: 48px;
   border: 2px solid var(--auspost-red-500);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-pill);
   background-color: var(--bg-primary-button);
   color: var(--text-inverted);
   font-family: var(--body-font-family);
@@ -254,7 +255,8 @@ button.button {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
 }
 
 a.button:hover,
@@ -262,9 +264,10 @@ button.button:hover {
   background-color: var(--bg-primary-button-hover);
   border-color: var(--bg-primary-button-hover);
   text-decoration: none;
+  box-shadow: 0 4px 12px rgb(220 25 40 / 30%);
 }
 
-/* Secondary button */
+/* Secondary/outline button */
 a.button.secondary:any-link,
 button.button.secondary {
   background-color: transparent;
@@ -276,6 +279,7 @@ a.button.secondary:hover,
 button.button.secondary:hover {
   background-color: var(--bg-secondary-button-hover);
   border-color: var(--ink-800);
+  box-shadow: none;
 }
 
 /* ===== IMAGES ===== */
