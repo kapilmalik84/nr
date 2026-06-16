@@ -1,0 +1,27 @@
+main .media-contact {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--neutral-200, #f4f4f4);
+  border-left: 4px solid var(--auspost-red-500, #dc1928);
+  border-radius: var(--radius-s, 4px);
+  font-size: var(--body-font-size-s, 0.875rem);
+}
+
+main .media-contact .media-contact-row {
+  margin: 0.4rem 0;
+  color: var(--text-secondary, #31313d);
+}
+
+main .media-contact .media-contact-row:first-child {
+  font-weight: 700;
+  color: var(--text-primary, #212129);
+}
+
+main .media-contact a {
+  color: var(--auspost-red-500, #dc1928);
+  text-decoration: none;
+}
+
+main .media-contact a:hover {
+  text-decoration: underline;
+}
