@@ -164,7 +164,9 @@ export default async function decorate(block) {
         block.append(renderPagination(totalPages, page, showPage));
       }
 
-      block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72', 10);
+      const blockTop = block.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+      window.scrollTo({ top: Math.max(0, blockTop), behavior: 'smooth' });
     };
 
     showPage(1);
