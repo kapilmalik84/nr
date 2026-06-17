@@ -216,6 +216,17 @@ def extract_body_paragraphs(raw):
     block = strip_wrapper_tags(block, "div")
     block = strip_wrapper_tags(block, "span")
 
+    # Extract <ul>/<ol> list blocks as whole items (preserves list structure in AEM)
+    # Replace each list block with a sentinel so paragraph scanning stays in order
+    list_blocks = {}
+    sentinel_idx = [0]
+    def _stash_list(m):
+        key = f"\x00LIST{sentinel_idx[0]}\x00"
+        list_blocks[key] = m.group(0)
+        sentinel_idx[0] += 1
+        return f"<p>{key}</p>"
+    block = re.sub(r"<(ul|ol)\b[^>]*>.*?</\1>", _stash_list, block, flags=re.S | re.I)
+
     paras = re.findall(r"<p[^>]*>(.*?)</p>", block, re.S)
     paras = [unescape(p) for p in paras]
 
@@ -246,7 +257,9 @@ def extract_body_paragraphs(raw):
             else:
                 contact_lines.append(text)
         else:
-            body.append(p)
+            # Restore list blocks to their original HTML
+            restored = list_blocks.get(p.strip(), p)
+            body.append(restored)
     return body, contact_lines
 
 
@@ -484,7 +497,11 @@ def build_html(page):
     if page["date_text"]:
         body_html.append(f'<p class="article-date">{html.escape(page["date_text"])}</p>')
     for p in page["body"]:
-        body_html.append(f"<p>{p}</p>")
+        stripped = p.strip()
+        if re.match(r"<(?:ul|ol)\b", stripped, re.I):
+            body_html.append(stripped)  # list blocks don't need <p> wrapper
+        else:
+            body_html.append(f"<p>{p}</p>")
     # Inline images and video stay in the article body section (left column)
     for src, alt in page.get("inline_images", []):
         body_html.append(f'<picture><img src="{src}" alt="{html.escape(alt)}"></picture>')

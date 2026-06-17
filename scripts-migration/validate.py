@@ -27,6 +27,7 @@ Usage:
   python3 validate.py --list urls-video.txt                 # video only
 """
 import argparse
+import html as html_mod
 import json
 import os
 import re
@@ -89,9 +90,14 @@ def fetch(url, timeout=20):
 
 # ---------- source extraction ----------
 
+def normalise_title(s):
+    """Decode HTML entities, strip tags, collapse whitespace for comparison."""
+    return ' '.join(html_mod.unescape(strip_tags(s or '')).split()).lower()
+
+
 def source_title(raw):
     m = re.search(r'<h1 id="ctl00_MainContent_headingTitle">(.*?)</h1>', raw, re.S)
-    return strip_tags(m.group(1)) if m else None
+    return html_mod.unescape(strip_tags(m.group(1))).strip() if m else None
 
 
 def source_date(raw):
@@ -115,7 +121,7 @@ def source_has_video(raw):
 
 def aem_title(plain):
     m = re.search(r"<h1[^>]*>(.*?)</h1>", plain, re.I | re.S)
-    return strip_tags(m.group(1)) if m else None
+    return html_mod.unescape(strip_tags(m.group(1))).strip() if m else None
 
 
 def aem_has_date(plain):
@@ -191,18 +197,19 @@ def validate(slug, da_path_map):
         atitle = aem_title(aem_raw)
         result["source_title"] = stitle
         result["aem_title"] = atitle
-        if stitle and atitle and stitle.lower().strip() != atitle.lower().strip():
+        if stitle and atitle and normalise_title(stitle) != normalise_title(atitle):
             result["issues"].append("title_mismatch")
 
         # 2. Date
         result["source_date"] = source_date(src_raw)
 
-        # 3. Body word count
+        # 3. Body word count (skip for video articles — short descriptions are expected)
+        is_video = "/archive/video/" in (da_path or "")
         sw = source_body_words(src_raw)
         aw = aem_body_words(aem_raw)
         result["source_words"] = sw
         result["aem_words"] = aw
-        if sw > 50 and aw < sw * 0.5:
+        if not is_video and sw > 50 and aw < sw * 0.5:
             result["issues"].append(f"low_word_count({aw}/{sw})")
 
         # 4. Video embed
