@@ -34,7 +34,7 @@
 }
 
 .breadcrumb .breadcrumb-item::after {
-  content: '/';
+  content: '→';
   margin: 0 0.4rem;
   color: var(--border-secondary, #919194);
   font-size: 0.8em;
