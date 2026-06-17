@@ -3,10 +3,6 @@ import { loadFragment } from '../fragment/fragment.js';
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
-const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" aria-hidden="true" focusable="false">
-  <circle cx="30" cy="30" r="30" fill="#dc1928"/>
-  <path d="M18 12h14c6.627 0 12 5.373 12 12s-5.373 12-12 12H26v12H18V12zm8 16h6c2.209 0 4-1.791 4-4s-1.791-4-4-4h-6v8z" fill="#fff"/>
-</svg>`;
 
 function toggleAllNavSections(navSections) {
   if (!navSections) return;
@@ -76,13 +72,17 @@ export default async function decorate(block) {
   brandA.href = fixHref(brandLink ? brandLink.href : '/');
   brandA.className = 'nav-brand-logo';
   brandA.setAttribute('aria-label', 'Australia Post Newsroom home');
-  brandA.innerHTML = LOGO_SVG;
 
-  const brandName = document.createElement('span');
-  brandName.className = 'nav-brand-name';
-  brandName.innerHTML = 'Australia Post<span>Newsroom</span>';
+  const logoImg = document.createElement('img');
+  logoImg.src = '/icons/auspost-logo.svg';
+  logoImg.alt = 'Australia Post';
+  logoImg.setAttribute('aria-hidden', 'true');
 
-  brandA.append(brandName);
+  const newsroomLabel = document.createElement('span');
+  newsroomLabel.className = 'nav-brand-newsroom';
+  newsroomLabel.textContent = 'Newsroom';
+
+  brandA.append(logoImg, newsroomLabel);
   brandDiv.append(brandA);
 
   // ── Nav sections ──────────────────────────────────────────────────────────

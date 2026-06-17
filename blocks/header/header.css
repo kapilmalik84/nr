@@ -41,33 +41,27 @@ header nav .nav-brand {
 
 header nav .nav-brand-logo {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
   text-decoration: none;
-  border: 1.5px solid var(--ink-800, #202027);
-  border-radius: 4px;
-  padding: 0.3rem 0.625rem;
 }
 
-header nav .nav-brand-logo svg {
-  width: 32px;
-  height: 32px;
+header nav .nav-brand-logo img {
+  width: 110px;
+  height: auto;
+  display: block;
   flex-shrink: 0;
 }
 
-header nav .nav-brand-name {
-  color: var(--auspost-red-500, #dc1928);
-  font-weight: 700;
-  font-size: 0.9375rem;
-  white-space: nowrap;
-  line-height: 1.2;
-}
-
-header nav .nav-brand-name span {
-  display: block;
-  color: var(--ink-800, #202027);
-  font-size: 0.6875rem;
+header nav .nav-brand-newsroom {
+  font-size: 0.625rem;
   font-weight: 500;
+  color: var(--ink-600, #31313d);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding-left: 2px;
 }
 
 /* === NAV SECTIONS (desktop) === */
@@ -94,13 +88,13 @@ header nav .nav-sections > ul > li > a {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.5rem 0.875rem;
-  border-radius: var(--radius-pill, 9999px);
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
   color: var(--ink-800, #202027);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9375rem;
   text-decoration: none;
-  border: 2px solid transparent;
+  background: transparent;
   transition: background 0.15s, color 0.15s;
   white-space: nowrap;
   line-height: 1.4;
@@ -109,6 +103,7 @@ header nav .nav-sections > ul > li > a {
 header nav .nav-sections > ul > li > a:hover,
 header nav .nav-sections > ul > li[aria-expanded='true'] > a {
   background: var(--neutral-200, #f4f4f4);
+  text-decoration: none;
 }
 
 /* Chevron — dark pointing down by default; red pointing up when open */
@@ -411,4 +406,5 @@ header nav p {
 
 header nav a:any-link {
   color: currentcolor;
+  text-decoration: none;
 }
