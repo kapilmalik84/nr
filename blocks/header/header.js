@@ -40,7 +40,7 @@ function setupHoverDropdown(drop) {
     drop.setAttribute('aria-expanded', 'true');
     if (dropLink) {
       dropLink.classList.add('nav-active');
-      dropLink.style.background = '#dcdcdc';
+      dropLink.style.background = '#c0c0c0';
     }
   };
 

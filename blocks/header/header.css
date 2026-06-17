@@ -105,26 +105,24 @@ header nav .nav-sections > ul > li > a {
 /* Pill background: triggered by hovering anywhere in the li (including dropdown) */
 header nav .nav-sections > ul > li > a:hover,
 header nav .nav-sections > ul > li:hover > a {
-  background: #dcdcdc;
+  background: #c0c0c0;
   text-decoration: none;
 }
 
-/* Chevron — dark open ∨ by default; red open ∧ on hover */
+/* Chevron ▾ idle (dark), rotates to ▴ red on hover */
 header nav .nav-sections .nav-drop > a::after {
-  content: '';
+  content: '▾';
+  font-size: 0.7em;
+  line-height: 1;
+  color: var(--ink-800, #202027);
   display: inline-block;
-  width: 10px;
-  height: 6px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpolyline points='0,0.5 5,5.5 10,0.5' fill='none' stroke='%23202027' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   flex-shrink: 0;
-  transition: background-image 0.15s;
+  transition: color 0.15s, transform 0.15s;
 }
 
 header nav .nav-sections .nav-drop:hover > a::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpolyline points='0,5.5 5,0.5 10,5.5' fill='none' stroke='%23dc1928' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  color: var(--auspost-red-500, #dc1928);
+  transform: rotate(180deg);
 }
 
 /* Dropdown panel */
