@@ -68,6 +68,9 @@ export default function decorate(block) {
     homeLi.append(homeLink);
     ol.append(homeLi);
 
+    // Paths that are URL namespaces only — no DA page exists at these paths
+    const noPagePaths = new Set(['/section']);
+
     let cumulativePath = '';
 
     pathSegments.forEach((segment, i) => {
@@ -85,9 +88,13 @@ export default function decorate(block) {
         span.textContent = label;
         li.append(span);
         li.classList.add('breadcrumb-current');
+      } else if (noPagePaths.has(cumulativePath)) {
+        const span = document.createElement('span');
+        span.textContent = label;
+        li.append(span);
       } else {
         const link = document.createElement('a');
-        link.href = cumulativePath;
+        link.href = `${cumulativePath}/`;
         link.textContent = label;
         li.append(link);
       }
