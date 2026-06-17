@@ -41,9 +41,9 @@ header nav .nav-brand {
 
 header nav .nav-brand-logo {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
   text-decoration: none;
 }
 
@@ -55,13 +55,15 @@ header nav .nav-brand-logo img {
 }
 
 header nav .nav-brand-newsroom {
-  font-size: 0.625rem;
-  font-weight: 500;
-  color: var(--ink-600, #31313d);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--body-font-size-m, 1rem);
+  font-weight: 700;
+  color: var(--ink-900, #0d0d10);
+  letter-spacing: 0;
+  text-transform: none;
   line-height: 1;
-  padding-left: 2px;
+  padding-left: 0.875rem;
+  margin-left: 0.875rem;
+  border-left: 1.5px solid var(--neutral-300, #eee);
 }
 
 /* === NAV SECTIONS (desktop) === */
