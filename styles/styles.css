@@ -298,6 +298,17 @@ main .section > div {
   margin: 0 auto;
 }
 
+/* Breadcrumb section sits flush under the fixed nav — no section padding */
+main .section:has(.breadcrumb-wrapper) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Section immediately after breadcrumb section: tighter top padding */
+main .section:has(.breadcrumb-wrapper) + .section {
+  padding-top: 1.5rem;
+}
+
 main .section.highlight {
   background-color: var(--bg-secondary);
 }
@@ -357,7 +368,7 @@ main .section p > em:only-child {
   :root {
     --nav-height: 72px;
     --heading-font-size-xxl: 3rem;
-    --section-spacing: 3rem;
+    --section-spacing: 2rem;
   }
 
   main .section {
