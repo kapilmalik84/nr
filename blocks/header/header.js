@@ -100,6 +100,7 @@ export default async function decorate(block) {
       if (subUl) {
         li.classList.add('nav-drop');
         li.setAttribute('aria-expanded', 'false');
+        li.setAttribute('aria-haspopup', 'true');
 
         // Prepend a "view all" link at top of dropdown matching parent
         const parentLink = li.querySelector(':scope > a');

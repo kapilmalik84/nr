@@ -224,6 +224,9 @@ def extract_body_paragraphs(raw):
             # boilerplate handled separately via the shared fragment
             in_contact = False
             continue
+        # "Download video" / "Download" / "Watch video" links belong in the embed block
+        if re.match(r'^(download|watch video|watch now)\b', text.strip(), re.I):
+            continue
         if "media contact" in text.lower() or "national media line" in text.lower():
             in_contact = True
         if in_contact:
@@ -290,6 +293,43 @@ def extract_downloads(raw):
         [(absolutize(url), unescape(label)) for url, label in pdfs],
         [(absolutize(url), unescape(label)) for url, label in photos],
     )
+
+
+def extract_video_download_urls(raw):
+    """Find download links for video articles (Vimeo CDN, direct mp4, etc).
+    Returns list of (url, label) tuples, de-duplicated by URL."""
+    results = []
+    seen_urls = set()
+
+    _download_re = re.compile(
+        r'<a\b[^>]+href="([^"]+)"[^>]*>\s*((?:Download|Watch)[^<]*)\s*</a>',
+        re.I | re.S,
+    )
+
+    body_m = re.search(r'<div class="article-body[^"]*">', raw)
+    if body_m:
+        block = extract_balanced_div(raw, body_m.end())
+        for a_m in _download_re.finditer(block):
+            url = a_m.group(1).strip()
+            label = unescape(strip_tags(a_m.group(2))).strip() or "Download video"
+            if not url.startswith("http"):
+                url = SITE_BASE + url
+            if url not in seen_urls:
+                seen_urls.add(url)
+                results.append((url, label))
+
+    dl_section = re.search(r'<div class="link-list card downloads">(.*?)</div>\s*</div>', raw, re.S)
+    if dl_section:
+        for a_m in _download_re.finditer(dl_section.group(1)):
+            url = a_m.group(1).strip()
+            if not url.startswith("http"):
+                url = SITE_BASE + url
+            label = unescape(strip_tags(a_m.group(2))).strip() or "Download video"
+            if url not in seen_urls:
+                seen_urls.add(url)
+                results.append((url, label))
+
+    return results
 
 
 def upload_pdf_to_da(src_url, token, session):
@@ -391,6 +431,7 @@ def extract_page(slug):
     inline_images = extract_inline_images(raw)
     pdfs, photos = extract_downloads(raw)
     video_url = extract_video_embed(raw)
+    video_download_urls = extract_video_download_urls(raw) if video_url else []
     article_image = extract_article_image(raw)
     description = extract_article_description(raw)
 
@@ -411,6 +452,7 @@ def extract_page(slug):
         "pdfs": pdfs,
         "photos": photos,
         "video_url": video_url,
+        "video_download_urls": video_download_urls,
         "article_image": article_image,
         "description": description,
     }
@@ -441,8 +483,17 @@ def build_html(page):
     for src, alt in page.get("inline_images", []):
         body_html.append(f'<picture><img src="{src}" alt="{html.escape(alt)}"></picture>')
     if page["video_url"]:
+        dl_urls = page.get("video_download_urls", [])
+        first_dl = dl_urls[0] if dl_urls else None
+        dl_row = (
+            f'<div><div><a href="{first_dl[0]}">{html.escape(first_dl[1])}</a></div></div>'
+            if first_dl else ""
+        )
         body_html.append(
-            f'<div class="embed"><div><div><a href="{page["video_url"]}">{page["video_url"]}</a></div></div></div>'
+            f'<div class="embed">'
+            f'<div><div><a href="{page["video_url"]}">{page["video_url"]}</a></div></div>'
+            f'{dl_row}'
+            f'</div>'
         )
     body_html.append("</div>")
     parts.append("".join(body_html))
