@@ -4,12 +4,12 @@ import { loadFragment } from '../fragment/fragment.js';
 const SOCIAL_LINKS = [
   {
     href: 'https://www.facebook.com/australiapost',
-    src: 'https://newsroom.auspost.com.au/assets/img/icon-facebook.svg',
+    src: '/assets/icons/icon-facebook.svg',
     label: 'Facebook',
   },
   {
     href: 'https://www.linkedin.com/company/australia-post/',
-    src: 'https://newsroom.auspost.com.au/assets/img/icon-linkedin.svg',
+    src: '/assets/icons/icon-linkedin.svg',
     label: 'LinkedIn',
   },
 ];
@@ -23,14 +23,11 @@ export default async function decorate(block) {
 
   block.textContent = '';
   const footer = document.createElement('div');
-  while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
-  // Identify the three content paragraphs by pattern
-  const paras = [...footer.querySelectorAll('p')];
+  const paras = [...fragment.querySelectorAll('p')];
   const copyrightP = paras.find((p) => p.textContent.includes('Copyright'));
   const ackP = paras.find((p) => p.textContent.includes('Traditional Custodians'));
 
-  // Copyright row: copyright text + social icons
   if (copyrightP) {
     const legalRow = document.createElement('div');
     legalRow.className = 'footer-legal';
@@ -50,17 +47,16 @@ export default async function decorate(block) {
       const img = document.createElement('img');
       img.src = src;
       img.alt = label;
-      img.width = 32;
-      img.height = 32;
+      img.width = 24;
+      img.height = 24;
       a.append(img);
       socialDiv.append(a);
     });
 
     legalRow.append(copyrightSpan, socialDiv);
-    copyrightP.replaceWith(legalRow);
+    footer.append(legalRow);
   }
 
-  // Acknowledgement row: RAP image + text
   if (ackP) {
     const ackRow = document.createElement('div');
     ackRow.className = 'footer-acknowledgement';
@@ -75,7 +71,7 @@ export default async function decorate(block) {
     textSpan.textContent = ackP.textContent;
 
     ackRow.append(img, textSpan);
-    ackP.replaceWith(ackRow);
+    footer.append(ackRow);
   }
 
   block.append(footer);
