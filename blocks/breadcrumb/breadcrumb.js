@@ -68,19 +68,31 @@ export default function decorate(block) {
     homeLi.append(homeLink);
     ol.append(homeLi);
 
-    // Paths that are URL namespaces only — no DA page exists at these paths
-    const noPagePaths = new Set(['/section']);
+    // Returns false for URL namespace folders that have no published DA page.
+    // Crumbs for these paths are skipped entirely.
+    function pathHasPage(path) {
+      // /section is a URL namespace — sections live at /section/news/, /section/stamps/ etc.
+      if (path === '/section') return false;
+      // /archive and its immediate news/video children are namespace folders only
+      if (/^\/archive(\/(?:news|video))?$/.test(path)) return false;
+      // Year folders under /archive/news (e.g. /archive/news/2023) have no page
+      if (/^\/archive\/news\/\d{4}$/.test(path)) return false;
+      return true;
+    }
 
     let cumulativePath = '';
 
     pathSegments.forEach((segment, i) => {
       cumulativePath += `/${segment}`;
 
-      const li = document.createElement('li');
-      li.className = 'breadcrumb-item';
-
       const isLast = i === pathSegments.length - 1;
       const label = formatLabel(segment);
+
+      // Skip intermediate crumbs that have no published page
+      if (!isLast && !pathHasPage(cumulativePath)) return;
+
+      const li = document.createElement('li');
+      li.className = 'breadcrumb-item';
 
       if (isLast) {
         const span = document.createElement('span');
@@ -88,10 +100,6 @@ export default function decorate(block) {
         span.textContent = label;
         li.append(span);
         li.classList.add('breadcrumb-current');
-      } else if (noPagePaths.has(cumulativePath)) {
-        const span = document.createElement('span');
-        span.textContent = label;
-        li.append(span);
       } else {
         const link = document.createElement('a');
         link.href = `${cumulativePath}/`;
