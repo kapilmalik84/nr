@@ -17,9 +17,11 @@ export default function decorate(block) {
       const pic = imgCol.querySelector('picture');
       if (pic) {
         const img = pic.querySelector('img');
-        const optimized = createOptimizedPicture(img.src, img.alt || '', false, [{ width: '480' }]);
+        const optimized = createOptimizedPicture(img.src, '', false, [{ width: '480' }]);
         const imageWrap = document.createElement('div');
         imageWrap.className = 'card-image';
+        const optimizedImg = optimized.querySelector('img');
+        if (optimizedImg) optimizedImg.addEventListener('error', () => { imageWrap.remove(); });
         const link = textCol ? textCol.querySelector('a') : null;
         if (link) {
           const imgLink = document.createElement('a');

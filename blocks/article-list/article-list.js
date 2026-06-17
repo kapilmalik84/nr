@@ -13,7 +13,10 @@ function renderCard(article) {
     link.href = article.path;
     link.tabIndex = -1;
     link.setAttribute('aria-hidden', 'true');
-    link.append(createOptimizedPicture(article.image, article.title || '', false, [{ width: '480' }]));
+    const pic = createOptimizedPicture(article.image, '', false, [{ width: '480' }]);
+    const img = pic.querySelector('img');
+    if (img) img.addEventListener('error', () => { imgWrap.remove(); });
+    link.append(pic);
     imgWrap.append(link);
     card.append(imgWrap);
   }
