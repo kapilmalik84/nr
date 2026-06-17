@@ -98,7 +98,7 @@ header nav .nav-sections > ul > li > a {
   font-size: 0.9375rem;
   text-decoration: none;
   border: 2px solid transparent;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, color 0.15s;
   white-space: nowrap;
   line-height: 1.4;
 }
@@ -108,19 +108,22 @@ header nav .nav-sections > ul > li[aria-expanded='true'] > a {
   background: var(--neutral-200, #f4f4f4);
 }
 
-/* Chevron for items with children */
+/* Chevron — dark pointing down by default; red pointing up when open */
 header nav .nav-sections .nav-drop > a::after {
   content: '';
   display: inline-block;
   width: 6px;
   height: 6px;
-  border: 2px solid currentcolor;
   border-width: 0 2px 2px 0;
+  border-style: solid;
+  border-color: var(--ink-800, #202027);
   transform: rotate(45deg) translateY(-2px);
   flex-shrink: 0;
+  transition: border-color 0.15s, transform 0.2s;
 }
 
 header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+  border-color: var(--auspost-red-500, #dc1928);
   transform: rotate(-135deg) translateY(2px);
 }
 
