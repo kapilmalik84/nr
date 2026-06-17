@@ -9,7 +9,10 @@ function toggleAllNavSections(navSections) {
   navSections.querySelectorAll('.nav-drop').forEach((d) => {
     d.setAttribute('aria-expanded', 'false');
     const a = d.querySelector(':scope > a');
-    if (a) a.classList.remove('nav-active');
+    if (a) {
+      a.classList.remove('nav-active');
+      a.style.background = '';
+    }
   });
 }
 
@@ -35,14 +38,20 @@ function setupHoverDropdown(drop) {
     clearTimeout(closeTimer);
     toggleAllNavSections(drop.closest('.nav-sections'));
     drop.setAttribute('aria-expanded', 'true');
-    if (dropLink) dropLink.classList.add('nav-active');
+    if (dropLink) {
+      dropLink.classList.add('nav-active');
+      dropLink.style.background = '#dcdcdc';
+    }
   };
 
   const scheduleClose = () => {
     clearTimeout(closeTimer);
     closeTimer = setTimeout(() => {
       drop.setAttribute('aria-expanded', 'false');
-      if (dropLink) dropLink.classList.remove('nav-active');
+      if (dropLink) {
+        dropLink.classList.remove('nav-active');
+        dropLink.style.background = '';
+      }
     }, 180);
   };
 
