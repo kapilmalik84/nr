@@ -214,9 +214,11 @@ def extract_body_paragraphs(raw):
         return [], []
     block = extract_balanced_div(raw, m.end())
 
-    # Word-paste artifacts: unwrap nested <div> and <span> wrappers, keep <p>/<a>/<strong>/<em>/<br>
-    block = strip_wrapper_tags(block, "div")
+    # Unwrap inline span wrappers (keep text content)
     block = strip_wrapper_tags(block, "span")
+
+    # Strip table blocks (too complex to render in AEM EDS and not part of narrative)
+    block = re.sub(r"<table\b.*?</table>", "", block, flags=re.S | re.I)
 
     # Extract <ul>/<ol> list blocks as whole items (preserves list structure in AEM)
     # Replace each list block with a sentinel so paragraph scanning stays in order
@@ -228,6 +230,11 @@ def extract_body_paragraphs(raw):
         sentinel_idx[0] += 1
         return f"<p>{key}</p>"
     block = re.sub(r"<(ul|ol)\b[^>]*>.*?</\1>", _stash_list, block, flags=re.S | re.I)
+
+    # Convert <div> paragraph wrappers to <p> so div-wrapped content is captured
+    # (some CMS articles use <div> instead of <p> for body paragraphs)
+    block = re.sub(r"<div\b[^>]*>", "<p>", block, flags=re.I)
+    block = re.sub(r"</div>", "</p>", block, flags=re.I)
 
     paras = re.findall(r"<p[^>]*>(.*?)</p>", block, re.S)
     paras = [unescape(p) for p in paras]

@@ -88,8 +88,8 @@ def purge_path(path, token, dry_run):
         return ("DRY", "DRY")
 
     try:
-        pv = session.delete(pv_url, headers={"Authorization": f"token {token}"}, timeout=15)
-        lv = session.delete(lv_url, headers={"Authorization": f"token {token}"}, timeout=15)
+        pv = session.delete(pv_url, headers={"Authorization": f"Bearer {token}"}, timeout=15)
+        lv = session.delete(lv_url, headers={"Authorization": f"Bearer {token}"}, timeout=15)
         return (pv.status_code, lv.status_code)
     except Exception as e:
         print(f"  ERROR: {e}")

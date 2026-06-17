@@ -107,7 +107,12 @@ def source_date(raw):
 
 def source_body_words(raw):
     m = re.search(r'<div class="article-body[^"]*">(.*?)</div>\s*</div>', raw, re.S)
-    return word_count(m.group(1)) if m else 0
+    if not m:
+        return 0
+    body = m.group(1)
+    # Strip tables (not migrated to AEM EDS — exclude from word count comparison)
+    body = re.sub(r'<table\b.*?</table>', '', body, flags=re.S | re.I)
+    return word_count(body)
 
 
 def source_has_video(raw):
