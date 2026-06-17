@@ -12,7 +12,7 @@ export default function decorate(block) {
   textCol.className = 'feature-text';
   if (cols[1]) textCol.append(...[...cols[1].childNodes]);
 
-  const cta = textCol.querySelector('a');
+  const cta = textCol.querySelector('p > a');
   if (cta) cta.classList.add('button');
 
   block.textContent = '';
