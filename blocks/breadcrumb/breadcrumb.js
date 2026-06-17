@@ -1,11 +1,20 @@
 export default function decorate(block) {
   const links = block.querySelectorAll('a');
   const items = [...block.querySelectorAll('li, p')];
+
   const nav = document.createElement('nav');
   nav.setAttribute('aria-label', 'Breadcrumb');
+
   const ol = document.createElement('ol');
   ol.className = 'breadcrumb-list';
 
+  // Helper to format labels
+  const formatLabel = (text) =>
+    decodeURIComponent(text)
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  //  1. If authored links exist
   if (links.length) {
     links.forEach((link, i) => {
       const li = document.createElement('li');
@@ -22,7 +31,10 @@ export default function decorate(block) {
 
       ol.append(li);
     });
-  } else if (items.length) {
+  }
+
+  //  2. If authored list/text exists
+  else if (items.length) {
     items.forEach((item, i) => {
       const li = document.createElement('li');
       li.className = 'breadcrumb-item';
@@ -44,10 +56,24 @@ export default function decorate(block) {
 
       ol.append(li);
     });
-  } else {
-     const pathSegments = window.location.pathname
+  }
+
+  //  3. Fallback to URL (MAIN FIX)
+  else {
+    const pathSegments = window.location.pathname
       .split('/')
       .filter((segment) => segment);
+
+    //  Add Home explicitly
+    const homeLi = document.createElement('li');
+    homeLi.className = 'breadcrumb-item';
+
+    const homeLink = document.createElement('a');
+    homeLink.href = '/';
+    homeLink.textContent = 'Home';
+
+    homeLi.append(homeLink);
+    ol.append(homeLi);
 
     let cumulativePath = '';
 
@@ -58,10 +84,7 @@ export default function decorate(block) {
       li.className = 'breadcrumb-item';
 
       const isLast = i === pathSegments.length - 1;
-
-      const label = decodeURIComponent(segment)
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+      const label = formatLabel(segment);
 
       if (isLast) {
         const span = document.createElement('span');
