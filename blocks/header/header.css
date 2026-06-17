@@ -1,139 +1,119 @@
 /* stylelint-disable no-descending-specificity */
 
-/* header and nav layout */
-header .nav-wrapper {
-  background-color: var(--bg-primary, #fff);
-  width: 100%;
-  z-index: 100;
-  position: fixed;
-  top: 0;
-  border-bottom: 1px solid var(--border-primary, #e2e2e2);
+/* =============================================
+   AUSPOST NEWSROOM NAV — matches stest.npe.auspost.com.au
+   Single-row, hover dropdowns, pill utilities
+   ============================================= */
+
+header {
+  height: var(--nav-height, 72px);
 }
 
-/* === TOP BAR: logo + contact === */
-header nav .nav-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1264px;
-  margin: 0 auto;
-  padding: 0.5rem 1.5rem;
+header .nav-wrapper {
+  background: var(--neutral-0, #fff);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 200;
   border-bottom: 1px solid var(--neutral-300, #eee);
 }
 
-header nav .nav-top-bar .nav-logo img {
-  height: 32px;
-  width: auto;
-}
-
-header nav .nav-top-bar .nav-logo a {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: var(--auspost-red-500, #dc1928);
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-header nav .nav-top-bar .nav-contact {
-  display: none;
-  align-items: center;
-  gap: 1.5rem;
-  font-size: var(--body-font-size-s, 0.875rem);
-  color: var(--ink-600, #31313d);
-}
-
-header nav .nav-top-bar .nav-contact a {
-  text-decoration: none;
-  color: var(--ink-600, #31313d);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-header nav .nav-top-bar .nav-contact a:hover {
-  color: var(--auspost-red-500, #dc1928);
-}
-
-@media (width >= 900px) {
-  header nav .nav-top-bar .nav-contact {
-    display: flex;
-  }
-}
-
-/* === BOTTOM BAR: Newsroom title + nav links + search === */
-header nav .nav-bottom-bar {
+header nav {
   display: flex;
   align-items: center;
   max-width: 1264px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  height: 48px;
-  gap: 2rem;
+  height: var(--nav-height, 72px);
+  gap: 0;
+  position: relative;
 }
 
+/* === BRAND === */
 header nav .nav-brand {
-  font-size: var(--heading-font-size-s, 1.125rem);
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-header nav .nav-brand a {
-  color: var(--ink-900, #0d0d10);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
   text-decoration: none;
 }
 
-/* sections */
-header nav .nav-sections {
-  flex: 1;
-  display: none;
+header nav .nav-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
-header nav .nav-sections ul {
+header nav .nav-brand-logo svg {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+header nav .nav-brand-name {
+  color: var(--auspost-red-500, #dc1928);
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+header nav .nav-brand-name span {
+  display: block;
+  color: var(--ink-800, #202027);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* === NAV SECTIONS (desktop) === */
+header nav .nav-sections {
+  display: none;
+  flex: 1;
+}
+
+header nav .nav-sections > ul {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 0.25rem;
   align-items: center;
+  gap: 0.125rem;
 }
 
-/* top-level nav items — bold, distinct */
+/* Top-level nav items */
 header nav .nav-sections > ul > li {
   position: relative;
 }
 
 header nav .nav-sections > ul > li > a {
-  color: var(--ink-800, #202027);
-  text-decoration: none;
-  font-size: var(--body-font-size-m, 1rem);
-  font-weight: 600;
-  padding: 0.625rem 0.75rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  border-radius: var(--radius-m, 8px);
-  transition: background 0.15s, color 0.15s;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-pill, 9999px);
+  color: var(--ink-800, #202027);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  line-height: 1.4;
 }
 
-header nav .nav-sections > ul > li > a:hover {
-  color: var(--auspost-red-500, #dc1928);
-  background: var(--auspost-red-100, #fff4f4);
-}
-
-/* active/current page indicator */
-header nav .nav-sections > ul > li.active > a,
+header nav .nav-sections > ul > li > a:hover,
 header nav .nav-sections > ul > li[aria-expanded='true'] > a {
-  color: var(--auspost-red-500, #dc1928);
+  background: var(--neutral-200, #f4f4f4);
 }
 
-/* dropdown chevron on items that have children */
+/* Chevron for items with children */
 header nav .nav-sections .nav-drop > a::after {
   content: '';
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border: 2px solid currentcolor;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) translateY(-2px);
@@ -141,139 +121,187 @@ header nav .nav-sections .nav-drop > a::after {
 }
 
 header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after {
-  transform: rotate(-135deg) translateY(-2px);
+  transform: rotate(-135deg) translateY(2px);
 }
 
-/* sub-nav dropdowns */
+/* Dropdown panel */
 header nav .nav-sections > ul > li > ul {
   display: none;
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   left: 0;
-  background: var(--bg-primary, #fff);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  background: var(--neutral-0, #fff);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 14%), 0 2px 8px rgb(0 0 0 / 8%);
   border-top: 3px solid var(--auspost-red-500, #dc1928);
-  border-radius: 0 0 var(--radius-m, 8px) var(--radius-m, 8px);
-  padding: 0.5rem 0;
-  min-width: 220px;
+  border-radius: 0 var(--radius-l, 12px) var(--radius-l, 12px) var(--radius-l, 12px);
+  padding: 0.75rem 0;
+  min-width: 240px;
   z-index: 10;
+  list-style: none;
 }
 
 header nav .nav-sections > ul > li[aria-expanded='true'] > ul {
   display: block;
 }
 
-header nav .nav-sections > ul > li > ul > li {
-  padding: 0;
+/* Dropdown section heading (first link = parent category) */
+header nav .nav-sections > ul > li > ul > li:first-child > a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink-900, #0d0d10);
+  text-decoration: none;
+  border-bottom: 1px solid var(--neutral-300, #eee);
+  margin-bottom: 0.375rem;
 }
 
-/* sub-items — lighter, smaller, clearly subordinate */
+header nav .nav-sections > ul > li > ul > li:first-child > a::after {
+  content: '→';
+  color: var(--auspost-red-500, #dc1928);
+  font-weight: 700;
+}
+
+header nav .nav-sections > ul > li > ul > li:first-child > a:hover {
+  color: var(--auspost-red-500, #dc1928);
+  background: none;
+}
+
+/* Sub-items */
 header nav .nav-sections > ul > li > ul > li > a {
   display: block;
-  padding: 0.55rem 1.25rem;
+  padding: 0.45rem 1.25rem;
   font-size: var(--body-font-size-s, 0.875rem);
   font-weight: 400;
-  white-space: nowrap;
-  color: var(--ink-700, #212129);
+  color: var(--ink-700, #31313d);
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition: color 0.15s, background 0.15s;
 }
 
 header nav .nav-sections > ul > li > ul > li > a:hover {
   color: var(--auspost-red-500, #dc1928);
   background: var(--auspost-red-100, #fff4f4);
-  padding-left: 1.5rem;
 }
 
 @media (width >= 900px) {
   header nav .nav-sections {
-    display: block;
-  }
-}
-
-/* search box */
-header nav .nav-search {
-  display: none;
-  align-items: center;
-  margin-left: auto;
-}
-
-header nav .nav-search {
-  background: var(--neutral-100, #f5f5f5);
-  border: 1.5px solid var(--border-primary, #e2e2e2);
-  border-radius: var(--radius-pill, 9999px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  transition: border-color 0.2s;
-}
-
-header nav .nav-search:focus-within {
-  border-color: var(--auspost-red-500, #dc1928);
-}
-
-header nav .nav-search input {
-  border: none;
-  background: transparent;
-  padding: 0.4rem 0.75rem;
-  font-size: var(--body-font-size-s, 0.875rem);
-  width: 150px;
-  font-family: var(--body-font-family);
-  outline: none;
-  color: var(--text-primary, #212129);
-}
-
-header nav .nav-search button {
-  background: var(--auspost-red-500, #dc1928);
-  border: none;
-  padding: 0.4rem 0.65rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  color: #fff;
-  transition: background 0.2s;
-}
-
-header nav .nav-search button:hover {
-  background: var(--auspost-red-600, #b01420);
-}
-
-header nav .nav-search button svg {
-  width: 15px;
-  height: 15px;
-  stroke: #fff;
-}
-
-@media (width >= 900px) {
-  header nav .nav-search {
     display: flex;
   }
 }
 
-/* hamburger (mobile) */
+/* === UTILITY AREA (right side) === */
+header nav .nav-utilities {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+header nav .nav-utilities .nav-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--body-font-size-s, 0.875rem);
+  color: var(--ink-700, #31313d);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+header nav .nav-utilities .nav-contact-link:hover {
+  color: var(--auspost-red-500, #dc1928);
+}
+
+/* Track-or-search style pill button */
+header nav .nav-utilities .nav-search-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border: 1.5px solid var(--neutral-400, #e2e2e2);
+  border-radius: var(--radius-pill, 9999px);
+  background: var(--neutral-100, #f5f5f5);
+  color: var(--ink-800, #202027);
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-weight: 500;
+  cursor: text;
+  transition: border-color 0.15s;
+}
+
+header nav .nav-utilities .nav-search-pill:focus-within {
+  border-color: var(--auspost-red-500, #dc1928);
+  background: var(--neutral-0, #fff);
+}
+
+header nav .nav-utilities .nav-search-pill input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-family: var(--body-font-family);
+  width: 140px;
+  color: var(--text-primary, #212129);
+}
+
+header nav .nav-utilities .nav-search-pill input::placeholder {
+  color: var(--neutral-600, #6d6d72);
+}
+
+header nav .nav-utilities .nav-search-pill button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--ink-700, #31313d);
+  transition: color 0.15s;
+}
+
+header nav .nav-utilities .nav-search-pill button:hover {
+  color: var(--auspost-red-500, #dc1928);
+}
+
+@media (width >= 900px) {
+  header nav .nav-utilities {
+    display: flex;
+  }
+}
+
+/* === HAMBURGER (mobile) === */
 header nav .nav-hamburger {
   display: flex;
   align-items: center;
+  margin-left: auto;
 }
 
 header nav .nav-hamburger button {
-  height: 22px;
-  margin: 0;
+  height: 24px;
   border: 0;
   padding: 0;
   background: transparent;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
 }
 
 header nav .nav-hamburger-icon,
 header nav .nav-hamburger-icon::before,
 header nav .nav-hamburger-icon::after {
   display: block;
-  position: relative;
-  width: 20px;
+  width: 22px;
   height: 2px;
   border-radius: 2px;
-  background: currentcolor;
+  background: var(--ink-800, #202027);
+}
+
+header nav .nav-hamburger-icon {
+  position: relative;
 }
 
 header nav .nav-hamburger-icon::before,
@@ -283,11 +311,11 @@ header nav .nav-hamburger-icon::after {
 }
 
 header nav .nav-hamburger-icon::before {
-  top: -6px;
+  top: -7px;
 }
 
 header nav .nav-hamburger-icon::after {
-  top: 6px;
+  top: 7px;
 }
 
 @media (width >= 900px) {
@@ -296,36 +324,38 @@ header nav .nav-hamburger-icon::after {
   }
 }
 
-/* mobile expanded state */
+/* === MOBILE EXPANDED NAV === */
 @media (width < 900px) {
   header nav[aria-expanded='true'] .nav-sections {
     display: block;
     position: absolute;
-    top: 100%;
+    top: var(--nav-height, 72px);
     left: 0;
     right: 0;
-    background: var(--bg-primary, #fff);
+    background: var(--neutral-0, #fff);
     border-top: 1px solid var(--neutral-300, #eee);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
-    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    padding: 1rem 1.5rem 1.5rem;
+    max-height: calc(100vh - var(--nav-height, 72px));
+    overflow-y: auto;
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0;
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul > li {
-    width: 100%;
     border-bottom: 1px solid var(--neutral-300, #eee);
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul > li > a {
     width: 100%;
-    padding: 0.75rem 0;
+    padding: 0.875rem 0.5rem;
     border-radius: 0;
     justify-content: space-between;
+    border: none;
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul > li > ul {
@@ -333,22 +363,36 @@ header nav .nav-hamburger-icon::after {
     box-shadow: none;
     border-top: none;
     border-radius: 0;
-    padding: 0.25rem 0 0.25rem 1rem;
+    padding: 0.25rem 0 0.75rem 0.75rem;
     background: var(--neutral-100, #f5f5f5);
+    min-width: unset;
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul > li[aria-expanded='true'] > ul {
     display: block;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li > ul > li > a {
+  header nav[aria-expanded='true'] .nav-sections > ul > li > ul > li:first-child > a {
+    border-bottom: none;
     padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0;
   }
-}
 
-/* nav wrapper layout removed (handled by top/bottom bar) */
-header nav {
-  position: relative;
+  header nav[aria-expanded='true'] .nav-sections > ul > li > ul > li > a {
+    padding: 0.45rem 0.75rem;
+  }
+
+  header nav[aria-expanded='true'] .nav-utilities {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem 0;
+    border-top: 1px solid var(--neutral-300, #eee);
+    margin-top: 0.5rem;
+  }
 }
 
 header nav p {

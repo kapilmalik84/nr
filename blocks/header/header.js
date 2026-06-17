@@ -26,46 +26,31 @@ function fixHref(href) {
   return href.replace(/^http:\/\/\//, '/').replace(/^http:\/\/(?!\/)/, '/');
 }
 
-/**
- * Parses a flat paragraph with links separated by <br> into a nested <ul>.
- * Links = top-level items; plain text after a link = sub-items (dropdown).
- */
-function buildNavList(paragraph) {
-  const ul = document.createElement('ul');
-  let currentLi = null;
-  let currentSubUl = null;
+function setupHoverDropdown(drop) {
+  let closeTimer = null;
 
-  [...paragraph.childNodes].forEach((node) => {
-    if (node.nodeName === 'BR') return;
+  const open = () => {
+    clearTimeout(closeTimer);
+    toggleAllNavSections(drop.closest('.nav-sections'));
+    drop.setAttribute('aria-expanded', 'true');
+  };
 
-    if (node.nodeName === 'A') {
-      currentLi = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = fixHref(node.href);
-      a.textContent = node.textContent;
-      currentLi.append(a);
-      ul.append(currentLi);
-      currentSubUl = null;
-    } else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-      if (currentLi) {
-        if (!currentSubUl) {
-          currentSubUl = document.createElement('ul');
-          currentLi.append(currentSubUl);
-          currentLi.classList.add('nav-drop');
-          currentLi.setAttribute('aria-expanded', 'false');
-        }
-        const subLi = document.createElement('li');
-        const a = document.createElement('a');
-        const parentLink = currentLi.querySelector(':scope > a');
-        a.href = parentLink ? parentLink.href : '#';
-        a.textContent = node.textContent.trim();
-        subLi.append(a);
-        currentSubUl.append(subLi);
-      }
-    }
-  });
+  const close = (delay = 150) => {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      drop.setAttribute('aria-expanded', 'false');
+    }, delay);
+  };
 
-  return ul;
+  drop.addEventListener('mouseenter', open);
+  drop.addEventListener('mouseleave', () => close());
+
+  // Keep dropdown open when hovering inside the submenu
+  const subUl = drop.querySelector(':scope > ul');
+  if (subUl) {
+    subUl.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    subUl.addEventListener('mouseleave', () => close());
+  }
 }
 
 export default async function decorate(block) {
@@ -78,15 +63,11 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  // Get all paragraphs from the fragment (may be in one div or multiple divs)
   const allParagraphs = [...nav.querySelectorAll('p')];
   const navUl = nav.querySelector('ul');
 
-  // Identify paragraphs by content pattern:
-  // p[0] = brand link, p[1] = nav links (with <br>), p[2+] = contact info
   const brandP = allParagraphs[0];
-  const navP = allParagraphs[1];
-  const contactPs = allParagraphs.slice(2);
+  const contactPs = allParagraphs.slice(1);
 
   // Build top bar
   const topBar = document.createElement('div');
@@ -145,33 +126,57 @@ export default async function decorate(block) {
         li.setAttribute('aria-expanded', 'false');
       }
     });
-  } else if (navP && navP.querySelector('a')) {
-    const ul = buildNavList(navP);
-    navSections.append(ul);
   }
 
-  // Dropdown click handlers
+  // Desktop: hover opens dropdown; mobile: click toggles
   navSections.querySelectorAll('.nav-drop').forEach((drop) => {
+    // Mobile click handler
     drop.addEventListener('click', (e) => {
+      if (isDesktop.matches) return;
       if (e.target.closest('ul ul')) return;
-      if (isDesktop.matches) {
-        e.preventDefault();
-        const expanded = drop.getAttribute('aria-expanded') === 'true';
-        toggleAllNavSections(navSections);
-        drop.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-      }
+      e.preventDefault();
+      const expanded = drop.getAttribute('aria-expanded') === 'true';
+      toggleAllNavSections(navSections);
+      drop.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     });
   });
 
+  isDesktop.addEventListener('change', () => {
+    if (isDesktop.matches) {
+      navSections.querySelectorAll('.nav-drop').forEach(setupHoverDropdown);
+    }
+  });
+
+  if (isDesktop.matches) {
+    navSections.querySelectorAll('.nav-drop').forEach(setupHoverDropdown);
+  }
+
   bottomBar.append(navSections);
 
-  // Search box
+  // Search — navigates to /search?q=query
   const searchDiv = document.createElement('div');
   searchDiv.className = 'nav-search';
-  searchDiv.innerHTML = `<input type="text" placeholder="Search..." aria-label="Search">
-    <button type="button" aria-label="Search">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>`;
+
+  const searchInput = document.createElement('input');
+  searchInput.type = 'text';
+  searchInput.placeholder = 'Search...';
+  searchInput.setAttribute('aria-label', 'Search');
+
+  const searchBtn = document.createElement('button');
+  searchBtn.type = 'button';
+  searchBtn.setAttribute('aria-label', 'Search');
+  searchBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+
+  const doNavSearch = () => {
+    const q = searchInput.value.trim();
+    if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
+  };
+  searchBtn.addEventListener('click', doNavSearch);
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doNavSearch();
+  });
+
+  searchDiv.append(searchInput, searchBtn);
   bottomBar.append(searchDiv);
 
   // Hamburger
@@ -192,6 +197,7 @@ export default async function decorate(block) {
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
+  // Close all dropdowns when clicking outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-sections')) {
       toggleAllNavSections(navSections, false);
