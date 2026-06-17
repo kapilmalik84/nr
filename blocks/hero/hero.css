@@ -28,17 +28,17 @@ main .hero[style*="background-image"]::before {
   z-index: 0;
 }
 
-/* Decorative P-circle swoosh (large arc on the left, like stest) */
+/* Decorative P-circle swoosh — large circle mostly off-screen left, page-bg fill creates the arc
+   Mirrors .gradient div from stest banner (banner.scss): 250%×250%, left:-96%, bottom:12% */
 main .hero::after {
   content: '';
   position: absolute;
-  left: -6%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(54%, 400px);
-  aspect-ratio: 1;
+  height: 250%;
+  width: 250%;
   border-radius: 50%;
-  border: clamp(48px, 8%, 72px) solid rgba(255, 255, 255, 0.09);
+  background: var(--bg-primary, #fff);
+  left: -96%;
+  bottom: 12%;
   z-index: 0;
   pointer-events: none;
 }
