@@ -28,7 +28,7 @@ indices:
         select: head > meta[name="category"]
         value: attribute(el, "content")
       subcategory:
-        select: head > meta[name="subcategory"]
+        select: head > meta[name="sub-category"]
         value: attribute(el, "content")
       lastModified:
         select: none

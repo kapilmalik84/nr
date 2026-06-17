@@ -77,7 +77,13 @@ def compute_da_path(slug):
     """Compute the target DA path using year-based folder structure from category scan."""
     _load_scan()
     base = slug.rstrip("/").split("/")[-1]
+    # AEM EDS cannot handle double-dash or leading dash in path segments (returns preview:404)
+    base = re.sub(r'-{2,}', '-', base).lstrip('-')
     info = _scan_lookup.get(slug) or _scan_lookup.get(base) or {}
+    if not info:
+        # Try original (un-normalised) base in case scan used the raw slug
+        raw_base = slug.rstrip("/").split("/")[-1]
+        info = _scan_lookup.get(raw_base) or {}
     section = info.get("section", "Unknown")
     subsection = info.get("subsection", "")
     year = info.get("year") or "unknown"

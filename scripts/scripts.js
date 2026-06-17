@@ -20,17 +20,32 @@ import {
  * @param {Element} main the main element
  */
 function decorateArticlePage(main) {
-  const date = getMetadata('date');
+  const date = getMetadata('publication-date');
   const category = getMetadata('category');
   if (!date) return;
 
   const h1 = main.querySelector('h1');
   if (!h1) return;
 
+  // Remove the raw category paragraph (before h1) — AEM strips its class, left as plain <p>
+  const prevEl = h1.previousElementSibling;
+  if (prevEl && prevEl.tagName === 'P' && prevEl.textContent.trim() === (category || '').trim()) {
+    prevEl.remove();
+  }
+
+  // Remove the raw date paragraph (first <p> after h1) — AEM strips its class too
+  const nextEl = h1.nextElementSibling;
+  if (nextEl && nextEl.tagName === 'P') {
+    const txt = nextEl.textContent.trim();
+    if (/^\d{1,2}\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}$/.test(txt)) {
+      nextEl.remove();
+    }
+  }
+
   const dateEl = document.createElement('p');
   dateEl.className = 'article-date';
 
-  const parsedDate = new Date(date);
+  const parsedDate = new Date(date.split('/').reverse().join('-'));
   const formatted = Number.isNaN(parsedDate.getTime())
     ? date
     : parsedDate.toLocaleDateString('en-AU', {
