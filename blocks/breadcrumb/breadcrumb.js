@@ -40,7 +40,12 @@ export default function decorate(block) {
     if (isCurrent) {
       const span = document.createElement('span');
       span.setAttribute('aria-current', 'page');
-      span.textContent = text.length > 50 ? `${text.slice(0, 50)}…` : text;
+      if (text.length > 50) {
+        const cut = text.lastIndexOf(' ', 50);
+        span.textContent = `${text.slice(0, cut > 0 ? cut : 50)} ...`;
+      } else {
+        span.textContent = text;
+      }
       li.classList.add('breadcrumb-current');
       li.append(span);
     } else if (href) {
