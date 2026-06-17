@@ -101,7 +101,7 @@ header nav .nav-sections > ul > li > a {
 }
 
 header nav .nav-sections > ul > li > a:hover,
-header nav .nav-sections > ul > li[aria-expanded='true'] > a {
+header nav .nav-sections > ul > li > a.nav-active {
   background: #dcdcdc;
   text-decoration: none;
 }
@@ -120,11 +120,11 @@ header nav .nav-sections .nav-drop > a::after {
   transition: border-color 0.15s, transform 0.2s;
 }
 
-header nav .nav-sections .nav-drop[aria-expanded='true'] > a {
+header nav .nav-sections .nav-drop > a.nav-active {
   color: var(--ink-800, #202027);
 }
 
-header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+header nav .nav-sections .nav-drop > a.nav-active::after {
   border-color: var(--auspost-red-500, #dc1928);
   transform: rotate(-135deg) translateY(3px);
 }

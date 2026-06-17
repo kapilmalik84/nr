@@ -6,7 +6,11 @@ const isDesktop = window.matchMedia('(min-width: 900px)');
 
 function toggleAllNavSections(navSections) {
   if (!navSections) return;
-  navSections.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('aria-expanded', 'false'));
+  navSections.querySelectorAll('.nav-drop').forEach((d) => {
+    d.setAttribute('aria-expanded', 'false');
+    const a = d.querySelector(':scope > a');
+    if (a) a.classList.remove('nav-active');
+  });
 }
 
 function toggleMenu(nav, navSections, forceOpen = null) {
@@ -24,17 +28,22 @@ function fixHref(href) {
 }
 
 function setupHoverDropdown(drop) {
+  const dropLink = drop.querySelector(':scope > a');
   let closeTimer = null;
 
   const open = () => {
     clearTimeout(closeTimer);
     toggleAllNavSections(drop.closest('.nav-sections'));
     drop.setAttribute('aria-expanded', 'true');
+    if (dropLink) dropLink.classList.add('nav-active');
   };
 
   const scheduleClose = () => {
     clearTimeout(closeTimer);
-    closeTimer = setTimeout(() => drop.setAttribute('aria-expanded', 'false'), 180);
+    closeTimer = setTimeout(() => {
+      drop.setAttribute('aria-expanded', 'false');
+      if (dropLink) dropLink.classList.remove('nav-active');
+    }, 180);
   };
 
   drop.addEventListener('mouseenter', open);
