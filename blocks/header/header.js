@@ -3,22 +3,23 @@ import { loadFragment } from '../fragment/fragment.js';
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
-function toggleAllNavSections(sections, expanded = false) {
-  if (!sections) return;
-  sections.querySelectorAll('.nav-drop').forEach((section) => {
-    section.setAttribute('aria-expanded', expanded);
-  });
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" aria-hidden="true" focusable="false">
+  <circle cx="30" cy="30" r="30" fill="#dc1928"/>
+  <path d="M18 12h14c6.627 0 12 5.373 12 12s-5.373 12-12 12H26v12H18V12zm8 16h6c2.209 0 4-1.791 4-4s-1.791-4-4-4h-6v8z" fill="#fff"/>
+</svg>`;
+
+function toggleAllNavSections(navSections) {
+  if (!navSections) return;
+  navSections.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('aria-expanded', 'false'));
 }
 
-function toggleMenu(nav, navSections, forceExpanded = null) {
-  const expanded = forceExpanded !== null
-    ? !forceExpanded
-    : nav.getAttribute('aria-expanded') === 'true';
-  const button = nav.querySelector('.nav-hamburger button');
-  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
-  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
-  if (button) button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
+function toggleMenu(nav, navSections, forceOpen = null) {
+  const isOpen = forceOpen !== null ? forceOpen : nav.getAttribute('aria-expanded') !== 'true';
+  nav.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflowY = isOpen && !isDesktop.matches ? 'hidden' : '';
+  if (!isOpen) toggleAllNavSections(navSections);
+  const btn = nav.querySelector('.nav-hamburger button');
+  if (btn) btn.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
 }
 
 function fixHref(href) {
@@ -35,21 +36,18 @@ function setupHoverDropdown(drop) {
     drop.setAttribute('aria-expanded', 'true');
   };
 
-  const close = (delay = 150) => {
+  const scheduleClose = () => {
     clearTimeout(closeTimer);
-    closeTimer = setTimeout(() => {
-      drop.setAttribute('aria-expanded', 'false');
-    }, delay);
+    closeTimer = setTimeout(() => drop.setAttribute('aria-expanded', 'false'), 180);
   };
 
   drop.addEventListener('mouseenter', open);
-  drop.addEventListener('mouseleave', () => close());
+  drop.addEventListener('mouseleave', scheduleClose);
 
-  // Keep dropdown open when hovering inside the submenu
   const subUl = drop.querySelector(':scope > ul');
   if (subUl) {
     subUl.addEventListener('mouseenter', () => clearTimeout(closeTimer));
-    subUl.addEventListener('mouseleave', () => close());
+    subUl.addEventListener('mouseleave', scheduleClose);
   }
 }
 
@@ -61,76 +59,61 @@ export default async function decorate(block) {
   block.textContent = '';
   const nav = document.createElement('nav');
   nav.id = 'nav';
+
+  // Move fragment children into nav so we can query them
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  const allParagraphs = [...nav.querySelectorAll('p')];
+  // nav.html structure: div[brand link], div[ul nav], div[contact paragraphs]
   const navUl = nav.querySelector('ul');
+  const brandLink = nav.querySelector('a[href]');
+  const contactLinks = [...nav.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')];
 
-  const brandP = allParagraphs[0];
-  const contactPs = allParagraphs.slice(1);
+  // ── Brand ─────────────────────────────────────────────────────────────────
+  const brandDiv = document.createElement('div');
+  brandDiv.className = 'nav-brand';
 
-  // Build top bar
-  const topBar = document.createElement('div');
-  topBar.className = 'nav-top-bar';
-
-  const logoDiv = document.createElement('div');
-  logoDiv.className = 'nav-logo';
-  if (brandP) {
-    const brandLink = brandP.querySelector('a');
-    if (brandLink) {
-      const a = document.createElement('a');
-      a.href = fixHref(brandLink.href);
-      a.textContent = 'Australia Post';
-      logoDiv.append(a);
-    }
-  }
-  topBar.append(logoDiv);
-
-  const contactDiv = document.createElement('div');
-  contactDiv.className = 'nav-contact';
-  contactPs.forEach((p) => {
-    const a = p.querySelector('a');
-    if (a) {
-      const clone = a.cloneNode(true);
-      clone.href = fixHref(a.href);
-      contactDiv.append(clone);
-    } else if (p.textContent.trim()) {
-      const span = document.createElement('span');
-      span.textContent = p.textContent.trim();
-      contactDiv.append(span);
-    }
-  });
-  topBar.append(contactDiv);
-
-  // Build bottom bar
-  const bottomBar = document.createElement('div');
-  bottomBar.className = 'nav-bottom-bar';
-
-  const brand = document.createElement('div');
-  brand.className = 'nav-brand';
   const brandA = document.createElement('a');
-  brandA.href = '/';
-  brandA.textContent = 'Newsroom';
-  brand.append(brandA);
-  bottomBar.append(brand);
+  brandA.href = fixHref(brandLink ? brandLink.href : '/');
+  brandA.className = 'nav-brand-logo';
+  brandA.setAttribute('aria-label', 'Australia Post Newsroom home');
+  brandA.innerHTML = LOGO_SVG;
 
-  // Nav sections
+  const brandName = document.createElement('span');
+  brandName.className = 'nav-brand-name';
+  brandName.innerHTML = 'Australia Post<span>Newsroom</span>';
+
+  brandA.append(brandName);
+  brandDiv.append(brandA);
+
+  // ── Nav sections ──────────────────────────────────────────────────────────
   const navSections = document.createElement('div');
   navSections.className = 'nav-sections';
 
   if (navUl) {
     navSections.append(navUl);
+    // Mark items that have sub-lists as dropdowns
     navUl.querySelectorAll(':scope > li').forEach((li) => {
-      if (li.querySelector('ul')) {
+      const subUl = li.querySelector('ul');
+      if (subUl) {
         li.classList.add('nav-drop');
         li.setAttribute('aria-expanded', 'false');
+
+        // Prepend a "view all" link at top of dropdown matching parent
+        const parentLink = li.querySelector(':scope > a');
+        if (parentLink) {
+          const headingLi = document.createElement('li');
+          const headingA = document.createElement('a');
+          headingA.href = fixHref(parentLink.href);
+          headingA.textContent = parentLink.textContent;
+          headingLi.append(headingA);
+          subUl.prepend(headingLi);
+        }
       }
     });
   }
 
-  // Desktop: hover opens dropdown; mobile: click toggles
+  // Desktop: hover | Mobile: click
   navSections.querySelectorAll('.nav-drop').forEach((drop) => {
-    // Mobile click handler
     drop.addEventListener('click', (e) => {
       if (isDesktop.matches) return;
       if (e.target.closest('ul ul')) return;
@@ -141,66 +124,73 @@ export default async function decorate(block) {
     });
   });
 
-  isDesktop.addEventListener('change', () => {
+  const attachHover = () => {
     if (isDesktop.matches) {
       navSections.querySelectorAll('.nav-drop').forEach(setupHoverDropdown);
     }
+  };
+  attachHover();
+  isDesktop.addEventListener('change', attachHover);
+
+  // ── Utilities (right side) ────────────────────────────────────────────────
+  const utilitiesDiv = document.createElement('div');
+  utilitiesDiv.className = 'nav-utilities';
+
+  contactLinks.forEach((a) => {
+    const link = document.createElement('a');
+    link.href = fixHref(a.href);
+    link.className = 'nav-contact-link';
+    link.textContent = a.textContent.trim();
+    utilitiesDiv.append(link);
   });
 
-  if (isDesktop.matches) {
-    navSections.querySelectorAll('.nav-drop').forEach(setupHoverDropdown);
-  }
-
-  bottomBar.append(navSections);
-
-  // Search — navigates to /search?q=query
-  const searchDiv = document.createElement('div');
-  searchDiv.className = 'nav-search';
+  // Pill search (styled like "Track or search" on stest.npe.auspost.com.au)
+  const searchPill = document.createElement('div');
+  searchPill.className = 'nav-search-pill';
 
   const searchInput = document.createElement('input');
   searchInput.type = 'text';
-  searchInput.placeholder = 'Search...';
+  searchInput.placeholder = 'Search Newsroom';
   searchInput.setAttribute('aria-label', 'Search');
 
   const searchBtn = document.createElement('button');
   searchBtn.type = 'button';
-  searchBtn.setAttribute('aria-label', 'Search');
-  searchBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+  searchBtn.setAttribute('aria-label', 'Submit search');
+  searchBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
 
-  const doNavSearch = () => {
+  const doSearch = () => {
     const q = searchInput.value.trim();
     if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
   };
-  searchBtn.addEventListener('click', doNavSearch);
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') doNavSearch();
-  });
+  searchBtn.addEventListener('click', doSearch);
+  searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
 
-  searchDiv.append(searchInput, searchBtn);
-  bottomBar.append(searchDiv);
+  searchPill.append(searchInput, searchBtn);
+  utilitiesDiv.append(searchPill);
 
-  // Hamburger
+  // ── Hamburger ─────────────────────────────────────────────────────────────
   const hamburger = document.createElement('div');
-  hamburger.classList.add('nav-hamburger');
+  hamburger.className = 'nav-hamburger';
   hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
     <span class="nav-hamburger-icon"></span>
   </button>`;
   hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
 
-  // Assemble
+  // ── Assemble ──────────────────────────────────────────────────────────────
   nav.textContent = '';
-  nav.append(topBar);
-  bottomBar.prepend(hamburger);
-  nav.append(bottomBar);
+  nav.append(brandDiv, navSections, utilitiesDiv, hamburger);
   nav.setAttribute('aria-expanded', 'false');
 
-  toggleMenu(nav, navSections, isDesktop.matches);
-  isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
-
-  // Close all dropdowns when clicking outside
+  // Close dropdowns when clicking outside nav
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-sections')) {
-      toggleAllNavSections(navSections, false);
+    if (!e.target.closest('#nav')) toggleAllNavSections(navSections);
+  });
+
+  // Sync hamburger state on resize
+  isDesktop.addEventListener('change', () => {
+    if (isDesktop.matches) {
+      nav.setAttribute('aria-expanded', 'false');
+      document.body.style.overflowY = '';
     }
   });
 

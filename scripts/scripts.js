@@ -87,12 +87,28 @@ function loadAnalytics() {
 }
 
 /**
+ * Auto-inject a breadcrumb block at the top of any page that doesn't already
+ * have one. The breadcrumb.js fallback generates trail from the URL path.
+ * @param {Element} main the main element
+ */
+function buildBreadcrumb(main) {
+  if (main.querySelector('.breadcrumb')) return;
+  // Skip homepage
+  if (window.location.pathname === '/' || window.location.pathname === '/index') return;
+
+  const breadcrumb = buildBlock('breadcrumb', '');
+  const firstSection = main.querySelector(':scope > div');
+  if (firstSection) firstSection.prepend(breadcrumb);
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main the main element
  */
 export default function decorateMain(main) {
   decorateIcons(main);
   buildHeroBlock(main);
+  buildBreadcrumb(main);
   decorateSections(main);
   decorateBlocks(main);
   decorateArticlePage(main);

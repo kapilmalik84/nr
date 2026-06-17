@@ -84,7 +84,14 @@ export default async function decorate(block) {
     info.className = 'search-info';
     info.textContent = `${matched.length} result${matched.length !== 1 ? 's' : ''} for "${query}"`;
     results.append(info);
-    matched.slice(0, 20).forEach((a) => results.append(renderResult(a)));
+    if (matched.length === 0) {
+      const noResults = document.createElement('div');
+      noResults.className = 'search-no-results';
+      noResults.innerHTML = `<strong>No results found</strong>Try different keywords or check the spelling.`;
+      results.append(noResults);
+    } else {
+      matched.slice(0, 20).forEach((a) => results.append(renderResult(a)));
+    }
   }
 
   btn.addEventListener('click', () => doSearch(input.value.trim()));

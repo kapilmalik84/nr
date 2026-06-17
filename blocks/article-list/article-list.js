@@ -99,7 +99,8 @@ function renderPagination(totalPages, currentPage, onPageChange) {
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const source = config.source || '/query-index.json';
-  const category = (config.category || '').toLowerCase();
+  const category = (config.category || '').toLowerCase().trim();
+  const subcategory = (config.subcategory || '').toLowerCase().trim();
   const year = config.year ? parseInt(config.year, 10) : null;
   const pageSize = parseInt(config.limit, 10) || PAGE_SIZE;
 
@@ -111,8 +112,16 @@ export default async function decorate(block) {
     const json = await resp.json();
     let articles = json.data || [];
 
-    if (category) {
-      articles = articles.filter((a) => (a.category || '').toLowerCase().includes(category));
+    if (subcategory) {
+      // subcategory config uses hyphens (e.g. "arts-and-culture"); index uses spaces
+      const subNorm = subcategory.replace(/-/g, ' ');
+      articles = articles.filter((a) => (a.subcategory || '').toLowerCase() === subNorm
+        || (a.category || '').toLowerCase() === subNorm);
+    } else if (category) {
+      // Match top-level category; also catch sub-items whose category field equals it
+      articles = articles.filter((a) => (a.category || '').toLowerCase() === category
+        || (a.subcategory || '').toLowerCase() === category
+        || (a.category || '').toLowerCase().startsWith(category));
     }
 
     if (year) {
