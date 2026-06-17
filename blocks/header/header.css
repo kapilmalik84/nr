@@ -92,38 +92,55 @@ header nav .nav-sections > ul > li > a {
   gap: 0.4rem;
   padding: 0.5rem 1.125rem;
   border-radius: 100px;
+  border: 1.5px solid transparent;
   color: var(--ink-800, #202027);
   font-weight: 500;
   font-size: 0.9375rem;
   text-decoration: none;
   background: transparent;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, border-color 0.15s;
   white-space: nowrap;
   line-height: 1.4;
 }
 
-/* Pill background: triggered by hovering anywhere in the li (including dropdown) */
-header nav .nav-sections > ul > li > a:hover,
-header nav .nav-sections > ul > li:hover > a,
+/* Leaf items (no dropdown): gray fill on hover or current page */
+header nav .nav-sections > ul > li:not(.nav-drop):hover > a,
 header nav .nav-sections > ul > li > a.nav-current-page {
   background: #c0c0c0;
   text-decoration: none;
 }
 
-/* Chevron ▾ idle (dark), rotates to ▴ red on hover */
+/* Dropdown items: gray fill + charcoal border on hover / open / current section */
+header nav .nav-sections .nav-drop:hover > a,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a,
+header nav .nav-sections .nav-drop > a.nav-current-section {
+  background: #c0c0c0;
+  border-color: var(--ink-700, #4d4d54);
+  text-decoration: none;
+}
+
+/* Chevron ∨ — default (dark) for items with children */
 header nav .nav-sections .nav-drop > a::after {
-  content: '▾';
-  font-size: 0.7em;
+  content: '∨';
+  font-size: 0.8em;
   line-height: 1;
   color: var(--ink-800, #202027);
   display: inline-block;
   flex-shrink: 0;
-  transition: color 0.15s, transform 0.15s;
+  transition: color 0.15s;
 }
 
-header nav .nav-sections .nav-drop:hover > a::after {
+/* Red chevron when hovered, open, or browsing current section */
+header nav .nav-sections .nav-drop:hover > a::after,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after,
+header nav .nav-sections .nav-drop > a.nav-current-section::after {
   color: var(--auspost-red-500, #dc1928);
-  transform: rotate(180deg);
+}
+
+/* ∧ chevron (up) when hover or dropdown is open */
+header nav .nav-sections .nav-drop:hover > a::after,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+  content: '∧';
 }
 
 /* Dropdown panel */
@@ -358,6 +375,34 @@ header nav .nav-hamburger-icon::after {
     border-radius: 0;
     justify-content: space-between;
     border: none;
+    background: transparent;
+  }
+
+  /* Mobile chevron: › (right) for items with children */
+  header nav[aria-expanded='true'] .nav-sections .nav-drop > a::after {
+    content: '›';
+    font-size: 1.2em;
+    color: var(--ink-700, #4d4d54);
+  }
+
+  /* Mobile: ∨ when sub-menu is expanded on mobile */
+  header nav[aria-expanded='true'] .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+    content: '∨';
+    color: var(--auspost-red-500, #dc1928);
+  }
+
+  /* Mobile: red text for active section or current page */
+  header nav[aria-expanded='true'] .nav-sections > ul > li > a.nav-current-section,
+  header nav[aria-expanded='true'] .nav-sections > ul > li > a.nav-current-page {
+    color: var(--auspost-red-500, #dc1928);
+    background: transparent;
+    border-color: transparent;
+  }
+
+  /* Mobile: active section right chevron also red */
+  header nav[aria-expanded='true'] .nav-sections .nav-drop > a.nav-current-section::after {
+    content: '›';
+    color: var(--auspost-red-500, #dc1928);
   }
 
   header nav[aria-expanded='true'] .nav-sections > ul > li > ul {

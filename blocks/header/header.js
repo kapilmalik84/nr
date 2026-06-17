@@ -7,11 +7,6 @@ function toggleAllNavSections(navSections) {
   if (!navSections) return;
   navSections.querySelectorAll('.nav-drop').forEach((d) => {
     d.setAttribute('aria-expanded', 'false');
-    const a = d.querySelector(':scope > a');
-    if (a) {
-      a.classList.remove('nav-active');
-      a.style.background = '';
-    }
   });
 }
 
@@ -30,27 +25,18 @@ function fixHref(href) {
 }
 
 function setupHoverDropdown(drop) {
-  const dropLink = drop.querySelector(':scope > a');
   let closeTimer = null;
 
   const open = () => {
     clearTimeout(closeTimer);
     toggleAllNavSections(drop.closest('.nav-sections'));
     drop.setAttribute('aria-expanded', 'true');
-    if (dropLink) {
-      dropLink.classList.add('nav-active');
-      dropLink.style.background = '#c0c0c0';
-    }
   };
 
   const scheduleClose = () => {
     clearTimeout(closeTimer);
     closeTimer = setTimeout(() => {
       drop.setAttribute('aria-expanded', 'false');
-      if (dropLink) {
-        dropLink.classList.remove('nav-active');
-        dropLink.style.background = '';
-      }
     }, 180);
   };
 
@@ -149,15 +135,18 @@ export default async function decorate(block) {
   attachHover();
   isDesktop.addEventListener('change', attachHover);
 
-  // Mark the current section's nav item with a persistent gray background
+  // Mark active nav items: nav-current-section (has-children) or nav-current-page (leaf)
   const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
   navSections.querySelectorAll(':scope > ul > li > a').forEach((a) => {
     try {
+      const li = a.parentElement;
       const linkPath = new URL(a.href, window.location.href).pathname.replace(/\/$/, '') || '/';
       const isActive = linkPath === '/'
         ? currentPath === '/'
         : currentPath === linkPath || currentPath.startsWith(`${linkPath}/`);
-      if (isActive) a.classList.add('nav-current-page');
+      if (isActive) {
+        a.classList.add(li.classList.contains('nav-drop') ? 'nav-current-section' : 'nav-current-page');
+      }
     } catch (_) { /* skip */ }
   });
 
