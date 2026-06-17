@@ -100,13 +100,14 @@ header nav .nav-sections > ul > li > a {
   line-height: 1.4;
 }
 
+/* Pill background: triggered by hovering anywhere in the li (including dropdown) */
 header nav .nav-sections > ul > li > a:hover,
-header nav .nav-sections > ul > li > a.nav-active {
+header nav .nav-sections > ul > li:hover > a {
   background: #dcdcdc;
   text-decoration: none;
 }
 
-/* Chevron — dark pointing down by default; red pointing up when open */
+/* Chevron — dark ▼ by default */
 header nav .nav-sections .nav-drop > a::after {
   content: '';
   display: inline-block;
@@ -120,11 +121,8 @@ header nav .nav-sections .nav-drop > a::after {
   transition: border-color 0.15s, transform 0.2s;
 }
 
-header nav .nav-sections .nav-drop > a.nav-active {
-  color: var(--ink-800, #202027);
-}
-
-header nav .nav-sections .nav-drop > a.nav-active::after {
+/* Chevron — red ▲ when li is hovered (dropdown open) */
+header nav .nav-sections .nav-drop:hover > a::after {
   border-color: var(--auspost-red-500, #dc1928);
   transform: rotate(-135deg) translateY(3px);
 }
@@ -133,7 +131,7 @@ header nav .nav-sections .nav-drop > a.nav-active::after {
 header nav .nav-sections > ul > li > ul {
   display: none;
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   left: 0;
   background: var(--neutral-0, #fff);
   box-shadow: 0 8px 32px rgb(0 0 0 / 14%), 0 2px 8px rgb(0 0 0 / 8%);
