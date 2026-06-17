@@ -1,32 +1,28 @@
-/* featured section: article + quick-links side by side */
-main .section.featured-section {
-  max-width: var(--max-content-width, 1200px);
-  margin: 0 auto;
-  padding: var(--section-spacing, 2rem) 1rem;
+/* Section with both featured-article and quick-links: side by side layout */
+main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) > div {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-main .section.featured-section .featured-article-wrapper {
+main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .featured-article-wrapper {
   flex: 1;
   min-width: 0;
 }
 
-main .section.featured-section .quick-links-wrapper {
+main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .quick-links-wrapper {
   width: 100%;
 }
 
 @media (width >= 900px) {
-  main .section.featured-section {
+  main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) > div {
     flex-direction: row;
     gap: 2rem;
     align-items: flex-start;
-    padding: var(--section-spacing, 3rem) 2rem;
   }
 
-  main .section.featured-section .quick-links-wrapper {
-    width: 320px;
+  main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .quick-links-wrapper {
+    width: 300px;
     flex-shrink: 0;
   }
 }

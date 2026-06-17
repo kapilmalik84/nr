@@ -1,6 +1,6 @@
 .breadcrumb-wrapper {
   background: var(--neutral-0, #fff);
-  border-bottom: 1px solid var(--border-primary, #e2e2e2);
+  /* border-bottom now on the .section in styles.css for full-viewport-width alignment */
 }
 
 .breadcrumb {

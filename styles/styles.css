@@ -298,15 +298,21 @@ main .section > div {
   margin: 0 auto;
 }
 
-/* Breadcrumb section sits flush under the fixed nav — no section padding */
+/* Breadcrumb section: flush under nav, border spans full viewport width */
 main .section:has(.breadcrumb-wrapper) {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--neutral-300, #eee);
 }
 
-/* Section immediately after breadcrumb section: tighter top padding */
+/* Section after breadcrumb: compact top */
 main .section:has(.breadcrumb-wrapper) + .section {
-  padding-top: 1.5rem;
+  padding-top: 0.75rem;
+}
+
+/* Reduce gap between a category paragraph and the article H1/H2 */
+main p + h1,
+main p + h2 {
+  margin-top: 0.5em;
 }
 
 main .section.highlight {

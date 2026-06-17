@@ -19,10 +19,18 @@ export default function decorate(block) {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = link.href;
-      a.textContent = link.textContent;
+      const label = document.createElement('span');
+      label.className = 'link-label';
+      label.textContent = link.textContent;
+      a.append(label);
       if (link.hostname && link.hostname !== window.location.hostname) {
         a.target = '_blank';
         a.rel = 'noopener';
+        const ext = document.createElement('span');
+        ext.className = 'link-ext';
+        ext.setAttribute('aria-hidden', 'true');
+        ext.textContent = '↗';
+        label.append(ext);
       }
       li.append(a);
       list.append(li);

@@ -51,16 +51,9 @@ main .quick-links .links-list a::after {
   margin-left: 1rem;
 }
 
-main .quick-links .links-list a[target="_blank"]::before {
-  content: '↗';
-  font-size: 0.875rem;
-  margin-left: 0.35rem;
-  order: 0;
-  opacity: 0.6;
-}
-
-main .quick-links .links-list a[target="_blank"]::after {
-  content: '›';
-  font-size: 1.5rem;
-  color: var(--neutral-500, #919194);
+main .quick-links .links-list .link-ext {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  opacity: 0.55;
+  vertical-align: super;
 }
