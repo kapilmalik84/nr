@@ -28,9 +28,12 @@ ORG = "kapilmalik84"
 SITE = "nr"
 TOKEN_FILE = os.path.join(os.path.dirname(__file__), "..", ".hlx", ".da-token.json")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "migration-log.jsonl")
+SCAN_FILE = os.path.join(os.path.dirname(__file__), "category-scan.json")
 
 # In-process cache: external image URL -> DA relative path (avoids re-uploading same image)
 _image_cache: dict[str, str] = {}
+# Category scan lookup: slug/base -> {section, subsection, year, is_video}
+_scan_lookup: dict[str, dict] = {}
 
 ABOUT_FRAGMENT = "/fragments/about-australia-post"
 PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
@@ -53,6 +56,37 @@ PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
 def get_token():
     with open(TOKEN_FILE) as f:
         return json.load(f)["access_token"]
+
+
+def _load_scan():
+    global _scan_lookup
+    if _scan_lookup or not os.path.exists(SCAN_FILE):
+        return
+    with open(SCAN_FILE) as f:
+        data = json.load(f)
+    for r in data:
+        _scan_lookup[r["slug"]] = r
+        _scan_lookup[r["base"]] = r  # fallback by last path segment
+
+
+def _subsection_slug(name):
+    return name.lower().replace(" ", "-").replace("&", "and").replace("/", "-").strip("-")
+
+
+def compute_da_path(slug):
+    """Compute the target DA path using year-based folder structure from category scan."""
+    _load_scan()
+    base = slug.rstrip("/").split("/")[-1]
+    info = _scan_lookup.get(slug) or _scan_lookup.get(base) or {}
+    section = info.get("section", "Unknown")
+    subsection = info.get("subsection", "")
+    year = info.get("year") or "unknown"
+    if info.get("is_video") or section == "Video":
+        return f"/archive/video/{base}"
+    if section == "Stamps":
+        sub_slug = _subsection_slug(subsection) if subsection else "general"
+        return f"/section/stamps/{sub_slug}/{year}/{base}"
+    return f"/archive/news/{year}/{base}"
 
 
 def log(record):
@@ -468,11 +502,10 @@ def post_with_retry(session, url, **kwargs):
 
 
 def push_and_publish(slug, html_content, token, session):
-    path = "/" + slug.strip("/")
-    # Encode each path segment so special chars (--) are safe for the HLX preview/live API
-    encoded_path = "/".join(quote(seg, safe="") for seg in path.split("/"))
+    da_path = compute_da_path(slug)
+    encoded_path = "/".join(quote(seg, safe="") for seg in da_path.split("/"))
 
-    da_url = f"https://admin.da.live/source/{ORG}/{SITE}{path}.html"
+    da_url = f"https://admin.da.live/source/{ORG}/{SITE}{da_path}.html"
     files = {"data": ("page.html", html_content, "text/html")}
     r = post_with_retry(session, da_url, headers={"Authorization": f"Bearer {token}"}, files=files)
     push_status = r.status_code
@@ -485,7 +518,7 @@ def push_and_publish(slug, html_content, token, session):
         session, f"https://admin.hlx.page/live/{ORG}/{SITE}/main{encoded_path}",
         headers={"Authorization": f"Bearer {token}"},
     )
-    return push_status, pv.status_code, lv.status_code
+    return push_status, pv.status_code, lv.status_code, da_path
 
 
 def main():
@@ -519,9 +552,9 @@ def main():
                 print(f"[{i}] OK (dry-run) {slug} -> title={page['title']!r} category={page['category']!r} date={page['date_ddmmyyyy']!r} body_paras={len(page['body'])} pdfs={len(page['pdfs'])} photos={len(page['photos'])} video={bool(page['video_url'])}")
                 log({"slug": slug, "status": "dry-run-ok", "page": page})
             else:
-                push, pv, lv = push_and_publish(slug, content, token, session)
-                print(f"[{i}] {slug} -> push:{push} preview:{pv} live:{lv}")
-                log({"slug": slug, "status": "pushed", "push": push, "preview": pv, "live": lv})
+                push, pv, lv, da_path = push_and_publish(slug, content, token, session)
+                print(f"[{i}] {slug} -> {da_path}  push:{push} preview:{pv} live:{lv}")
+                log({"slug": slug, "da_path": da_path, "status": "pushed", "push": push, "preview": pv, "live": lv})
             ok += 1
         except Exception as e:
             print(f"[{i}] FAILED {slug}: {e}", file=sys.stderr)
