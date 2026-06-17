@@ -103,6 +103,11 @@ export default function decorate(block) {
     });
   }
 
+  // Normalise legacy migration crumbs: "Newsroom" home link → "Home"
+  ol.querySelectorAll('a[href="/"]').forEach((a) => {
+    if (a.textContent.trim().toLowerCase() === 'newsroom') a.textContent = 'Home';
+  });
+
   nav.append(ol);
   block.textContent = '';
   block.append(nav);
