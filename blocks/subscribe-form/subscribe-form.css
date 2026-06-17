@@ -8,6 +8,12 @@ main .subscribe-form .subscribe-container h1 {
   font-size: var(--heading-font-size-xl, 2rem);
 }
 
+main .subscribe-form .subscribe-description {
+  color: var(--text-secondary, #31313d);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
 main .subscribe-form .form-group {
   margin-bottom: 1.25rem;
 }
@@ -20,8 +26,9 @@ main .subscribe-form .form-group label {
   color: var(--text-secondary, #31313d);
 }
 
-main .subscribe-form .form-group input[type="text"],
-main .subscribe-form .form-group input[type="email"] {
+main .subscribe-form .form-group input[type='text'],
+main .subscribe-form .form-group input[type='email'] {
+  box-sizing: border-box;
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-input, #919194);
@@ -43,7 +50,7 @@ main .subscribe-form .form-checkbox {
   gap: 0.75rem;
 }
 
-main .subscribe-form .form-checkbox input[type="checkbox"] {
+main .subscribe-form .form-checkbox input[type='checkbox'] {
   width: 18px;
   height: 18px;
   margin-top: 2px;
@@ -68,4 +75,19 @@ main .subscribe-form .subscribe-status.success {
 
 main .subscribe-form .subscribe-status.error {
   color: var(--system-red-700, #bd152e);
+}
+
+main .subscribe-form .subscribe-success {
+  padding: 2rem;
+  background: var(--auspost-red-100, #fff4f4);
+  border: 1px solid var(--auspost-red-200, #fbe8e9);
+  border-radius: var(--radius-m, 8px);
+  text-align: center;
+}
+
+main .subscribe-form .subscribe-success-heading {
+  font-size: var(--heading-font-size-s, 1.25rem);
+  font-weight: 700;
+  color: var(--auspost-red-500, #dc1928);
+  margin-bottom: 0.5rem;
 }

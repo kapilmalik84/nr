@@ -15,12 +15,72 @@ footer .footer p {
   line-height: 1.6;
 }
 
+/* Copyright row */
+footer .footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+footer .footer-copyright {
+  line-height: 1.6;
+}
+
+footer .footer-social {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+footer .footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 10%);
+  transition: background 0.2s;
+}
+
+footer .footer-social a:hover {
+  background: rgb(255 255 255 / 20%);
+}
+
 footer .footer a:any-link {
   color: var(--neutral-300, #eee);
 }
 
 footer .footer a:hover {
   color: var(--neutral-0, #fff);
+}
+
+footer .footer-social img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Acknowledgement of Country row */
+footer .footer-acknowledgement {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+footer .footer-acknowledgement img {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 @media (width >= 900px) {

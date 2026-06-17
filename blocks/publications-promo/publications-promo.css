@@ -1,70 +1,78 @@
+main .publications-promo-wrapper {
+  padding: 2rem 1rem;
+}
+
 main .publications-promo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  background: var(--auspost-red-500, #dc1928);
-  padding: 2.5rem 2rem;
+  gap: 1.25rem;
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--auspost-red-100, #fff4f4);
+  border: 1px solid var(--auspost-red-200, #fbe8e9);
   border-radius: var(--radius-xl, 20px);
+  padding: 2.5rem 2rem;
   text-align: center;
-  box-shadow: var(--card-shadow, 0 2px 8px rgb(0 0 0 / 8%));
 }
 
-main .publications-promo .promo-image {
-  max-width: 260px;
+/* Red circle icon badge */
+main .publications-promo .promo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--auspost-red-500, #dc1928);
   flex-shrink: 0;
 }
 
-main .publications-promo .promo-image img {
-  width: 100%;
-  border-radius: var(--radius-l, 12px);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
-}
-
-main .publications-promo .promo-text {
-  color: var(--neutral-0, #fff);
-}
-
-main .publications-promo .promo-text h4 {
-  margin-top: 0;
-  color: var(--neutral-0, #fff);
+main .publications-promo .promo-heading {
+  margin: 0;
   font-size: var(--heading-font-size-m, 1.25rem);
-}
-
-main .publications-promo .promo-text p {
-  color: rgb(255 255 255 / 85%);
-  margin: 0.5rem 0;
-}
-
-main .publications-promo .promo-text a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75em 2em;
-  min-height: 44px;
-  border: 2px solid var(--neutral-0, #fff);
-  border-radius: var(--radius-pill, 9999px);
-  background: transparent;
-  color: var(--neutral-0, #fff);
+  color: var(--text-primary, #212129);
   font-weight: 700;
-  text-decoration: none;
-  margin-top: 1rem;
-  transition: background 0.2s, color 0.2s;
 }
 
-main .publications-promo .promo-text a:hover {
+main .publications-promo .promo-desc {
+  margin: 0;
+  color: var(--text-secondary, #31313d);
+  font-size: var(--body-font-size-s, 0.875rem);
+  line-height: 1.6;
+}
+
+/* Nav link pills */
+main .publications-promo .promo-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+main .publications-promo .promo-nav li a {
+  display: block;
+  padding: 0.75rem 1rem;
   background: var(--neutral-0, #fff);
+  border: 1px solid var(--auspost-red-200, #fbe8e9);
+  border-radius: var(--radius-m, 8px);
   color: var(--auspost-red-500, #dc1928);
+  font-weight: 600;
+  font-size: var(--body-font-size-s, 0.875rem);
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
-@media (width >= 600px) {
-  main .publications-promo {
-    flex-direction: row;
-    text-align: left;
-    padding: 3rem 2.5rem;
-  }
+main .publications-promo .promo-nav li a:hover {
+  background: var(--auspost-red-200, #fbe8e9);
+  box-shadow: 0 2px 8px rgb(220 25 40 / 12%);
+}
 
-  main .publications-promo .promo-text a {
-    margin-top: 1.5rem;
-  }
+/* CTA button — full width */
+main .publications-promo .promo-cta {
+  width: 100%;
+  justify-content: center;
 }

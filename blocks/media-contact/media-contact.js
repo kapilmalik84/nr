@@ -1,44 +1,106 @@
 /*
- * Media Contact Block
- * Authored as rows of "Name, M: <mobile>, E: <email>" text, with the
- * Australia Post National Media Line as the last row (optional).
- * Converts phone numbers and emails into tel:/mailto: links.
+ * Parses two formats produced by the migration script:
+ *
+ * Old (pre-fix): single row with inline M:/E:
+ *   "Tracy Hicks, General Manager, Australia PostM: 0477 027 860E: tracy@..."
+ *
+ * New (post-fix): separate rows per line
+ *   "Tracy Hicks, General Manager, Australia Post"
+ *   "M: 0477 027 860"
+ *   "E: tracy@..."
  */
 
-function linkify(text) {
-  const frag = document.createDocumentFragment();
-  const re = /(\+?\d[\d\s]{6,}\d)|([\w.+-]+@[\w-]+\.[\w.-]+)/g;
-  let lastIndex = 0;
-  let match = re.exec(text);
-  while (match) {
-    if (match.index > lastIndex) {
-      frag.append(document.createTextNode(text.slice(lastIndex, match.index)));
+function parseContacts(rows) {
+  const contacts = [];
+  let current = null;
+
+  rows.forEach((text) => {
+    const t = text.trim();
+    if (!t) return;
+
+    // Skip heading rows ("Media contact:", "National Media Line", etc.)
+    if (/^media contact/i.test(t) || /^national media line/i.test(t)) return;
+
+    // Detect M: at start (new multi-line format)
+    const mStart = t.match(/^M:\s*(.+)/i);
+    if (mStart) {
+      if (current) current.phone = mStart[1].trim();
+      return;
     }
-    const a = document.createElement('a');
-    if (match[1]) {
-      a.href = `tel:${match[1].replace(/\s+/g, '')}`;
-      a.textContent = match[1];
-    } else {
-      a.href = `mailto:${match[2]}`;
-      a.textContent = match[2];
+
+    // Detect E: at start (new multi-line format)
+    const eStart = t.match(/^E:\s*(.+)/i);
+    if (eStart) {
+      if (current) current.email = eStart[1].trim();
+      return;
     }
-    frag.append(a);
-    lastIndex = re.lastIndex;
-    match = re.exec(text);
-  }
-  if (lastIndex < text.length) {
-    frag.append(document.createTextNode(text.slice(lastIndex)));
-  }
-  return frag;
+
+    // Old single-line format: "Name, Role OrgM: phone E: email"
+    // M: appears inline (not at start)
+    const inlineM = t.match(/^(.+?)\s*M:\s*(\+?[\d][\d\s]{5,})/i);
+    if (inlineM) {
+      const phone = inlineM[2].trim();
+      const emailM = t.match(/E:\s*([\w.+%-]+@[\w.-]+\.[\w]{2,})/i);
+      current = {
+        name: inlineM[1].trim(),
+        phone,
+        email: emailM ? emailM[1].trim() : '',
+      };
+      contacts.push(current);
+      return;
+    }
+
+    // Plain name/role line → start a new contact
+    current = { name: t, phone: '', email: '' };
+    contacts.push(current);
+  });
+
+  return contacts;
 }
 
 export default function decorate(block) {
-  [...block.children].forEach((row) => {
-    row.className = 'media-contact-row';
+  const rows = [...block.children].map((row) => {
     const cell = row.firstElementChild;
-    if (!cell) return;
-    const text = cell.textContent.trim();
-    cell.textContent = '';
-    cell.append(linkify(text));
+    return cell ? cell.textContent.trim() : '';
+  }).filter(Boolean);
+
+  block.textContent = '';
+
+  const heading = document.createElement('p');
+  heading.className = 'media-contact-heading';
+  heading.textContent = 'Media contact:';
+  block.append(heading);
+
+  const contacts = parseContacts(rows);
+  contacts.forEach((contact) => {
+    const person = document.createElement('div');
+    person.className = 'media-contact-person';
+
+    const nameP = document.createElement('p');
+    nameP.className = 'media-contact-name';
+    nameP.textContent = contact.name;
+    person.append(nameP);
+
+    if (contact.phone) {
+      const phoneP = document.createElement('p');
+      phoneP.className = 'media-contact-detail';
+      const a = document.createElement('a');
+      a.href = `tel:${contact.phone.replace(/\s+/g, '')}`;
+      a.textContent = contact.phone;
+      phoneP.append(document.createTextNode('M: '), a);
+      person.append(phoneP);
+    }
+
+    if (contact.email) {
+      const emailP = document.createElement('p');
+      emailP.className = 'media-contact-detail';
+      const a = document.createElement('a');
+      a.href = `mailto:${contact.email}`;
+      a.textContent = contact.email;
+      emailP.append(document.createTextNode('E: '), a);
+      person.append(emailP);
+    }
+
+    block.append(person);
   });
 }

@@ -104,7 +104,8 @@ header nav .nav-sections > ul > li > a {
 
 /* Pill background: triggered by hovering anywhere in the li (including dropdown) */
 header nav .nav-sections > ul > li > a:hover,
-header nav .nav-sections > ul > li:hover > a {
+header nav .nav-sections > ul > li:hover > a,
+header nav .nav-sections > ul > li > a.nav-current-page {
   background: #c0c0c0;
   text-decoration: none;
 }

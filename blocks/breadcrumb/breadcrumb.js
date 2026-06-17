@@ -9,12 +9,10 @@ export default function decorate(block) {
   ol.className = 'breadcrumb-list';
 
   // Helper to format labels
-  const formatLabel = (text) =>
-    decodeURIComponent(text)
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
+  const formatLabel = (text) => decodeURIComponent(text)
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  //  1. If authored links exist
   if (links.length) {
     links.forEach((link, i) => {
       const li = document.createElement('li');
@@ -31,10 +29,7 @@ export default function decorate(block) {
 
       ol.append(li);
     });
-  }
-
-  //  2. If authored list/text exists
-  else if (items.length) {
+  } else if (items.length) {
     items.forEach((item, i) => {
       const li = document.createElement('li');
       li.className = 'breadcrumb-item';
@@ -56,10 +51,8 @@ export default function decorate(block) {
 
       ol.append(li);
     });
-  }
-
-  //  3. Fallback to URL (MAIN FIX)
-  else {
+  } else {
+    // Fallback to URL segments
     const pathSegments = window.location.pathname
       .split('/')
       .filter((segment) => segment);

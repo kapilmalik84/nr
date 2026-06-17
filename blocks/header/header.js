@@ -3,7 +3,6 @@ import { loadFragment } from '../fragment/fragment.js';
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
-
 function toggleAllNavSections(navSections) {
   if (!navSections) return;
   navSections.querySelectorAll('.nav-drop').forEach((d) => {
@@ -149,6 +148,18 @@ export default async function decorate(block) {
   };
   attachHover();
   isDesktop.addEventListener('change', attachHover);
+
+  // Mark the current section's nav item with a persistent gray background
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  navSections.querySelectorAll(':scope > ul > li > a').forEach((a) => {
+    try {
+      const linkPath = new URL(a.href, window.location.href).pathname.replace(/\/$/, '') || '/';
+      const isActive = linkPath === '/'
+        ? currentPath === '/'
+        : currentPath === linkPath || currentPath.startsWith(`${linkPath}/`);
+      if (isActive) a.classList.add('nav-current-page');
+    } catch (_) { /* skip */ }
+  });
 
   // ── Utilities (right side) ────────────────────────────────────────────────
   const utilitiesDiv = document.createElement('div');

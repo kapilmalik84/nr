@@ -21,9 +21,9 @@ main .hero[style*="background-image"]::before {
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(110, 5, 15, 0.97) 0%,
-    rgba(165, 14, 24, 0.94) 45%,
-    rgba(220, 25, 40, 0.88) 100%
+    rgb(110 5 15 / 97%) 0%,
+    rgb(165 14 24 / 94%) 45%,
+    rgb(220 25 40 / 88%) 100%
   );
   z-index: 0;
 }

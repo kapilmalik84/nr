@@ -1,5 +1,7 @@
 export default function decorate(block) {
   const heading = block.querySelector('strong, h1, h2, h3');
+  const descriptionP = [...block.querySelectorAll('p')].find((p) => !p.querySelector('strong, a'));
+  const descriptionText = descriptionP ? descriptionP.textContent.trim() : '';
   block.textContent = '';
 
   const container = document.createElement('div');
@@ -8,6 +10,13 @@ export default function decorate(block) {
   const h1 = document.createElement('h1');
   h1.textContent = heading ? heading.textContent : 'Media sign up';
   container.append(h1);
+
+  if (descriptionText) {
+    const desc = document.createElement('p');
+    desc.className = 'subscribe-description';
+    desc.textContent = descriptionText;
+    container.append(desc);
+  }
 
   const form = document.createElement('form');
   form.className = 'subscribe-form';
@@ -60,6 +69,7 @@ export default function decorate(block) {
 
   const status = document.createElement('p');
   status.className = 'subscribe-status';
+  status.setAttribute('aria-live', 'polite');
 
   const submitBtn = document.createElement('button');
   submitBtn.type = 'submit';
@@ -71,31 +81,46 @@ export default function decorate(block) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const email = form.querySelector('#email');
     const firstName = form.querySelector('#firstName');
+    const lastName = form.querySelector('#lastName');
+    const email = form.querySelector('#email');
     const privacy = form.querySelector('#privacy');
 
     if (!firstName.value.trim()) {
       status.textContent = 'Please enter your first name.';
       status.className = 'subscribe-status error';
+      firstName.focus();
+      return;
+    }
+
+    if (!lastName.value.trim()) {
+      status.textContent = 'Please enter your last name.';
+      status.className = 'subscribe-status error';
+      lastName.focus();
       return;
     }
 
     if (!email.value.trim() || !email.validity.valid) {
       status.textContent = 'Please enter a valid email address.';
       status.className = 'subscribe-status error';
+      email.focus();
       return;
     }
 
     if (!privacy.checked) {
-      status.textContent = 'Please accept the privacy policy.';
+      status.textContent = 'Please accept the privacy policy to continue.';
       status.className = 'subscribe-status error';
       return;
     }
 
-    status.textContent = 'Thank you for signing up!';
-    status.className = 'subscribe-status success';
-    form.reset();
+    // Replace form with success panel
+    const success = document.createElement('div');
+    success.className = 'subscribe-success';
+    success.innerHTML = `
+      <p class="subscribe-success-heading">Thank you for subscribing!</p>
+      <p>You'll receive the latest news and updates from Australia Post Newsroom in your inbox.</p>
+    `;
+    form.replaceWith(success);
   });
 
   container.append(form);

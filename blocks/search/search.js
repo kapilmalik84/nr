@@ -87,7 +87,7 @@ export default async function decorate(block) {
     if (matched.length === 0) {
       const noResults = document.createElement('div');
       noResults.className = 'search-no-results';
-      noResults.innerHTML = `<strong>No results found</strong>Try different keywords or check the spelling.`;
+      noResults.innerHTML = '<strong>No results found</strong>Try different keywords or check the spelling.';
       results.append(noResults);
     } else {
       matched.slice(0, 20).forEach((a) => results.append(renderResult(a)));

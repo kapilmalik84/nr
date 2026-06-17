@@ -42,11 +42,6 @@ main .downloads .downloads-files a::before {
   flex-shrink: 0;
 }
 
-main .downloads .downloads-files a:hover {
-  background: var(--auspost-red-200, #fbe8e9);
-  box-shadow: 0 2px 8px rgb(220 25 40 / 15%);
-}
-
 main .downloads .downloads-note {
   font-size: var(--body-font-size-xs, 0.75rem);
   color: var(--text-tertiary, #4d4d54);
@@ -71,6 +66,11 @@ main .downloads .downloads-photos a {
   overflow: hidden;
   box-shadow: var(--card-shadow, 0 2px 8px rgb(0 0 0 / 8%));
   transition: box-shadow 0.2s, transform 0.2s;
+}
+
+main .downloads .downloads-files a:hover {
+  background: var(--auspost-red-200, #fbe8e9);
+  box-shadow: 0 2px 8px rgb(220 25 40 / 15%);
 }
 
 main .downloads .downloads-photos a:hover {

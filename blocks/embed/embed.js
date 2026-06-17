@@ -7,10 +7,23 @@ export default function decorate(block) {
   wrapper.className = 'embed-wrapper';
 
   if (url.includes('vimeo.com')) {
-    const videoId = url.match(/vimeo\.com\/(\d+)/);
-    if (videoId) {
+    // URL formats: vimeo.com/ID  or  vimeo.com/ID/HASH (private videos)
+    const vimeoMatch = url.match(/vimeo\.com\/(\d+)(?:\/([a-f0-9]+))?/);
+    if (vimeoMatch) {
+      const [,, rawHash] = vimeoMatch;
+      let hash = rawHash || '';
+      // Fallback: extract hash from the download link (second <a>) if present
+      if (!hash) {
+        const dlLink = block.querySelectorAll('a')[1];
+        if (dlLink) {
+          const dlMatch = dlLink.href.match(/vimeo\.com\/\d+\/([a-f0-9]+)/);
+          if (dlMatch) [, hash] = dlMatch;
+        }
+      }
       const iframe = document.createElement('iframe');
-      iframe.src = `https://player.vimeo.com/video/${videoId[1]}`;
+      iframe.src = hash
+        ? `https://player.vimeo.com/video/${vimeoMatch[1]}?h=${hash}`
+        : `https://player.vimeo.com/video/${vimeoMatch[1]}`;
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');

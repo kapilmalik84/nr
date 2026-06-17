@@ -1,5 +1,6 @@
 .breadcrumb-wrapper {
   background: var(--neutral-0, #fff);
+
   /* border-bottom now on the .section in styles.css for full-viewport-width alignment */
 }
 
