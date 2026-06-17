@@ -10,6 +10,8 @@ main .hero {
   background-position: center;
   display: flex;
   align-items: center;
+  border-radius: var(--radius-l, 12px);
+  overflow: hidden;
 }
 
 /* Red overlay on image backgrounds */

@@ -1,24 +1,26 @@
-/* Section with both featured-article and quick-links: side by side layout */
-main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) > div {
+/* Section with both featured-article and quick-links: section IS the flex row */
+main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .featured-article-wrapper {
-  flex: 1;
-  min-width: 0;
-}
-
-main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .quick-links-wrapper {
-  width: 100%;
+/* Each block wrapper would normally get max-width:1200px centred — override */
+main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) > div {
+  max-width: none;
+  margin: 0;
 }
 
 @media (width >= 900px) {
-  main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) > div {
+  main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) {
     flex-direction: row;
     gap: 2rem;
     align-items: flex-start;
+  }
+
+  main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .featured-article-wrapper {
+    flex: 1;
+    min-width: 0;
   }
 
   main .section:has(.featured-article-wrapper):has(.quick-links-wrapper) .quick-links-wrapper {
