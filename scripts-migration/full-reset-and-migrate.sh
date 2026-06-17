@@ -26,23 +26,12 @@ echo "========================================================"
 echo ""
 
 # Validate token is readable
-python3 - <<'PYEOF'
-import json, sys
-try:
-    d = json.load(open("$REPO_DIR/.hlx/.da-token.json".replace("$REPO_DIR", __import__("os").path.dirname(__file__) + "/..")))
-    print(f"Token OK (first 20 chars): {d['access_token'][:20]}...")
-except Exception as e:
-    print(f"ERROR: {e}", file=sys.stderr)
-    sys.exit(1)
-PYEOF
-
-# Inline token check (safer in bash heredoc context)
 python3 -c "
 import json, sys, os
 tf = os.path.join('$REPO_DIR', '.hlx', '.da-token.json')
 d = json.load(open(tf))
 print('Token OK:', d['access_token'][:20] + '...')
-" || { echo "ERROR: Cannot read DA token at $REPO_DIR/.hlx/.da-token.json"; exit 1; }
+" || { echo "ERROR: Cannot read DA token"; exit 1; }
 
 echo ""
 echo "--------------------------------------------------------"
