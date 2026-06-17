@@ -92,6 +92,8 @@ function loadAnalytics() {
  * @param {Element} main the main element
  */
 function buildBreadcrumb(main) {
+  // Only auto-inject on the actual page main, not on nav/footer fragments
+  if (main !== document.querySelector('main')) return;
   if (main.querySelector('.breadcrumb')) return;
   // Skip homepage
   if (window.location.pathname === '/' || window.location.pathname === '/index') return;
