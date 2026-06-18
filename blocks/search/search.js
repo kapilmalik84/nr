@@ -68,6 +68,14 @@ function buildFilterPanel(data) {
     inner.classList.toggle('is-open', !expanded);
   });
 
+  // Clear filters button
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'filter-clear';
+  clearBtn.textContent = 'Clear filters';
+  clearBtn.hidden = true;
+  inner.append(clearBtn);
+
   // ── Content Type ──
   const typeGroup = document.createElement('div');
   typeGroup.className = 'filter-group';
@@ -152,14 +160,6 @@ function buildFilterPanel(data) {
 
   catGroup.append(catList);
   inner.append(catGroup);
-
-  // Clear filters button
-  const clearBtn = document.createElement('button');
-  clearBtn.type = 'button';
-  clearBtn.className = 'filter-clear';
-  clearBtn.textContent = 'Clear filters';
-  clearBtn.hidden = true;
-  inner.append(clearBtn);
 
   panel.append(inner);
   return panel;
