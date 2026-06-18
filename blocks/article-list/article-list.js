@@ -1,19 +1,27 @@
 import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
 
 const PAGE_SIZE = 12;
+const DEFAULT_IMAGE = 'https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg';
+const BAD_DEFAULTS = ['photo-man-reading-on-tablet', 'default-meta-image'];
+
+function resolveImage(url) {
+  if (!url || BAD_DEFAULTS.some((s) => url.includes(s))) return DEFAULT_IMAGE;
+  return url;
+}
 
 function renderCard(article) {
   const card = document.createElement('li');
   card.className = 'card';
 
-  if (article.image) {
+  const imageUrl = resolveImage(article.image);
+  if (imageUrl) {
     const imgWrap = document.createElement('div');
     imgWrap.className = 'card-image';
     const link = document.createElement('a');
     link.href = article.path;
     link.tabIndex = -1;
     link.setAttribute('aria-hidden', 'true');
-    const pic = createOptimizedPicture(article.image, '', false, [{ width: '480' }]);
+    const pic = createOptimizedPicture(imageUrl, '', false, [{ width: '480' }]);
     const img = pic.querySelector('img');
     if (img) img.addEventListener('error', () => { imgWrap.remove(); });
     link.append(pic);
