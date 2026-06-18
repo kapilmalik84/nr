@@ -89,7 +89,6 @@ function buildHeroBlock(main) {
   }
 }
 
-
 /**
  * Auto-inject a breadcrumb block at the top of any page that doesn't already
  * have one. The breadcrumb.js fallback generates trail from the URL path.

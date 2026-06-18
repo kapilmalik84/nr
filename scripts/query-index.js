@@ -6,6 +6,7 @@
 
 const cache = new Map();
 
+// eslint-disable-next-line import/prefer-default-export
 export async function getQueryIndex(source = '/query-index.json') {
   if (cache.has(source)) return cache.get(source);
   const promise = fetch(source)

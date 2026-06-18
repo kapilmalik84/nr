@@ -27,7 +27,7 @@ export function renderCard(article) {
   const card = document.createElement('li');
   card.className = 'card';
   const isStamp = (article.path || '').startsWith('/section/');
-  if (isStamp) card.classList.add('card--stamp');
+  if (isStamp) card.classList.add('card-stamp');
 
   const imageUrl = resolveImage(article.image, isStamp);
   if (imageUrl) {

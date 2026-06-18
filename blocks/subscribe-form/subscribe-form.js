@@ -41,9 +41,15 @@ export default function decorate(block) {
   form.setAttribute('novalidate', '');
 
   const fields = [
-    { name: 'firstName', label: 'First Name', type: 'text', required: true },
-    { name: 'lastName', label: 'Last Name', type: 'text', required: true },
-    { name: 'email', label: 'Email', type: 'email', required: true },
+    {
+      name: 'firstName', label: 'First Name', type: 'text', required: true,
+    },
+    {
+      name: 'lastName', label: 'Last Name', type: 'text', required: true,
+    },
+    {
+      name: 'email', label: 'Email', type: 'email', required: true,
+    },
   ];
 
   fields.forEach((field) => {

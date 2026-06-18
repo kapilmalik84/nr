@@ -24,7 +24,7 @@ export async function loadFragment(path) {
     try {
       resp = await Promise.race([
         fetch(`${path}.plain.html`),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), FETCH_TIMEOUT_MS)),
+        new Promise((_, rej) => { setTimeout(() => rej(new Error('timeout')), FETCH_TIMEOUT_MS); }),
       ]);
     } catch {
       return null;
