@@ -14,7 +14,7 @@ const SOCIAL_LINKS = [
   },
 ];
 
-const ACK_IMAGE_SRC = 'https://newsroom.auspost.com.au/assets/img/acknowledgement.svg';
+const ACK_IMAGE_SRC = '/assets/acknowledgement.svg';
 
 export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
