@@ -4,7 +4,7 @@ This project is a website built with Edge Delivery Services in Adobe Experience 
 
 ## Project Overview
 
-This project is based on the https://github.com/adobe/aem-boilerplate/ project and set up as a new project. You are expected to follow the coding style and practices established in the boilerplate, but add functionality according to the needs of the site currently developed.
+This is the Australia Post Newsroom AEM EDS project. Follow AEM EDS coding conventions and the patterns established in this codebase.
 
 The repository provides the basic structure, blocks, and configuration needed to run a complete site with `*.aem.live` as the backend.
 

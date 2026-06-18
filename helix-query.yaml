@@ -10,7 +10,6 @@ indices:
       - /head
       - /404
       - /fragments/*
-      - /sample-edition
     properties:
       title:
         select: head > meta[property="og:title"]

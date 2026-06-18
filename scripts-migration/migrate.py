@@ -36,6 +36,7 @@ _image_cache: dict[str, str] = {}
 _scan_lookup: dict[str, dict] = {}
 
 ABOUT_FRAGMENT = "/fragments/about-australia-post"
+DEFAULT_ARTICLE_IMAGE = "https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg"
 PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
 <div>
 <div></div>
@@ -274,7 +275,8 @@ def extract_body_paragraphs(raw):
 
 def extract_article_image(raw):
     """Return the article's primary thumbnail/hero image URL.
-    Tries common CMS patterns before the article body, falls back to first /uploads/ img."""
+    Tries common CMS patterns, then restricts last-resort to the article body only
+    to avoid picking up sidebar/promo images. Falls back to DEFAULT_ARTICLE_IMAGE."""
     patterns = [
         r'<div[^>]+id="[^"]*pnlArticleImage[^"]*"[^>]*>.*?<img[^>]+src="([^"]+)"',
         r'<div[^>]+id="[^"]*pnlImage[^"]*"[^>]*>.*?<img[^>]+src="([^"]+)"',
@@ -286,11 +288,13 @@ def extract_article_image(raw):
         if m:
             src = m.group(1)
             return src if src.startswith("http") else SITE_BASE + src
-    # Last resort: first /uploads/ image anywhere on the page
-    m = re.search(r'<img[^>]+src="(/uploads/[^"]+)"', raw, re.I)
-    if m:
-        return SITE_BASE + m.group(1)
-    return None
+    # Last resort: first /uploads/ image within the article body only (not sidebar/promo)
+    m_body = re.search(r'<div class="article-body[^"]*">(.*?)</div>\s*</div>', raw, re.S)
+    if m_body:
+        m = re.search(r'<img[^>]+src="(/uploads/[^"]+)"', m_body.group(1), re.I)
+        if m:
+            return SITE_BASE + m.group(1)
+    return DEFAULT_ARTICLE_IMAGE
 
 
 def extract_article_description(raw):
@@ -505,6 +509,12 @@ def build_html(page):
     body_html.append(f'<h1>{html.escape(page["title"] or page["slug"])}</h1>')
     if page["date_text"]:
         body_html.append(f'<p class="article-date">{html.escape(page["date_text"])}</p>')
+    # Show featured image inline when there are no inline images in the article body
+    if not page.get("inline_images") and page.get("article_image"):
+        body_html.append(
+            f'<picture><img src="{page["article_image"]}" '
+            f'alt="{html.escape(page["title"] or "")}"></picture>'
+        )
     for p in page["body"]:
         stripped = p.strip()
         if re.match(r"<(?:ul|ol)\b", stripped, re.I):
@@ -560,8 +570,8 @@ def build_html(page):
         meta_rows += f'<div><div>sub-category</div><div>{html.escape(subcategory)}</div></div>'
     if page["date_ddmmyyyy"]:
         meta_rows += f'<div><div>publication-date</div><div>{page["date_ddmmyyyy"]}</div></div>'
-    if page.get("article_image"):
-        meta_rows += f'<div><div>image</div><div><picture><img src="{page["article_image"]}"></picture></div></div>'
+    img_url = page.get("article_image") or DEFAULT_ARTICLE_IMAGE
+    meta_rows += f'<div><div>image</div><div><picture><img src="{img_url}"></picture></div></div>'
     if page.get("description"):
         meta_rows += f'<div><div>description</div><div>{html.escape(page["description"])}</div></div>'
     parts.append(f'<div><div class="metadata">{meta_rows}</div></div>')
