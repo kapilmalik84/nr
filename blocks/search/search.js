@@ -224,7 +224,7 @@ export default async function decorate(block) {
     const raw = await dataPromise;
     enrichedData = raw.map((a) => ({
       ...a,
-      _year: a.date ? new Date(a.date * 1000).getFullYear() : null,
+      year: a.date ? new Date(a.date * 1000).getFullYear() : null,
     }));
     return enrichedData;
   };
@@ -239,7 +239,7 @@ export default async function decorate(block) {
     if (filterPanel) return;
     const data = await ensureData();
     const categories = [...new Set(data.map((a) => a.category).filter(Boolean))].sort();
-    const years = [...new Set(data.map((a) => a._year).filter(Boolean))].sort((a, b) => b - a);
+    const years = [...new Set(data.map((a) => a.year).filter(Boolean))].sort((a, b) => b - a);
 
     filterPanel = buildFilterPanel(categories, years);
     body.prepend(filterPanel);
@@ -289,7 +289,7 @@ export default async function decorate(block) {
 
       if (selectedYear) {
         const yr = Number(selectedYear);
-        matched = matched.filter((a) => a._year === yr);
+        matched = matched.filter((a) => a.year === yr);
       }
 
       if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
@@ -378,8 +378,10 @@ export default async function decorate(block) {
       matched = matched.filter((a) => [a.title, a.description, a.category]
         .filter(Boolean).join(' ').toLowerCase().includes(query));
     }
-    if (activeCategories.length > 0) matched = matched.filter((a) => activeCategories.includes(a.category));
-    if (selectedYear) matched = matched.filter((a) => a._year === Number(selectedYear));
+    if (activeCategories.length > 0) {
+      matched = matched.filter((a) => activeCategories.includes(a.category));
+    }
+    if (selectedYear) matched = matched.filter((a) => a.year === Number(selectedYear));
     if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
     else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
 

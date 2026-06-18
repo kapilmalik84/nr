@@ -178,7 +178,8 @@ export default async function decorate(block) {
       const headingA = document.createElement('a');
       headingA.href = fixHref(parentLink.href);
       // Use only text content (not the chevron span)
-      headingA.textContent = parentLink.firstChild?.textContent?.trim() || parentLink.textContent.trim();
+      const firstText = parentLink.firstChild?.textContent?.trim();
+      headingA.textContent = firstText || parentLink.textContent.trim();
       headingLi.append(headingA);
       subUl.prepend(headingLi);
     });

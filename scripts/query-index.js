@@ -19,6 +19,7 @@ export async function getQueryIndex(source = '/query-index.json') {
       cache.set(source, data);
       return data;
     })
+    // eslint-disable-next-line no-console
     .catch((err) => { console.error('query-index fetch failed:', source, err); return []; });
   cache.set(source, promise);
   return promise;
