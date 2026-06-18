@@ -2,19 +2,25 @@ import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
 
 const PAGE_SIZE = 12;
 const DEFAULT_IMAGE = 'https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg';
+const STAMP_DEFAULT_IMAGE = '/assets/images/stamp-placeholder.png';
 const BAD_DEFAULTS = ['photo-man-reading-on-tablet', 'default-meta-image'];
+const STAMP_BAD_HASH = '1010d36fe031';
 
-function resolveImage(url) {
-  if (!url || BAD_DEFAULTS.some((s) => url.includes(s))) return DEFAULT_IMAGE;
+function resolveImage(url, isStamp) {
+  if (!url || BAD_DEFAULTS.some((s) => url.includes(s))) {
+    return isStamp ? STAMP_DEFAULT_IMAGE : DEFAULT_IMAGE;
+  }
+  if (isStamp && url.includes(STAMP_BAD_HASH)) return STAMP_DEFAULT_IMAGE;
   return url;
 }
 
 function renderCard(article) {
   const card = document.createElement('li');
   card.className = 'card';
-  if ((article.path || '').startsWith('/section/')) card.classList.add('card--stamp');
+  const isStamp = (article.path || '').startsWith('/section/');
+  if (isStamp) card.classList.add('card--stamp');
 
-  const imageUrl = resolveImage(article.image);
+  const imageUrl = resolveImage(article.image, isStamp);
   if (imageUrl) {
     const imgWrap = document.createElement('div');
     imgWrap.className = 'card-image';

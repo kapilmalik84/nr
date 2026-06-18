@@ -37,6 +37,7 @@ _scan_lookup: dict[str, dict] = {}
 
 ABOUT_FRAGMENT = "/fragments/about-australia-post"
 DEFAULT_ARTICLE_IMAGE = "https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg"
+STAMPS_DEFAULT_IMAGE = "https://main--nr--kapilmalik84.aem.page/assets/images/stamp-placeholder.png"
 PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
 <div>
 <div></div>
@@ -510,9 +511,11 @@ def build_html(page):
     if page["date_text"]:
         body_html.append(f'<p class="article-date">{html.escape(page["date_text"])}</p>')
     # Show featured image inline when there are no inline images in the article body
-    if not page.get("inline_images") and page.get("article_image"):
+    _is_stamps = (page.get("da_path") or "").startswith("/section/")
+    _feat_img = page.get("article_image") or (STAMPS_DEFAULT_IMAGE if _is_stamps else None)
+    if not page.get("inline_images") and _feat_img:
         body_html.append(
-            f'<picture><img src="{page["article_image"]}" '
+            f'<picture><img src="{_feat_img}" '
             f'alt="{html.escape(page["title"] or "")}"></picture>'
         )
     for p in page["body"]:
@@ -570,7 +573,8 @@ def build_html(page):
         meta_rows += f'<div><div>sub-category</div><div>{html.escape(subcategory)}</div></div>'
     if page["date_ddmmyyyy"]:
         meta_rows += f'<div><div>publication-date</div><div>{page["date_ddmmyyyy"]}</div></div>'
-    img_url = page.get("article_image") or DEFAULT_ARTICLE_IMAGE
+    is_stamps = (page.get("da_path") or "").startswith("/section/")
+    img_url = page.get("article_image") or (STAMPS_DEFAULT_IMAGE if is_stamps else DEFAULT_ARTICLE_IMAGE)
     meta_rows += f'<div><div>image</div><div><picture><img src="{img_url}"></picture></div></div>'
     if page.get("description"):
         meta_rows += f'<div><div>description</div><div>{html.escape(page["description"])}</div></div>'
