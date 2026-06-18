@@ -11,6 +11,7 @@ function resolveImage(url) {
 function renderCard(article) {
   const card = document.createElement('li');
   card.className = 'card';
+  if ((article.path || '').startsWith('/section/')) card.classList.add('card--stamp');
 
   const imageUrl = resolveImage(article.image);
   if (imageUrl) {
