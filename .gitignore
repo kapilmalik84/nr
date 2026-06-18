@@ -16,6 +16,12 @@ helix-importer-ui
 
 content
 
+# Claude Code local settings (not project config)
+.claude/
+
+# Root-level log files
+*.log
+
 # Migration runtime output
 scripts-migration/*.log
 scripts-migration/*.jsonl
