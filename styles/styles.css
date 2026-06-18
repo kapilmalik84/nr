@@ -63,6 +63,10 @@
   --neutral-800: #2b2b32;
   --neutral-900: #000;
 
+  /* ---- StarTrack ---- */
+  --startrack-blue-100: #e4f1f7;
+  --startrack-blue-600: #007fae;
+
   /* ---- Secondary accents ---- */
   --eucalyptus-100: #f1f1ef;
   --eucalyptus-200: #e7e7e4;
@@ -149,7 +153,7 @@
   --radius-s: 4px;
   --radius-m: 8px;
   --radius-l: 12px;
-  --radius-xl: 20px;
+  --radius-xl: 24px;
   --radius-pill: 9999px;
   --card-shadow: 0 2px 8px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 6%);
   --card-shadow-hover: 0 8px 24px rgb(0 0 0 / 12%), 0 2px 6px rgb(0 0 0 / 8%);
@@ -194,9 +198,21 @@ h1, h2, h3, h4, h5, h6 {
   scroll-margin: calc(var(--nav-height) + 1em);
 }
 
-h1 { font-size: var(--heading-font-size-xxl); }
-h2 { font-size: var(--heading-font-size-xl); }
-h3 { font-size: var(--heading-font-size-l); }
+h1 {
+  font-size: var(--heading-font-size-xxl);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--heading-font-size-xl);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: var(--heading-font-size-l);
+  letter-spacing: -0.01em;
+}
+
 h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
@@ -227,6 +243,7 @@ button.button {
   gap: 0.5em;
   padding: 0.75em 1.75em;
   min-height: 48px;
+  min-width: 120px;
   border: 2px solid var(--auspost-red-500);
   border-radius: var(--radius-pill);
   background-color: var(--bg-primary-button);
@@ -262,6 +279,28 @@ button.button.secondary:hover {
   background-color: var(--bg-secondary-button-hover);
   border-color: var(--ink-800);
   box-shadow: none;
+}
+
+/* Tertiary — text-only CTA, matches stest inline "Learn more" pattern */
+a.button.tertiary:any-link,
+button.button.tertiary {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--auspost-red-500);
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+  box-shadow: none;
+}
+
+a.button.tertiary:hover,
+button.button.tertiary:hover {
+  background-color: transparent;
+  border-color: transparent;
+  text-decoration: none;
+  box-shadow: none;
+  color: var(--auspost-red-600);
 }
 
 /* ===== IMAGES ===== */
@@ -401,7 +440,7 @@ main .section p > em:only-child {
 @media (width >= 900px) {
   :root {
     --nav-height: 72px;
-    --heading-font-size-xxl: 3rem;
+    --heading-font-size-xxl: 3.5rem;
     --section-spacing: 2rem;
   }
 
