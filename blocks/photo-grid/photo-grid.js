@@ -54,21 +54,34 @@ function renderPagination(totalPages, currentPage, onPageChange) {
   nav.className = 'photo-grid-pagination';
   nav.setAttribute('aria-label', 'Page navigation');
 
-  for (let i = 1; i <= Math.min(totalPages, 5); i += 1) {
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  const end = Math.min(totalPages, start + maxVisible - 1);
+  start = Math.max(1, end - maxVisible + 1);
+
+  if (currentPage > 1) {
+    const prev = document.createElement('button');
+    prev.textContent = '‹';
+    prev.setAttribute('aria-label', 'Previous page');
+    prev.addEventListener('click', () => onPageChange(currentPage - 1));
+    nav.append(prev);
+  }
+
+  for (let i = start; i <= end; i += 1) {
     const btn = document.createElement('button');
     btn.textContent = i;
     btn.className = i === currentPage ? 'active' : '';
+    btn.setAttribute('aria-label', `Page ${i}`);
+    if (i === currentPage) btn.setAttribute('aria-current', 'page');
     btn.addEventListener('click', () => onPageChange(i));
     nav.append(btn);
   }
 
-  if (totalPages > 5) {
+  if (currentPage < totalPages) {
     const next = document.createElement('button');
-    next.textContent = '>';
-    next.addEventListener('click', () => {
-      const nextPage = Math.min(currentPage + 1, totalPages);
-      onPageChange(nextPage);
-    });
+    next.textContent = '›';
+    next.setAttribute('aria-label', 'Next page');
+    next.addEventListener('click', () => onPageChange(currentPage + 1));
     nav.append(next);
   }
 

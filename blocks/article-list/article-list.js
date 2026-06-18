@@ -1,79 +1,8 @@
-import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
+import { readBlockConfig } from '../../scripts/aem.js';
+import { renderCard } from '../../scripts/article-card.js';
+import { getQueryIndex } from '../../scripts/query-index.js';
 
 const PAGE_SIZE = 12;
-const DEFAULT_IMAGE = 'https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg';
-const STAMP_DEFAULT_IMAGE = '/assets/images/stamp-placeholder.png';
-const BAD_DEFAULTS = ['photo-man-reading-on-tablet', 'default-meta-image'];
-const STAMP_BAD_HASH = '1010d36fe031';
-
-function resolveImage(url, isStamp) {
-  if (!url || BAD_DEFAULTS.some((s) => url.includes(s))) {
-    return isStamp ? STAMP_DEFAULT_IMAGE : DEFAULT_IMAGE;
-  }
-  if (isStamp && url.includes(STAMP_BAD_HASH)) return STAMP_DEFAULT_IMAGE;
-  return url;
-}
-
-function renderCard(article) {
-  const card = document.createElement('li');
-  card.className = 'card';
-  const isStamp = (article.path || '').startsWith('/section/');
-  if (isStamp) card.classList.add('card--stamp');
-
-  const imageUrl = resolveImage(article.image, isStamp);
-  if (imageUrl) {
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'card-image';
-    const link = document.createElement('a');
-    link.href = article.path;
-    link.tabIndex = -1;
-    link.setAttribute('aria-hidden', 'true');
-    const pic = createOptimizedPicture(imageUrl, '', false, [{ width: '480' }]);
-    const img = pic.querySelector('img');
-    if (img) img.addEventListener('error', () => { imgWrap.remove(); });
-    link.append(pic);
-    imgWrap.append(link);
-    card.append(imgWrap);
-  }
-
-  const text = document.createElement('div');
-  text.className = 'card-text';
-
-  if (article.date) {
-    const meta = document.createElement('p');
-    meta.className = 'card-meta';
-    const d = new Date(article.date * 1000);
-    meta.textContent = d.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
-    if (article.category) {
-      meta.textContent += ` | ${article.category}`;
-    }
-    text.append(meta);
-  }
-
-  const title = document.createElement('h4');
-  title.className = 'card-title';
-  const titleLink = document.createElement('a');
-  titleLink.href = article.path;
-  titleLink.textContent = article.title || '';
-  title.append(titleLink);
-  text.append(title);
-
-  if (article.description) {
-    const desc = document.createElement('p');
-    desc.className = 'card-excerpt';
-    desc.textContent = article.description;
-    text.append(desc);
-  }
-
-  const cta = document.createElement('a');
-  cta.href = article.path;
-  cta.className = 'card-cta';
-  cta.textContent = 'Read more';
-  text.append(cta);
-
-  card.append(text);
-  return card;
-}
 
 function renderPagination(totalPages, currentPage, onPageChange) {
   const nav = document.createElement('nav');
@@ -125,21 +54,15 @@ export default async function decorate(block) {
   block.textContent = 'Loading…';
 
   try {
-    const resp = await fetch(source);
-    if (!resp.ok) throw new Error('Failed to fetch');
-    const json = await resp.json();
-    let articles = json.data || [];
+    let articles = await getQueryIndex(source);
 
     if (subcategory) {
-      // subcategory config uses hyphens (e.g. "arts-and-culture"); index uses spaces
       const subNorm = subcategory.replace(/-/g, ' ');
       articles = articles.filter((a) => (a.subcategory || '').toLowerCase() === subNorm
         || (a.category || '').toLowerCase() === subNorm);
     } else if (category) {
-      // Match top-level category; also catch sub-items whose category field equals it
       articles = articles.filter((a) => (a.category || '').toLowerCase() === category
-        || (a.subcategory || '').toLowerCase() === category
-        || (a.category || '').toLowerCase().startsWith(category));
+        || (a.subcategory || '').toLowerCase() === category);
     }
 
     if (year) {
@@ -149,7 +72,7 @@ export default async function decorate(block) {
       });
     }
 
-    articles.sort((a, b) => (b.date || 0) - (a.date || 0));
+    articles = [...articles].sort((a, b) => (b.date || 0) - (a.date || 0));
 
     block.textContent = '';
 

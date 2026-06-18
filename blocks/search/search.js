@@ -1,15 +1,20 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
+import { resolveImage } from '../../scripts/article-card.js';
+import { getQueryIndex } from '../../scripts/query-index.js';
 
 function renderResult(article) {
+  const isStamp = (article.path || '').startsWith('/section/');
+  const imageUrl = resolveImage(article.image, isStamp);
+
   const item = document.createElement('div');
   item.className = 'search-result';
 
-  if (article.image) {
+  if (imageUrl) {
     const imgWrap = document.createElement('div');
     imgWrap.className = 'result-image';
     const link = document.createElement('a');
     link.href = article.path;
-    link.append(createOptimizedPicture(article.image, article.title || '', false, [{ width: '200' }]));
+    link.append(createOptimizedPicture(imageUrl, article.title || '', false, [{ width: '200' }]));
     imgWrap.append(link);
     item.append(imgWrap);
   }
@@ -35,7 +40,9 @@ function renderResult(article) {
 }
 
 export default async function decorate(block) {
-  const placeholderText = block.textContent.trim() || 'Search the newsroom';
+  const config = readBlockConfig(block);
+  const source = config.source || '/query-index.json';
+  const placeholderText = config.placeholder || block.textContent.trim() || 'Search the newsroom';
   block.textContent = '';
 
   const form = document.createElement('div');
@@ -57,23 +64,12 @@ export default async function decorate(block) {
   const results = document.createElement('div');
   results.className = 'search-results';
 
-  let articles = null;
-
-  async function loadIndex() {
-    if (articles) return articles;
-    const resp = await fetch('/query-index.json');
-    if (!resp.ok) return [];
-    const json = await resp.json();
-    articles = json.data || [];
-    return articles;
-  }
-
   async function doSearch(query) {
     if (!query || query.length < 2) {
       results.textContent = '';
       return;
     }
-    const data = await loadIndex();
+    const data = await getQueryIndex(source);
     const q = query.toLowerCase();
     const matched = data.filter((a) => {
       const searchable = [a.title || '', a.description || '', a.category || ''].join(' ').toLowerCase();

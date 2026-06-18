@@ -26,14 +26,24 @@ export default function decorate(block) {
   inner.className = 'hero-inner';
   inner.append(content);
 
-  const img = picture
-    ? picture.querySelector('img')
-    : block.querySelector('img');
-  if (img) {
-    block.style.backgroundImage = `url(${img.src})`;
-    img.loading = 'eager';
+  block.textContent = '';
+
+  // Use a <picture> element as the background so AEM's image optimisation CDN
+  // applies and the browser's native fallback chain handles load errors.
+  // fetchpriority="high" + loading="eager" ensures this is treated as LCP.
+  if (picture) {
+    const bg = document.createElement('div');
+    bg.className = 'hero-bg';
+    const img = picture.querySelector('img');
+    if (img) {
+      img.loading = 'eager';
+      img.fetchPriority = 'high';
+      img.setAttribute('alt', '');
+    }
+    bg.append(picture);
+    block.append(bg);
+    block.classList.add('has-bg-image');
   }
 
-  block.textContent = '';
   block.append(inner);
 }

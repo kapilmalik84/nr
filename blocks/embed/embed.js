@@ -46,6 +46,7 @@ export default function decorate(block) {
     iframe.src = url;
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('title', 'Video');
     wrapper.append(iframe);
   }
 

@@ -11,14 +11,25 @@ import {
   loadSections,
 } from '../../scripts/aem.js';
 
+const FETCH_TIMEOUT_MS = 3000;
+
 /**
  * Loads a fragment.
  * @param {string} path The path to the fragment
- * @returns {HTMLElement} The root element of the fragment
+ * @returns {HTMLElement} The root element of the fragment, or null on failure
  */
 export async function loadFragment(path) {
   if (path && path.startsWith('/') && !path.startsWith('//')) {
-    const resp = await fetch(`${path}.plain.html`);
+    let resp;
+    try {
+      resp = await Promise.race([
+        fetch(`${path}.plain.html`),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), FETCH_TIMEOUT_MS)),
+      ]);
+    } catch {
+      return null;
+    }
+
     if (resp.ok) {
       const main = document.createElement('main');
       main.innerHTML = await resp.text();

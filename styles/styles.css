@@ -1,59 +1,10 @@
-/* stylelint-disable */
-
 /*
  * Australia Post Newsroom — Global Styles
  * Design system matched to ptest.npe.auspost.com.au
  * Tokens extracted from auspost-aemaacs-program clientlib-site.css
  */
 
-/* ===== FONT FACE DECLARATIONS ===== */
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-RegularItalic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-MediumItalic.woff2') format('woff2');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'APTypeProText';
-  src: url('/fonts/APTypeProText-BoldItalic.woff2') format('woff2');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
+/* Font faces are declared in fonts.css (loaded via head.html) — not duplicated here */
 
 /* ===== DESIGN TOKENS ===== */
 :root {

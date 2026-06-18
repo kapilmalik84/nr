@@ -89,17 +89,6 @@ function buildHeroBlock(main) {
   }
 }
 
-/**
- * Load and register additional scripts for analytics.
- */
-function loadAnalytics() {
-  // Adobe DTM/Launch is loaded via head.html
-  /* eslint-disable no-underscore-dangle */
-  if (window._satellite) {
-    window._satellite.pageBottom();
-  }
-  /* eslint-enable no-underscore-dangle */
-}
 
 /**
  * Auto-inject a breadcrumb block at the top of any page that doesn't already
@@ -171,6 +160,7 @@ async function loadLazy(doc) {
   loadFooter(doc.querySelector('footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
+  loadCSS(`${window.hlx.codeBasePath}/styles/cards.css`);
   sampleRUM('lazy');
   if (sampleRUM.observe) sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
 }
@@ -182,7 +172,6 @@ function loadDelayed() {
   // eslint-disable-next-line import/no-cycle
   window.setTimeout(() => {
     import('./delayed.js');
-    loadAnalytics();
   }, 3000);
 }
 

@@ -10,6 +10,61 @@ indices:
       - /head
       - /404
       - /fragments/*
+      - /media/**
+      - /section/stamps/**
+      - /archive/news/**
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      date:
+        select: head > meta[name="publication-date"]
+        value: parseTimestamp(attribute(el, "content"), "DD/MM/YYYY")
+      category:
+        select: head > meta[name="category"]
+        value: attribute(el, "content")
+      subcategory:
+        select: head > meta[name="sub-category"]
+        value: attribute(el, "content")
+      lastModified:
+        select: none
+        value: lastModified
+  stamps:
+    target: /section/stamps/query-index.json
+    include:
+      - /section/stamps/**
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      date:
+        select: head > meta[name="publication-date"]
+        value: parseTimestamp(attribute(el, "content"), "DD/MM/YYYY")
+      category:
+        select: head > meta[name="category"]
+        value: attribute(el, "content")
+      subcategory:
+        select: head > meta[name="sub-category"]
+        value: attribute(el, "content")
+      lastModified:
+        select: none
+        value: lastModified
+  news:
+    target: /archive/news/query-index.json
+    include:
+      - /archive/news/**
     properties:
       title:
         select: head > meta[property="og:title"]

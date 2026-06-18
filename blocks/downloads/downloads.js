@@ -1,15 +1,15 @@
-/*
- * Downloads Block
- * Authored as rows: either a link to a downloadable file (e.g. PDF), or an
- * image + caption (high-resolution photo for media use). Renders a PDF link
- * list followed by a photo grid of download links.
- */
+import { readBlockConfig } from '../../scripts/aem.js';
 
 function isImageRow(row) {
   return !!row.querySelector('picture, img');
 }
 
 export default function decorate(block) {
+  const config = readBlockConfig(block);
+  const filesHeading = config['files-heading'] || 'Downloads';
+  const photosHeading = config['photos-heading'] || 'High Resolution Photos';
+  const photosNote = config['photos-note'] || 'All photos © by their respective copyright owners and have been authorised for Editorial use only.';
+
   const rows = [...block.children];
   const fileLinks = document.createElement('ul');
   fileLinks.className = 'downloads-files';
@@ -52,16 +52,16 @@ export default function decorate(block) {
 
   if (fileLinks.children.length) {
     const heading = document.createElement('h4');
-    heading.textContent = 'Downloads';
+    heading.textContent = filesHeading;
     block.append(heading, fileLinks);
   }
 
   if (photos.children.length) {
     const heading = document.createElement('h4');
-    heading.textContent = 'High Resolution Photos';
+    heading.textContent = photosHeading;
     const note = document.createElement('p');
     note.className = 'downloads-note';
-    note.textContent = 'All photos © by their respective copyright owners and have been authorised for Editorial use only.';
+    note.textContent = photosNote;
     block.append(heading, note, photos);
   }
 }

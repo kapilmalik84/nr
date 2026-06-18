@@ -38,6 +38,62 @@ _scan_lookup: dict[str, dict] = {}
 ABOUT_FRAGMENT = "/fragments/about-australia-post"
 DEFAULT_ARTICLE_IMAGE = "https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg"
 STAMPS_DEFAULT_IMAGE = "https://main--nr--kapilmalik84.aem.page/assets/images/stamp-placeholder.png"
+CDN_BASE = "https://main--nr--kapilmalik84.aem.page"
+
+# Maps uploads/ top-level folder to /assets/images/ section subfolder
+_UPLOADS_SECTION_MAP = {
+    "news": "news", "philatelic": "stamps", "commemorative": "stamps",
+    "stamps": "stamps", "video": "video", "videos": "video",
+    "corporate": "news", "defaults": "defaults",
+}
+
+
+def compute_image_path(uploads_url: str) -> str | None:
+    """Map a newsroom.auspost.com.au/uploads/ URL to a /assets/images/ relative path.
+
+    /uploads/News/{year}/{yyyymmdd-story}/[lowres/]{file} → news/{year}/{story}/{file}
+    /uploads/Philatelic/{year}/{yyyymmdd-story}/.../{file} → stamps/{year}/{story}/{file}
+    /uploads/defaults/{file}                              → defaults/{file}
+    """
+    m = re.match(r"https?://newsroom\.auspost\.com\.au/uploads/(.+)", uploads_url)
+    if not m:
+        return None
+    parts = [p for p in m.group(1).split("/") if p]
+    if not parts:
+        return None
+
+    section = _UPLOADS_SECTION_MAP.get(parts[0].lower(), "general")
+    filename = _normalise_img_filename(parts[-1])
+
+    if section == "defaults":
+        return f"defaults/{filename}"
+
+    year = story = None
+    for i, part in enumerate(parts[1:], 1):
+        if re.match(r"20\d\d$", part):
+            year = part
+            # Next component after year is the story folder (skip if it's the filename)
+            if i + 1 < len(parts) - 1:
+                candidate = parts[i + 1]
+                if not re.match(r"(low|hi(gh)?|med(ium)?)res", candidate, re.I):
+                    story = _normalise_img_slug(candidate)
+            break
+
+    if year and story:
+        return f"{section}/{year}/{story}/{filename}"
+    elif year:
+        return f"{section}/{year}/{filename}"
+    return f"{section}/{filename}"
+
+
+def _normalise_img_slug(s: str) -> str:
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9\-]", "-", s.lower())).strip("-")
+
+
+def _normalise_img_filename(s: str) -> str:
+    name, _, ext = s.rpartition(".")
+    name = re.sub(r"-+", "-", re.sub(r"[^a-z0-9\-]", "-", re.sub(r"[_\s]+", "-", name.lower()))).strip("-")
+    return f"{name}.{ext.lower()}" if ext else name
 PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
 <div>
 <div></div>
@@ -57,7 +113,14 @@ PUBLICATIONS_PROMO_BLOCK = """<div class="publications-promo">
 
 def get_token():
     with open(TOKEN_FILE) as f:
-        return json.load(f)["access_token"]
+        data = json.load(f)
+    expires_at = data.get("expires_at") or data.get("exp")
+    if expires_at and time.time() > float(expires_at) - 60:
+        sys.exit(
+            "ERROR: DA token has expired. Re-authenticate via the DA UI and update "
+            f"{TOKEN_FILE}, then re-run."
+        )
+    return data["access_token"]
 
 
 def _load_scan():
@@ -73,6 +136,17 @@ def _load_scan():
 
 def _subsection_slug(name):
     return name.lower().replace(" ", "-").replace("&", "and").replace("/", "-").strip("-")
+
+
+def _is_stamp_article(page):
+    """Return True if this article belongs to the Stamps section."""
+    slug = page.get("slug") or ""
+    if slug.startswith("section/"):
+        return True
+    _load_scan()
+    base = slug.rstrip("/").split("/")[-1]
+    info = _scan_lookup.get(slug) or _scan_lookup.get(base) or {}
+    return info.get("section", "") == "Stamps"
 
 
 def compute_da_path(slug):
@@ -275,9 +349,10 @@ def extract_body_paragraphs(raw):
 
 
 def extract_article_image(raw):
-    """Return the article's primary thumbnail/hero image URL.
+    """Return the article's primary thumbnail/hero image URL, or None if not found.
     Tries common CMS patterns, then restricts last-resort to the article body only
-    to avoid picking up sidebar/promo images. Falls back to DEFAULT_ARTICLE_IMAGE."""
+    to avoid picking up sidebar/promo images. Returns None when no image is present
+    so callers can choose an appropriate category-specific default."""
     patterns = [
         r'<div[^>]+id="[^"]*pnlArticleImage[^"]*"[^>]*>.*?<img[^>]+src="([^"]+)"',
         r'<div[^>]+id="[^"]*pnlImage[^"]*"[^>]*>.*?<img[^>]+src="([^"]+)"',
@@ -295,7 +370,7 @@ def extract_article_image(raw):
         m = re.search(r'<img[^>]+src="(/uploads/[^"]+)"', m_body.group(1), re.I)
         if m:
             return SITE_BASE + m.group(1)
-    return DEFAULT_ARTICLE_IMAGE
+    return None
 
 
 def extract_article_description(raw):
@@ -511,8 +586,9 @@ def build_html(page):
     if page["date_text"]:
         body_html.append(f'<p class="article-date">{html.escape(page["date_text"])}</p>')
     # Show featured image inline when there are no inline images in the article body
-    _is_stamps = (page.get("da_path") or "").startswith("/section/")
-    _feat_img = page.get("article_image") or (STAMPS_DEFAULT_IMAGE if _is_stamps else None)
+    _is_stamps = _is_stamp_article(page)
+    _default = STAMPS_DEFAULT_IMAGE if _is_stamps else DEFAULT_ARTICLE_IMAGE
+    _feat_img = page.get("article_image") or _default
     if not page.get("inline_images") and _feat_img:
         body_html.append(
             f'<picture><img src="{_feat_img}" '
@@ -573,8 +649,9 @@ def build_html(page):
         meta_rows += f'<div><div>sub-category</div><div>{html.escape(subcategory)}</div></div>'
     if page["date_ddmmyyyy"]:
         meta_rows += f'<div><div>publication-date</div><div>{page["date_ddmmyyyy"]}</div></div>'
-    is_stamps = (page.get("da_path") or "").startswith("/section/")
+    is_stamps = _is_stamp_article(page)
     img_url = page.get("article_image") or (STAMPS_DEFAULT_IMAGE if is_stamps else DEFAULT_ARTICLE_IMAGE)
+
     meta_rows += f'<div><div>image</div><div><picture><img src="{img_url}"></picture></div></div>'
     if page.get("description"):
         meta_rows += f'<div><div>description</div><div>{html.escape(page["description"])}</div></div>'
@@ -625,7 +702,20 @@ def main():
     ap.add_argument("--limit", type=int, default=10)
     ap.add_argument("--dry-run", action="store_true", help="extract + transform only, no push")
     ap.add_argument("--sleep", type=float, default=1.5, help="seconds between pages (rate-limit safety)")
+    ap.add_argument("--rescan", action="store_true", help="re-run scan_categories.py before migrating to refresh category-scan.json")
     args = ap.parse_args()
+
+    if args.rescan:
+        import subprocess
+        scan_script = os.path.join(os.path.dirname(__file__), "scan_categories.py")
+        print(f"Running category scan: {scan_script}")
+        result = subprocess.run([sys.executable, scan_script], check=False)
+        if result.returncode != 0:
+            sys.exit(f"Category scan failed (exit {result.returncode}). Aborting migration.")
+        print("Category scan complete.\n")
+        # Clear cached scan so compute_da_path re-reads the fresh file
+        global _scan_lookup
+        _scan_lookup = {}
 
     with open(args.list) as f:
         slugs = [line.strip().lstrip("/") for line in f if line.strip()]

@@ -73,7 +73,14 @@ export default function decorate(block) {
 
   const viewport = document.createElement('div');
   viewport.className = 'gallery-viewport';
+  viewport.setAttribute('tabindex', '0');
+  viewport.setAttribute('aria-label', 'Image gallery — use arrow keys to navigate');
   viewport.append(track);
+
+  viewport.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentIndex - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIndex + 1); }
+  });
 
   block.textContent = '';
   block.append(viewport, controls);

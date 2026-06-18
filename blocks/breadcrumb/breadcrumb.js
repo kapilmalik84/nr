@@ -1,3 +1,12 @@
+// URL path patterns that have no published DA page — breadcrumb items show as plain text.
+// Add new patterns here when new content sections are created.
+const NO_PAGE_PATHS = [
+  /^\/section$/,
+  /^\/archive(\/(?:news|video))?$/,
+  /^\/archive\/news\/\d{4}$/,
+  /^\/section\/[^/]+\/[^/]+\/\d{4}$/,
+];
+
 export default function decorate(block) {
   const nav = document.createElement('nav');
   nav.setAttribute('aria-label', 'Breadcrumb');
@@ -11,17 +20,10 @@ export default function decorate(block) {
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  // Paths that have no published DA page — skip in breadcrumb
   function pathHasPage(path) {
-    if (path === '/section') return false;
-    if (/^\/archive(\/(?:news|video))?$/.test(path)) return false;
-    if (/^\/archive\/news\/\d{4}$/.test(path)) return false;
-    // Year folders under stamp sections (e.g. /section/stamps/history/2022)
-    if (/^\/section\/[^/]+\/[^/]+\/\d{4}$/.test(path)) return false;
-    return true;
+    return !NO_PAGE_PATHS.some((pattern) => pattern.test(path));
   }
 
-  // Match a crumb label to the current URL to infer its href
   function inferHref(label) {
     const slug = label.toLowerCase()
       .replace(/&/g, 'and')
