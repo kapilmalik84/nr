@@ -32,7 +32,10 @@ export async function loadFragment(path) {
 
     if (resp.ok) {
       const main = document.createElement('main');
-      main.innerHTML = await resp.text();
+      // Parse via DOMParser so <script> tags are inert and event-handler
+      // vectors from CMS content cannot execute before decoration runs.
+      const doc = new DOMParser().parseFromString(await resp.text(), 'text/html');
+      main.append(...doc.body.childNodes);
 
       // reset base path for media to fragment base
       const resetAttributeBase = (tag, attr) => {

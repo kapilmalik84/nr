@@ -27,7 +27,13 @@ export default function decorate(block) {
       a.href = link ? link.href : (picture?.querySelector('img')?.src || '#');
       a.target = '_blank';
       a.rel = 'noopener';
-      if (picture) a.append(picture);
+      const altText = caption || 'Download high resolution photo';
+      if (picture) {
+        const img = picture.querySelector('img');
+        if (img && !img.alt) img.alt = altText;
+        a.append(picture);
+      }
+      a.setAttribute('aria-label', altText);
       const figcaption = document.createElement('span');
       figcaption.className = 'downloads-photo-caption';
       figcaption.textContent = caption;

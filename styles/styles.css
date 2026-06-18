@@ -4,7 +4,38 @@
  * Tokens extracted from auspost-aemaacs-program clientlib-site.css
  */
 
-/* Font faces are declared in fonts.css (loaded via head.html) — not duplicated here */
+/* Font faces are declared in fonts.css (loaded in loadLazy) — not duplicated here */
+
+/* ===== ACCESSIBILITY UTILITIES ===== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-nav {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--neutral-900);
+  color: var(--neutral-0);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 var(--radius-m) var(--radius-m);
+  text-decoration: none;
+  font-weight: 700;
+  transition: top 0.1s;
+}
+
+.skip-nav:focus {
+  top: 0;
+}
 
 /* ===== DESIGN TOKENS ===== */
 :root {

@@ -39,7 +39,11 @@ export function renderCard(article) {
     link.setAttribute('aria-hidden', 'true');
     const pic = createOptimizedPicture(imageUrl, '', false, [{ width: '480' }]);
     const img = pic.querySelector('img');
-    if (img) img.addEventListener('error', () => { imgWrap.remove(); });
+    if (img) {
+      img.setAttribute('width', '480');
+      img.setAttribute('height', '270');
+      img.addEventListener('error', () => { imgWrap.remove(); });
+    }
     link.append(pic);
     imgWrap.append(link);
     card.append(imgWrap);
@@ -75,7 +79,13 @@ export function renderCard(article) {
   const cta = document.createElement('a');
   cta.href = article.path;
   cta.className = 'card-cta';
-  cta.textContent = 'Read more';
+  const ctaVisible = document.createElement('span');
+  ctaVisible.setAttribute('aria-hidden', 'true');
+  ctaVisible.textContent = 'Read more';
+  const ctaHidden = document.createElement('span');
+  ctaHidden.className = 'visually-hidden';
+  ctaHidden.textContent = ` about ${article.title || 'this article'}`;
+  cta.append(ctaVisible, ctaHidden);
   text.append(cta);
 
   card.append(text);

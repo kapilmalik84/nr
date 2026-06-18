@@ -66,7 +66,7 @@ export default function decorate(block) {
 
   block.textContent = '';
 
-  const heading = document.createElement('p');
+  const heading = document.createElement('h4');
   heading.className = 'media-contact-heading';
   heading.textContent = 'Media contact:';
   block.append(heading);

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Migrate newsroom.auspost.com.au content into the kapilmalik84/nr da.live site.
+Migrate newsroom.auspost.com.au content into a da.live site.
 
 Usage:
   python3 migrate.py --list urls.txt --limit 10          # pilot run
   python3 migrate.py --list urls.txt --start 10 --limit 50
   python3 migrate.py --sitemap                            # pull all 842 from sitemap
+
+Config is read from migration-config.json in the same directory. Copy and update
+that file when moving from the dev environment (kapilmalik84/nr) to AusPost production.
 
 Writes a JSONL log to migration-log.jsonl (one record per page) so runs are resumable
 and reviewable.
@@ -23,12 +26,21 @@ from urllib.parse import quote, urlparse
 
 import requests
 
-SITE_BASE = "https://newsroom.auspost.com.au"
-ORG = "kapilmalik84"
-SITE = "nr"
-TOKEN_FILE = os.path.join(os.path.dirname(__file__), "..", ".hlx", ".da-token.json")
-LOG_FILE = os.path.join(os.path.dirname(__file__), "migration-log.jsonl")
-SCAN_FILE = os.path.join(os.path.dirname(__file__), "category-scan.json")
+# --- Load environment config ---
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "migration-config.json")
+_cfg: dict = {}
+if os.path.exists(_CONFIG_FILE):
+    with open(_CONFIG_FILE) as _f:
+        _cfg = json.load(_f)
+
+SITE_BASE = _cfg.get("source_site", "https://newsroom.auspost.com.au")
+ORG = _cfg.get("da_org", "kapilmalik84")
+SITE = _cfg.get("da_site", "nr")
+_GITHUB_ORG = _cfg.get("github_org", ORG)
+_GITHUB_REPO = _cfg.get("github_repo", SITE)
+TOKEN_FILE = os.path.join(os.path.dirname(__file__), _cfg.get("token_file", "../.hlx/.da-token.json"))
+LOG_FILE = os.path.join(os.path.dirname(__file__), _cfg.get("log_file", "migration-log.jsonl"))
+SCAN_FILE = os.path.join(os.path.dirname(__file__), _cfg.get("scan_file", "category-scan.json"))
 
 # In-process cache: external image URL -> DA relative path (avoids re-uploading same image)
 _image_cache: dict[str, str] = {}
@@ -36,9 +48,9 @@ _image_cache: dict[str, str] = {}
 _scan_lookup: dict[str, dict] = {}
 
 ABOUT_FRAGMENT = "/fragments/about-australia-post"
-DEFAULT_ARTICLE_IMAGE = "https://newsroom.auspost.com.au/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg"
-STAMPS_DEFAULT_IMAGE = "https://main--nr--kapilmalik84.aem.page/assets/images/stamp-placeholder.png"
-CDN_BASE = "https://main--nr--kapilmalik84.aem.page"
+DEFAULT_ARTICLE_IMAGE = f"{SITE_BASE}/uploads/defaults/Female-with-Express-Post-Parcel-optimised.jpg"
+CDN_BASE = f"https://main--{_GITHUB_REPO}--{_GITHUB_ORG}.aem.page"
+STAMPS_DEFAULT_IMAGE = f"{CDN_BASE}/assets/images/stamp-placeholder.png"
 
 # Maps uploads/ top-level folder to /assets/images/ section subfolder
 _UPLOADS_SECTION_MAP = {

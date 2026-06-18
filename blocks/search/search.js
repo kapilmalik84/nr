@@ -14,6 +14,8 @@ function renderResult(article) {
     imgWrap.className = 'result-image';
     const link = document.createElement('a');
     link.href = article.path;
+    link.setAttribute('aria-hidden', 'true');
+    link.tabIndex = -1;
     link.append(createOptimizedPicture(imageUrl, article.title || '', false, [{ width: '200' }]));
     imgWrap.append(link);
     item.append(imgWrap);
@@ -39,12 +41,7 @@ function renderResult(article) {
   return item;
 }
 
-function buildFilterPanel(data) {
-  const categories = [...new Set(data.map((a) => a.category).filter(Boolean))].sort();
-  const years = [...new Set(
-    data.map((a) => (a.date ? new Date(a.date * 1000).getFullYear() : null)).filter(Boolean),
-  )].sort((a, b) => b - a);
-
+function buildFilterPanel(categories, years) {
   const panel = document.createElement('aside');
   panel.className = 'search-filter-panel';
   panel.setAttribute('aria-label', 'Search filters');
@@ -66,9 +63,13 @@ function buildFilterPanel(data) {
     const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
     toggleBtn.setAttribute('aria-expanded', String(!expanded));
     inner.classList.toggle('is-open', !expanded);
+    if (!expanded) {
+      const firstControl = inner.querySelector('button, select, input');
+      if (firstControl) firstControl.focus();
+    }
   });
 
-  // Clear filters button
+  // Clear filters button — at top
   const clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'filter-clear';
@@ -171,8 +172,11 @@ export default async function decorate(block) {
   const placeholderText = config.placeholder || block.textContent.trim() || 'Search the newsroom';
   block.textContent = '';
 
-  const form = document.createElement('div');
+  // Use <form> with role="search" for proper landmark
+  const form = document.createElement('form');
   form.className = 'search-form';
+  form.setAttribute('role', 'search');
+  form.setAttribute('aria-label', 'Newsroom search');
 
   const input = document.createElement('input');
   input.type = 'search';
@@ -181,7 +185,7 @@ export default async function decorate(block) {
   input.setAttribute('aria-label', 'Search');
 
   const searchBtn = document.createElement('button');
-  searchBtn.type = 'button';
+  searchBtn.type = 'submit';
   searchBtn.className = 'search-btn';
   searchBtn.textContent = 'Search';
 
@@ -192,9 +196,15 @@ export default async function decorate(block) {
 
   const resultsArea = document.createElement('div');
   resultsArea.className = 'search-results-area';
+  resultsArea.setAttribute('role', 'region');
+  resultsArea.setAttribute('aria-label', 'Search results');
 
+  // Live region for result count announcements
   const infoEl = document.createElement('p');
   infoEl.className = 'search-info';
+  infoEl.setAttribute('role', 'status');
+  infoEl.setAttribute('aria-live', 'polite');
+  infoEl.setAttribute('aria-atomic', 'true');
   infoEl.hidden = true;
 
   const resultsEl = document.createElement('div');
@@ -204,35 +214,158 @@ export default async function decorate(block) {
   body.append(resultsArea);
   block.append(form, body);
 
-  const data = await getQueryIndex(source);
-  const filterPanel = buildFilterPanel(data);
-  body.prepend(filterPanel);
+  // Defer data fetch until first interaction (focus/submit)
+  let dataPromise = null;
+  let enrichedData = null;
 
-  const typeBtns = filterPanel.querySelectorAll('.type-btn');
-  const yearSelect = filterPanel.querySelector('.year-select');
-  const categoryCbs = filterPanel.querySelectorAll('.category-cb');
-  const clearBtn = filterPanel.querySelector('.filter-clear');
+  const ensureData = async () => {
+    if (enrichedData) return enrichedData;
+    if (!dataPromise) dataPromise = getQueryIndex(source);
+    const raw = await dataPromise;
+    enrichedData = raw.map((a) => ({
+      ...a,
+      _year: a.date ? new Date(a.date * 1000).getFullYear() : null,
+    }));
+    return enrichedData;
+  };
 
-  function getFilters() {
-    return {
+  let filterPanel = null;
+  let typeBtns;
+  let yearSelect;
+  let categoryCbs;
+  let clearBtn;
+
+  const buildPanel = async () => {
+    if (filterPanel) return;
+    const data = await ensureData();
+    const categories = [...new Set(data.map((a) => a.category).filter(Boolean))].sort();
+    const years = [...new Set(data.map((a) => a._year).filter(Boolean))].sort((a, b) => b - a);
+
+    filterPanel = buildFilterPanel(categories, years);
+    body.prepend(filterPanel);
+
+    typeBtns = filterPanel.querySelectorAll('.type-btn');
+    yearSelect = filterPanel.querySelector('.year-select');
+    categoryCbs = filterPanel.querySelectorAll('.category-cb');
+    clearBtn = filterPanel.querySelector('.filter-clear');
+
+    const getFilters = () => ({
       activeType: ([...typeBtns].find((b) => b.classList.contains('active')) || {}).dataset?.type || 'all',
       selectedYear: yearSelect.value,
       activeCategories: [...categoryCbs].filter((cb) => cb.checked).map((cb) => cb.value),
+    });
+
+    const updateClearBtn = () => {
+      const { activeType, selectedYear, activeCategories } = getFilters();
+      clearBtn.hidden = activeType === 'all' && !selectedYear && activeCategories.length === 0;
     };
-  }
 
-  function updateClearBtn() {
-    const { activeType, selectedYear, activeCategories } = getFilters();
-    clearBtn.hidden = activeType === 'all' && !selectedYear && activeCategories.length === 0;
-  }
+    const doSearch = async () => {
+      const allData = await ensureData();
+      const query = input.value.trim().toLowerCase();
+      const hasQuery = query.length >= 2;
+      const { activeType, selectedYear, activeCategories } = getFilters();
+      const hasFacet = activeCategories.length > 0 || selectedYear || activeType !== 'all';
 
-  function doSearch() {
+      updateClearBtn();
+
+      if (!hasQuery && !hasFacet) {
+        infoEl.hidden = true;
+        resultsEl.textContent = '';
+        return;
+      }
+
+      let matched = allData.filter((a) => a.title);
+
+      if (hasQuery) {
+        matched = matched.filter((a) => [a.title, a.description, a.category]
+          .filter(Boolean).join(' ').toLowerCase()
+          .includes(query));
+      }
+
+      if (activeCategories.length > 0) {
+        matched = matched.filter((a) => activeCategories.includes(a.category));
+      }
+
+      if (selectedYear) {
+        const yr = Number(selectedYear);
+        matched = matched.filter((a) => a._year === yr);
+      }
+
+      if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
+      else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
+
+      resultsEl.textContent = '';
+      const queryLabel = hasQuery ? ` for "${input.value.trim()}"` : '';
+      infoEl.textContent = `${matched.length} result${matched.length !== 1 ? 's' : ''}${queryLabel}`;
+      infoEl.hidden = false;
+
+      if (matched.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.className = 'search-no-results';
+        noResults.innerHTML = '<strong>No results found</strong>Try adjusting your filters or search terms.';
+        resultsEl.append(noResults);
+      } else {
+        matched.slice(0, 20).forEach((a) => resultsEl.append(renderResult(a)));
+      }
+    };
+
+    typeBtns.forEach((b) => {
+      b.addEventListener('click', () => {
+        typeBtns.forEach((other) => {
+          other.classList.remove('active');
+          other.setAttribute('aria-pressed', 'false');
+        });
+        b.classList.add('active');
+        b.setAttribute('aria-pressed', 'true');
+        doSearch();
+      });
+    });
+
+    yearSelect.addEventListener('change', doSearch);
+    categoryCbs.forEach((cb) => cb.addEventListener('change', doSearch));
+
+    clearBtn.addEventListener('click', () => {
+      typeBtns.forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+        if (b.dataset.type === 'all') {
+          b.classList.add('active');
+          b.setAttribute('aria-pressed', 'true');
+        }
+      });
+      yearSelect.value = '';
+      categoryCbs.forEach((cb) => { cb.checked = false; });
+      doSearch();
+    });
+
+    // If URL param already present, run search immediately
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) {
+      input.value = q;
+      doSearch();
+    }
+  };
+
+  // Trigger panel build + search on first focus or form submit
+  input.addEventListener('focus', () => buildPanel(), { once: true });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await buildPanel();
+    const { activeType, selectedYear, activeCategories } = filterPanel
+      ? {
+        activeType: ([...filterPanel.querySelectorAll('.type-btn')].find((b) => b.classList.contains('active')) || {}).dataset?.type || 'all',
+        selectedYear: filterPanel.querySelector('.year-select')?.value || '',
+        activeCategories: [...filterPanel.querySelectorAll('.category-cb')].filter((cb) => cb.checked).map((cb) => cb.value),
+      }
+      : { activeType: 'all', selectedYear: '', activeCategories: [] };
+
+    const allData = await ensureData();
     const query = input.value.trim().toLowerCase();
     const hasQuery = query.length >= 2;
-    const { activeType, selectedYear, activeCategories } = getFilters();
     const hasFacet = activeCategories.length > 0 || selectedYear || activeType !== 'all';
-
-    updateClearBtn();
 
     if (!hasQuery && !hasFacet) {
       infoEl.hidden = true;
@@ -240,25 +373,13 @@ export default async function decorate(block) {
       return;
     }
 
-    let matched = data.filter((a) => a.title);
-
+    let matched = allData.filter((a) => a.title);
     if (hasQuery) {
       matched = matched.filter((a) => [a.title, a.description, a.category]
-        .filter(Boolean).join(' ').toLowerCase()
-        .includes(query));
+        .filter(Boolean).join(' ').toLowerCase().includes(query));
     }
-
-    if (activeCategories.length > 0) {
-      matched = matched.filter((a) => activeCategories.includes(a.category));
-    }
-
-    if (selectedYear) {
-      matched = matched.filter((a) => {
-        if (!a.date) return false;
-        return new Date(a.date * 1000).getFullYear().toString() === selectedYear;
-      });
-    }
-
+    if (activeCategories.length > 0) matched = matched.filter((a) => activeCategories.includes(a.category));
+    if (selectedYear) matched = matched.filter((a) => a._year === Number(selectedYear));
     if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
     else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
 
@@ -275,44 +396,12 @@ export default async function decorate(block) {
     } else {
       matched.slice(0, 20).forEach((a) => resultsEl.append(renderResult(a)));
     }
-  }
-
-  typeBtns.forEach((b) => {
-    b.addEventListener('click', () => {
-      typeBtns.forEach((other) => {
-        other.classList.remove('active');
-        other.setAttribute('aria-pressed', 'false');
-      });
-      b.classList.add('active');
-      b.setAttribute('aria-pressed', 'true');
-      doSearch();
-    });
   });
 
-  yearSelect.addEventListener('change', doSearch);
-  categoryCbs.forEach((cb) => cb.addEventListener('change', doSearch));
-
-  clearBtn.addEventListener('click', () => {
-    typeBtns.forEach((b) => {
-      b.classList.remove('active');
-      b.setAttribute('aria-pressed', 'false');
-      if (b.dataset.type === 'all') {
-        b.classList.add('active');
-        b.setAttribute('aria-pressed', 'true');
-      }
-    });
-    yearSelect.value = '';
-    categoryCbs.forEach((cb) => { cb.checked = false; });
-    doSearch();
-  });
-
-  searchBtn.addEventListener('click', () => doSearch());
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
-
+  // If URL already has ?q= on page load, pre-fetch and search
   const params = new URLSearchParams(window.location.search);
-  const q = params.get('q');
-  if (q) {
-    input.value = q;
-    doSearch();
+  if (params.get('q')) {
+    input.value = params.get('q');
+    buildPanel();
   }
 }

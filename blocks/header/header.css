@@ -119,8 +119,8 @@ header nav .nav-sections .nav-drop > a.nav-current-section {
   text-decoration: none;
 }
 
-/* Chevron ∨ — default (dark) for items with children */
-header nav .nav-sections .nav-drop > a::after {
+/* Chevron — rendered via aria-hidden span so screen readers never hear ∨/∧ noise */
+header nav .nav-sections .nav-drop > a .nav-chevron::after {
   content: '∨';
   font-size: 0.8em;
   line-height: 1;
@@ -131,15 +131,15 @@ header nav .nav-sections .nav-drop > a::after {
 }
 
 /* Red chevron when hovered, open, or browsing current section */
-header nav .nav-sections .nav-drop:hover > a::after,
-header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after,
-header nav .nav-sections .nav-drop > a.nav-current-section::after {
+header nav .nav-sections .nav-drop:hover > a .nav-chevron::after,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after,
+header nav .nav-sections .nav-drop > a.nav-current-section .nav-chevron::after {
   color: var(--auspost-red-500, #dc1928);
 }
 
-/* ∧ chevron (up) when hover or dropdown is open */
-header nav .nav-sections .nav-drop:hover > a::after,
-header nav .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+/* ∧ chevron (up) when hovered or open */
+header nav .nav-sections .nav-drop:hover > a .nav-chevron::after,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after {
   content: '∧';
 }
 
@@ -258,7 +258,7 @@ header nav .nav-utilities .nav-search-pill:focus-within {
 header nav .nav-utilities .nav-search-pill input {
   border: none;
   background: transparent;
-  outline: none;
+  outline: transparent;
   font-size: var(--body-font-size-s, 0.875rem);
   font-family: var(--body-font-family);
   width: 140px;
@@ -345,7 +345,7 @@ header nav .nav-hamburger-icon::after {
 
 /* === MOBILE EXPANDED NAV === */
 @media (width < 900px) {
-  header nav[aria-expanded='true'] .nav-sections {
+  header nav.is-open .nav-sections {
     display: block;
     position: absolute;
     top: var(--nav-height, 72px);
@@ -359,17 +359,17 @@ header nav .nav-hamburger-icon::after {
     overflow-y: auto;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul {
+  header nav.is-open .nav-sections > ul {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li {
+  header nav.is-open .nav-sections > ul > li {
     border-bottom: 1px solid var(--neutral-300, #eee);
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li > a {
+  header nav.is-open .nav-sections > ul > li > a {
     width: 100%;
     padding: 0.875rem 0.5rem;
     border-radius: 0;
@@ -379,33 +379,33 @@ header nav .nav-hamburger-icon::after {
   }
 
   /* Mobile chevron: › (right) for items with children */
-  header nav[aria-expanded='true'] .nav-sections .nav-drop > a::after {
+  header nav.is-open .nav-sections .nav-drop > a .nav-chevron::after {
     content: '›';
     font-size: 1.2em;
     color: var(--ink-700, #4d4d54);
   }
 
   /* Mobile: ∨ when sub-menu is expanded on mobile */
-  header nav[aria-expanded='true'] .nav-sections .nav-drop[aria-expanded='true'] > a::after {
+  header nav.is-open .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after {
     content: '∨';
     color: var(--auspost-red-500, #dc1928);
   }
 
   /* Mobile: red text for active section or current page */
-  header nav[aria-expanded='true'] .nav-sections > ul > li > a.nav-current-section,
-  header nav[aria-expanded='true'] .nav-sections > ul > li > a.nav-current-page {
+  header nav.is-open .nav-sections > ul > li > a.nav-current-section,
+  header nav.is-open .nav-sections > ul > li > a.nav-current-page {
     color: var(--auspost-red-500, #dc1928);
     background: transparent;
     border-color: transparent;
   }
 
   /* Mobile: active section right chevron also red */
-  header nav[aria-expanded='true'] .nav-sections .nav-drop > a.nav-current-section::after {
+  header nav.is-open .nav-sections .nav-drop > a.nav-current-section .nav-chevron::after {
     content: '›';
     color: var(--auspost-red-500, #dc1928);
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li > ul {
+  header nav.is-open .nav-sections > ul > li > ul {
     position: static;
     box-shadow: none;
     border-top: none;
@@ -415,11 +415,11 @@ header nav .nav-hamburger-icon::after {
     min-width: unset;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li[aria-expanded='true'] > ul {
+  header nav.is-open .nav-sections > ul > li[aria-expanded='true'] > ul {
     display: block;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li > ul > li:first-child > a {
+  header nav.is-open .nav-sections > ul > li > ul > li:first-child > a {
     border-bottom: none;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
@@ -427,11 +427,11 @@ header nav .nav-hamburger-icon::after {
     margin-bottom: 0;
   }
 
-  header nav[aria-expanded='true'] .nav-sections > ul > li > ul > li > a {
+  header nav.is-open .nav-sections > ul > li > ul > li > a {
     padding: 0.45rem 0.75rem;
   }
 
-  header nav[aria-expanded='true'] .nav-utilities {
+  header nav.is-open .nav-utilities {
     display: flex;
     flex-direction: column;
     align-items: flex-start;

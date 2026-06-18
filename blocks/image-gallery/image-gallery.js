@@ -6,24 +6,35 @@ export default function decorate(block) {
 
   const track = document.createElement('div');
   track.className = 'gallery-track';
+  track.setAttribute('role', 'group');
+  track.setAttribute('aria-roledescription', 'carousel');
 
   const slides = [];
   let currentIndex = 0;
 
   const counter = document.createElement('span');
   counter.className = 'gallery-counter';
+  counter.setAttribute('aria-live', 'polite');
+  counter.setAttribute('aria-atomic', 'true');
   counter.textContent = `1 / ${rows.length}`;
 
   rows.forEach((row, i) => {
     const cols = [...row.children];
     const slide = document.createElement('figure');
     slide.className = 'gallery-slide';
+    slide.setAttribute('role', 'group');
+    slide.setAttribute('aria-roledescription', 'slide');
+    slide.setAttribute('aria-label', `${i + 1} of ${rows.length}`);
+    slide.setAttribute('aria-hidden', i !== 0 ? 'true' : 'false');
     if (i === 0) slide.classList.add('active');
 
     const pic = cols[0] ? cols[0].querySelector('picture') : null;
     if (pic) {
       const img = pic.querySelector('img');
       const optimized = createOptimizedPicture(img.src, img.alt || '', i === 0, [{ width: '800' }]);
+      // Lazy-load off-screen slides
+      const slideImg = optimized.querySelector('img');
+      if (slideImg && i !== 0) slideImg.loading = 'lazy';
       slide.append(optimized);
     }
 
@@ -46,8 +57,10 @@ export default function decorate(block) {
 
   function goTo(index) {
     slides[currentIndex].classList.remove('active');
+    slides[currentIndex].setAttribute('aria-hidden', 'true');
     currentIndex = (index + slides.length) % slides.length;
     slides[currentIndex].classList.add('active');
+    slides[currentIndex].setAttribute('aria-hidden', 'false');
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
     counter.textContent = `${currentIndex + 1} / ${slides.length}`;
   }

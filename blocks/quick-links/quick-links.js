@@ -31,6 +31,10 @@ export default function decorate(block) {
         ext.setAttribute('aria-hidden', 'true');
         ext.textContent = '↗';
         label.append(ext);
+        const notice = document.createElement('span');
+        notice.className = 'visually-hidden';
+        notice.textContent = ' (opens in new tab)';
+        a.append(notice);
       }
       li.append(a);
       list.append(li);

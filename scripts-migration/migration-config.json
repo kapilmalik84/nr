@@ -1,0 +1,11 @@
+{
+  "_comment": "Migration environment config. Copy and update when moving to AusPost production.",
+  "source_site": "https://newsroom.auspost.com.au",
+  "da_org": "kapilmalik84",
+  "da_site": "nr",
+  "github_org": "kapilmalik84",
+  "github_repo": "nr",
+  "token_file": "../.hlx/.da-token.json",
+  "log_file": "migration-log.jsonl",
+  "scan_file": "category-scan.json"
+}

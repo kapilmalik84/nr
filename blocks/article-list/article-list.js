@@ -51,7 +51,13 @@ export default async function decorate(block) {
   const year = config.year ? parseInt(config.year, 10) : null;
   const pageSize = parseInt(config.limit, 10) || PAGE_SIZE;
 
-  block.textContent = 'Loading…';
+  block.textContent = '';
+  const loadingMsg = document.createElement('p');
+  loadingMsg.setAttribute('aria-live', 'polite');
+  loadingMsg.textContent = 'Loading articles…';
+  block.append(loadingMsg);
+
+  const NAV_HEIGHT = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72', 10);
 
   try {
     let articles = await getQueryIndex(source);
@@ -74,6 +80,7 @@ export default async function decorate(block) {
 
     articles = [...articles].sort((a, b) => (b.date || 0) - (a.date || 0));
 
+    loadingMsg.remove();
     block.textContent = '';
 
     if (articles.length === 0) {
@@ -105,8 +112,11 @@ export default async function decorate(block) {
         block.append(renderPagination(totalPages, page, showPage));
       }
 
-      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72', 10);
-      const blockTop = block.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+      // Move focus to result count so screen readers announce page change
+      resultCount.tabIndex = -1;
+      resultCount.focus();
+
+      const blockTop = block.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT - 16;
       window.scrollTo({ top: Math.max(0, blockTop), behavior: 'smooth' });
     };
 

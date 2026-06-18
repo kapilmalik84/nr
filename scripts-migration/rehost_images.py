@@ -32,18 +32,33 @@ from urllib.parse import urlparse
 
 import requests
 
+# Force line-buffered output even when piped (tee, logs)
+import functools
+print = functools.partial(print, flush=True)
+
 # ── Config ───────────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).parent
 REPO_ROOT = SCRIPT_DIR.parent
-CACHE_DIR = REPO_ROOT / "assets" / "images"   # local download cache (not committed)
-LOG_FILE = SCRIPT_DIR / "migration-log.jsonl"
-TOKEN_FILE = REPO_ROOT / ".hlx" / ".da-token.json"
+
+_CONFIG_FILE = SCRIPT_DIR / "migration-config.json"
+_cfg: dict = {}
+if _CONFIG_FILE.exists():
+    with open(_CONFIG_FILE) as _f:
+        _cfg = json.load(_f)
+
+ORG  = _cfg.get("da_org", "kapilmalik84")
+SITE = _cfg.get("da_site", "nr")
+_gh_org  = _cfg.get("github_org", ORG)
+_gh_repo = _cfg.get("github_repo", SITE)
+
+CACHE_DIR  = REPO_ROOT / "assets" / "images"
+LOG_FILE   = SCRIPT_DIR / _cfg.get("log_file", "migration-log.jsonl")
+TOKEN_FILE = Path(os.path.join(str(SCRIPT_DIR), _cfg.get("token_file", "../.hlx/.da-token.json")))
 
 SOURCE_HOST = "newsroom.auspost.com.au"
-CDN_BASE = "https://main--nr--kapilmalik84.aem.page"
-DA_BASE = "https://admin.da.live"
+CDN_BASE = f"https://main--{_gh_repo}--{_gh_org}.aem.page"
+DA_BASE  = "https://admin.da.live"
 HLX_BASE = "https://admin.hlx.page"
-ORG, SITE = "kapilmalik84", "nr"
 
 UPLOADS_SECTION_MAP = {
     "news": "news",

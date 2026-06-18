@@ -14,7 +14,11 @@ export async function getQueryIndex(source = '/query-index.json') {
       if (!r.ok) throw new Error(`${r.status}`);
       return r.json();
     })
-    .then((json) => json.data || [])
+    .then((json) => {
+      const data = json.data || [];
+      cache.set(source, data);
+      return data;
+    })
     .catch((err) => { console.error('query-index fetch failed:', source, err); return []; });
   cache.set(source, promise);
   return promise;

@@ -3,7 +3,8 @@ main .subscribe-form .subscribe-container {
   margin: 0 auto;
 }
 
-main .subscribe-form .subscribe-container h1 {
+main .subscribe-form .subscribe-container h1,
+main .subscribe-form .subscribe-container h2 {
   margin-top: 0;
   font-size: var(--heading-font-size-xl, 2rem);
 }
@@ -38,8 +39,9 @@ main .subscribe-form .form-group input[type='email'] {
   transition: border-color 0.2s;
 }
 
-main .subscribe-form .form-group input:focus {
-  outline: none;
+main .subscribe-form .form-group input:focus-visible {
+  outline: 2px solid var(--border-input-active, #31313d);
+  outline-offset: 1px;
   border-color: var(--border-input-active, #31313d);
   box-shadow: 0 0 0 1px var(--border-input-active, #31313d);
 }

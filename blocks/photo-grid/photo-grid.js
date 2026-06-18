@@ -140,6 +140,13 @@ export default function decorate(block) {
     if (totalPages > 1) {
       block.append(renderPagination(totalPages, currentPage, showPage));
     }
+
+    // Move focus to first card so screen readers announce the page change
+    const firstCard = grid.querySelector('.photo-card');
+    if (firstCard) {
+      firstCard.tabIndex = -1;
+      firstCard.focus();
+    }
   }
 
   block.append(grid);

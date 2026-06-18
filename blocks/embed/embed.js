@@ -6,6 +6,8 @@ export default function decorate(block) {
   const wrapper = document.createElement('div');
   wrapper.className = 'embed-wrapper';
 
+  const pageTitle = document.querySelector('h1')?.textContent?.trim() || 'Video';
+
   if (url.includes('vimeo.com')) {
     // URL formats: vimeo.com/ID  or  vimeo.com/ID/HASH (private videos)
     const vimeoMatch = url.match(/vimeo\.com\/(\d+)(?:\/([a-f0-9]+))?/);
@@ -27,7 +29,8 @@ export default function decorate(block) {
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');
-      iframe.setAttribute('title', 'Video');
+      iframe.setAttribute('title', `${pageTitle} — Vimeo video`);
+      iframe.loading = 'lazy';
       wrapper.append(iframe);
     }
   } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -38,16 +41,28 @@ export default function decorate(block) {
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');
-      iframe.setAttribute('title', 'Video');
+      iframe.setAttribute('title', `${pageTitle} — YouTube video`);
+      iframe.loading = 'lazy';
       wrapper.append(iframe);
     }
   } else {
-    const iframe = document.createElement('iframe');
-    iframe.src = url;
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allowfullscreen', '');
-    iframe.setAttribute('title', 'Video');
-    wrapper.append(iframe);
+    // Validate URL is safe https:// only before embedding
+    let safeUrl;
+    try {
+      const parsed = new URL(url);
+      safeUrl = parsed.protocol === 'https:' ? url : null;
+    } catch (_) {
+      safeUrl = null;
+    }
+    if (safeUrl) {
+      const iframe = document.createElement('iframe');
+      iframe.src = safeUrl;
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('title', `${pageTitle} — video`);
+      iframe.loading = 'lazy';
+      wrapper.append(iframe);
+    }
   }
 
   const downloadLink = block.querySelectorAll('a')[1];

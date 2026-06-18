@@ -133,10 +133,16 @@ async function loadEager(doc) {
 
   const main = doc.querySelector('main');
   if (main) {
+    main.id = 'main-content';
+    const skipNav = document.createElement('a');
+    skipNav.href = '#main-content';
+    skipNav.className = 'skip-nav';
+    skipNav.textContent = 'Skip to main content';
+    document.body.prepend(skipNav);
     decorateMain(main);
     document.body.classList.add('appear');
-    const firstBlock = document.querySelector('.block');
-    if (firstBlock) await loadBlock(firstBlock);
+    const heroBlock = main.querySelector('.hero');
+    if (heroBlock) await loadBlock(heroBlock);
     await waitForFirstImage(main);
   }
 
@@ -159,7 +165,7 @@ async function loadLazy(doc) {
   loadFooter(doc.querySelector('footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
-  loadCSS(`${window.hlx.codeBasePath}/styles/cards.css`);
+  loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   sampleRUM('lazy');
   if (sampleRUM.observe) sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
 }

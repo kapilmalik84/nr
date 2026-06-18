@@ -34,10 +34,12 @@ export default async function decorate(block) {
 
     const copyrightSpan = document.createElement('span');
     copyrightSpan.className = 'footer-copyright';
-    copyrightSpan.innerHTML = copyrightP.innerHTML;
+    copyrightSpan.textContent = copyrightP.textContent;
 
-    const socialDiv = document.createElement('div');
-    socialDiv.className = 'footer-social';
+    const socialNav = document.createElement('nav');
+    socialNav.className = 'footer-social';
+    socialNav.setAttribute('aria-label', 'Social media links');
+    const socialDiv = socialNav;
     SOCIAL_LINKS.forEach(({ href, src, label }) => {
       const a = document.createElement('a');
       a.href = href;
@@ -53,7 +55,7 @@ export default async function decorate(block) {
       socialDiv.append(a);
     });
 
-    legalRow.append(copyrightSpan, socialDiv);
+    legalRow.append(copyrightSpan, socialNav);
     footer.append(legalRow);
   }
 

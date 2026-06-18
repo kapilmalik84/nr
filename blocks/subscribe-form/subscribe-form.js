@@ -14,9 +14,10 @@ export default function decorate(block) {
   const container = document.createElement('div');
   container.className = 'subscribe-container';
 
-  const h1 = document.createElement('h1');
-  h1.textContent = heading ? heading.textContent : 'Media sign up';
-  container.append(h1);
+  const existingH1 = document.querySelector('main h1');
+  const h = document.createElement(existingH1 ? 'h2' : 'h1');
+  h.textContent = heading ? heading.textContent : 'Media sign up';
+  container.append(h);
 
   if (descriptionText) {
     const desc = document.createElement('p');
@@ -84,7 +85,7 @@ export default function decorate(block) {
 
   const status = document.createElement('p');
   status.className = 'subscribe-status';
-  status.setAttribute('aria-live', 'polite');
+  status.setAttribute('role', 'alert');
 
   const submitBtn = document.createElement('button');
   submitBtn.type = 'submit';

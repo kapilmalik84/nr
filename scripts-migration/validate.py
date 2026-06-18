@@ -16,8 +16,11 @@ Checks:
   7. AEM page returns HTTP 200 (not 404)
 
 Notes:
-  - External newsroom.auspost.com.au image URLs are CORRECT — we intentionally use
-    them instead of uploading to DA (auth-gated, not served via CDN).
+  - newsroom.auspost.com.au image URLs in DA source are intentional. When an article
+    is previewed, the AEM pipeline auto-fetches and stores images in AEM CAS as
+    ./media_{SHA40hex}.jpg — so CDN output uses hashed paths even though DA source
+    still shows the original newsroom URLs. Run da_bulk_preview.py to ensure all
+    articles have their images cached before newsroom.auspost.com.au is decommissioned.
   - Uses migration-log.jsonl to resolve source slug -> DA path.
 
 Usage:
@@ -36,9 +39,18 @@ import time
 
 import requests
 
-SITE_BASE = "https://newsroom.auspost.com.au"
-AEM_BASE  = "https://main--nr--kapilmalik84.aem.page"
-LOG_FILE  = os.path.join(os.path.dirname(__file__), "migration-log.jsonl")
+# --- Load environment config ---
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "migration-config.json")
+_cfg: dict = {}
+if os.path.exists(_CONFIG_FILE):
+    with open(_CONFIG_FILE) as _f:
+        _cfg = json.load(_f)
+
+SITE_BASE   = _cfg.get("source_site", "https://newsroom.auspost.com.au")
+_gh_org     = _cfg.get("github_org", _cfg.get("da_org", "kapilmalik84"))
+_gh_repo    = _cfg.get("github_repo", _cfg.get("da_site", "nr"))
+AEM_BASE    = f"https://main--{_gh_repo}--{_gh_org}.aem.page"
+LOG_FILE    = os.path.join(os.path.dirname(__file__), _cfg.get("log_file", "migration-log.jsonl"))
 REPORT_FILE = os.path.join(os.path.dirname(__file__), "validation-report.jsonl")
 
 session = requests.Session()

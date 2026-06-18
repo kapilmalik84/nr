@@ -3,16 +3,22 @@ import { loadFragment } from '../fragment/fragment.js';
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
+// Track which drop elements already have hover listeners so resize never
+// double-attaches them (WeakSet avoids memory leaks).
+const hoverAttached = new WeakSet();
+
 function toggleAllNavSections(navSections) {
   if (!navSections) return;
   navSections.querySelectorAll('.nav-drop').forEach((d) => {
     d.setAttribute('aria-expanded', 'false');
+    const trigger = d.querySelector(':scope > a');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
   });
 }
 
 function toggleMenu(nav, navSections, forceOpen = null) {
-  const isOpen = forceOpen !== null ? forceOpen : nav.getAttribute('aria-expanded') !== 'true';
-  nav.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  const isOpen = forceOpen !== null ? forceOpen : !nav.classList.contains('is-open');
+  nav.classList.toggle('is-open', isOpen);
   document.body.style.overflowY = isOpen && !isDesktop.matches ? 'hidden' : '';
   if (!isOpen) toggleAllNavSections(navSections);
   const btn = nav.querySelector('.nav-hamburger button');
@@ -25,18 +31,25 @@ function fixHref(href) {
 }
 
 function setupHoverDropdown(drop) {
+  if (hoverAttached.has(drop)) return;
+  hoverAttached.add(drop);
+
   let closeTimer = null;
 
   const open = () => {
     clearTimeout(closeTimer);
     toggleAllNavSections(drop.closest('.nav-sections'));
     drop.setAttribute('aria-expanded', 'true');
+    const trigger = drop.querySelector(':scope > a');
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
   };
 
   const scheduleClose = () => {
     clearTimeout(closeTimer);
     closeTimer = setTimeout(() => {
       drop.setAttribute('aria-expanded', 'false');
+      const trigger = drop.querySelector(':scope > a');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
     }, 180);
   };
 
@@ -59,10 +72,8 @@ export default async function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'nav';
 
-  // Move fragment children into nav so we can query them
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  // nav.html structure: div[brand link], div[ul nav], div[contact paragraphs]
   const navUl = nav.querySelector('ul');
   const brandLink = nav.querySelector('a[href]');
   const contactLinks = [...nav.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')];
@@ -91,40 +102,101 @@ export default async function decorate(block) {
   // ── Nav sections ──────────────────────────────────────────────────────────
   const navSections = document.createElement('div');
   navSections.className = 'nav-sections';
+  navSections.id = 'nav-sections';
 
   if (navUl) {
     navSections.append(navUl);
-    // Mark items that have sub-lists as dropdowns
+
     navUl.querySelectorAll(':scope > li').forEach((li) => {
       const subUl = li.querySelector('ul');
-      if (subUl) {
-        li.classList.add('nav-drop');
-        li.setAttribute('aria-expanded', 'false');
-        li.setAttribute('aria-haspopup', 'true');
+      if (!subUl) return;
 
-        // Prepend a "view all" link at top of dropdown matching parent
-        const parentLink = li.querySelector(':scope > a');
-        if (parentLink) {
-          const headingLi = document.createElement('li');
-          const headingA = document.createElement('a');
-          headingA.href = fixHref(parentLink.href);
-          headingA.textContent = parentLink.textContent;
-          headingLi.append(headingA);
-          subUl.prepend(headingLi);
+      li.classList.add('nav-drop');
+      const parentLink = li.querySelector(':scope > a');
+      if (!parentLink) return;
+
+      // ARIA state on the interactive <a>, not the <li>
+      parentLink.setAttribute('aria-expanded', 'false');
+      parentLink.setAttribute('aria-haspopup', 'true');
+
+      // Chevron as aria-hidden span so screen readers never hear "∨" noise
+      const chevron = document.createElement('span');
+      chevron.className = 'nav-chevron';
+      chevron.setAttribute('aria-hidden', 'true');
+      parentLink.append(chevron);
+
+      // Keyboard interaction on the trigger link
+      parentLink.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const expanded = parentLink.getAttribute('aria-expanded') === 'true';
+          toggleAllNavSections(navSections);
+          const next = expanded ? 'false' : 'true';
+          parentLink.setAttribute('aria-expanded', next);
+          li.setAttribute('aria-expanded', next);
+          // ArrowDown or open: move focus to first sub-menu item
+          if (next === 'true') {
+            const first = subUl.querySelector('a');
+            if (first) first.focus();
+          }
         }
-      }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          // Open dropdown and focus first item
+          toggleAllNavSections(navSections);
+          parentLink.setAttribute('aria-expanded', 'true');
+          li.setAttribute('aria-expanded', 'true');
+          const first = subUl.querySelector('a');
+          if (first) first.focus();
+        }
+        if (e.key === 'Escape') {
+          parentLink.setAttribute('aria-expanded', 'false');
+          li.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Keyboard within sub-menu: ArrowUp on first item returns to trigger; Escape closes
+      subUl.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          parentLink.setAttribute('aria-expanded', 'false');
+          li.setAttribute('aria-expanded', 'false');
+          parentLink.focus();
+        }
+        if (e.key === 'ArrowUp') {
+          const links = [...subUl.querySelectorAll('a')];
+          if (document.activeElement === links[0]) {
+            e.preventDefault();
+            parentLink.setAttribute('aria-expanded', 'false');
+            li.setAttribute('aria-expanded', 'false');
+            parentLink.focus();
+          }
+        }
+      });
+
+      // Prepend "view all" link in dropdown
+      const headingLi = document.createElement('li');
+      const headingA = document.createElement('a');
+      headingA.href = fixHref(parentLink.href);
+      // Use only text content (not the chevron span)
+      headingA.textContent = parentLink.firstChild?.textContent?.trim() || parentLink.textContent.trim();
+      headingLi.append(headingA);
+      subUl.prepend(headingLi);
     });
   }
 
-  // Desktop: hover | Mobile: click
+  // Click to toggle (works on both mobile and desktop for keyboard activation)
   navSections.querySelectorAll('.nav-drop').forEach((drop) => {
     drop.addEventListener('click', (e) => {
-      if (isDesktop.matches) return;
       if (e.target.closest('ul ul')) return;
+      // Only handle clicks not already handled by keydown (i.e. pointer clicks)
+      if (e.detail === 0) return; // keyboard-synthesised click — keydown already handled it
       e.preventDefault();
-      const expanded = drop.getAttribute('aria-expanded') === 'true';
+      const trigger = drop.querySelector(':scope > a');
+      const expanded = (trigger || drop).getAttribute('aria-expanded') === 'true';
       toggleAllNavSections(navSections);
-      drop.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      const next = expanded ? 'false' : 'true';
+      if (trigger) trigger.setAttribute('aria-expanded', next);
+      drop.setAttribute('aria-expanded', next);
     });
   });
 
@@ -136,7 +208,7 @@ export default async function decorate(block) {
   attachHover();
   isDesktop.addEventListener('change', attachHover);
 
-  // Mark active nav items: nav-current-section (has-children) or nav-current-page (leaf)
+  // Mark active nav items
   const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
   navSections.querySelectorAll(':scope > ul > li > a').forEach((a) => {
     try {
@@ -151,7 +223,7 @@ export default async function decorate(block) {
     } catch (_) { /* skip */ }
   });
 
-  // ── Utilities (right side) ────────────────────────────────────────────────
+  // ── Utilities ─────────────────────────────────────────────────────────────
   const utilitiesDiv = document.createElement('div');
   utilitiesDiv.className = 'nav-utilities';
 
@@ -163,26 +235,26 @@ export default async function decorate(block) {
     utilitiesDiv.append(link);
   });
 
-  // Pill search (styled like "Track or search" on stest.npe.auspost.com.au)
-  const searchPill = document.createElement('div');
+  const searchPill = document.createElement('form');
   searchPill.className = 'nav-search-pill';
+  searchPill.setAttribute('role', 'search');
+  searchPill.setAttribute('aria-label', 'Site search');
 
   const searchInput = document.createElement('input');
-  searchInput.type = 'text';
+  searchInput.type = 'search';
   searchInput.placeholder = 'Search Newsroom';
-  searchInput.setAttribute('aria-label', 'Search');
+  searchInput.setAttribute('aria-label', 'Search Newsroom');
 
   const searchBtn = document.createElement('button');
-  searchBtn.type = 'button';
+  searchBtn.type = 'submit';
   searchBtn.setAttribute('aria-label', 'Submit search');
-  searchBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+  searchBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
 
-  const doSearch = () => {
+  searchPill.addEventListener('submit', (e) => {
+    e.preventDefault();
     const q = searchInput.value.trim();
     if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
-  };
-  searchBtn.addEventListener('click', doSearch);
-  searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
+  });
 
   searchPill.append(searchInput, searchBtn);
   utilitiesDiv.append(searchPill);
@@ -190,7 +262,7 @@ export default async function decorate(block) {
   // ── Hamburger ─────────────────────────────────────────────────────────────
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
-  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+  hamburger.innerHTML = `<button type="button" aria-controls="nav-sections" aria-label="Open navigation">
     <span class="nav-hamburger-icon"></span>
   </button>`;
   hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
@@ -198,17 +270,14 @@ export default async function decorate(block) {
   // ── Assemble ──────────────────────────────────────────────────────────────
   nav.textContent = '';
   nav.append(brandDiv, navSections, utilitiesDiv, hamburger);
-  nav.setAttribute('aria-expanded', 'false');
 
-  // Close dropdowns when clicking outside nav
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#nav')) toggleAllNavSections(navSections);
   });
 
-  // Sync hamburger state on resize
   isDesktop.addEventListener('change', () => {
     if (isDesktop.matches) {
-      nav.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('is-open');
       document.body.style.overflowY = '';
     }
   });

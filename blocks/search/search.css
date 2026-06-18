@@ -27,7 +27,7 @@ main .search .search-form:focus-within {
 main .search .search-input {
   flex: 1;
   border: none;
-  outline: none;
+  outline: transparent;
   background: transparent;
   font-family: var(--body-font-family);
   font-size: 1rem;
@@ -210,8 +210,9 @@ main .search .year-select {
   appearance: auto;
 }
 
-main .search .year-select:focus {
-  outline: none;
+main .search .year-select:focus-visible {
+  outline: 2px solid var(--auspost-red-500, #dc1928);
+  outline-offset: 2px;
   border-color: var(--auspost-red-500, #dc1928);
   box-shadow: 0 0 0 3px rgb(220 25 40 / 10%);
 }
