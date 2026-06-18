@@ -4,12 +4,12 @@ import { loadFragment } from '../fragment/fragment.js';
 const SOCIAL_LINKS = [
   {
     href: 'https://www.facebook.com/australiapost',
-    src: '/assets/icons/icon-facebook.svg',
+    src: '/assets/icons-logos/icon-facebook.svg',
     label: 'Facebook',
   },
   {
     href: 'https://www.linkedin.com/company/australia-post/',
-    src: '/assets/icons/icon-linkedin.svg',
+    src: '/assets/icons-logos/icon-linkedin.svg',
     label: 'LinkedIn',
   },
 ];
