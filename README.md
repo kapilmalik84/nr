@@ -38,312 +38,401 @@ See `scripts-migration/` for tools used to migrate content from the legacy newsr
 
 ## Blocks
 
-### article-cards
-
-Static card grid authored directly in DA. Each row is one card with two columns: image and text content.
-
-**Columns per row:**
-
-| Column | Content |
-|---|---|
-| 1 | Picture |
-| 2 | `**Bold title**`, excerpt paragraph(s), link (becomes "Read more" CTA) |
-
-Used on the home page for manually curated article highlights. For a dynamic feed use `latest-articles` instead.
+| # | Block | What it does | Used on |
+|---|---|---|---|
+| 1 | [article-cards](#1-article-cards) | Static curated card grid — image, title, excerpt, CTA | Home page |
+| 2 | [article-list](#2-article-list) | Paginated query-index listing with category/year filters | Archive & section pages |
+| 3 | [breadcrumb](#3-breadcrumb) | Home → Section → Article trail, last crumb from `h1` | Article pages |
+| 4 | [cards](#4-cards) | General-purpose image + body card grid | Any page |
+| 5 | [columns](#5-columns) | Side-by-side column layout | Article pages |
+| 6 | [downloads](#6-downloads) | PDF file list + high-resolution photo grid | Press releases |
+| 7 | [embed](#7-embed) | Responsive Vimeo / YouTube / generic iframe | Video article pages |
+| 8 | [featured-article](#8-featured-article) | Two-column editorial feature: image left, text + CTA right | Home page |
+| 9 | [footer](#9-footer) | Copyright, social links, Acknowledgement of Country | All pages (auto) |
+| 10 | [fragment](#10-fragment) | Includes another DA page inline | Shared content |
+| 11 | [header](#11-header) | Logo, primary nav with dropdowns, search | All pages (auto) |
+| 12 | [hero](#12-hero) | Full-width background-image banner with headline and CTA | Home page |
+| 13 | [image-gallery](#13-image-gallery) | Slideshow carousel with optional captions | Stamps article pages |
+| 14 | [latest-articles](#14-latest-articles) | Dynamic card feed from query-index, sorted by date | Home, section landing pages |
+| 15 | [media-contact](#15-media-contact) | Formatted press contact: name, mobile, email | Press release pages |
+| 16 | [photo-grid](#16-photo-grid) | Paginated photo card grid with captions | Stamps photo pages |
+| 17 | [publications-promo](#17-publications-promo) | Sidebar widget linking to publications catalogue | Stamps section pages |
+| 18 | [quick-links](#18-quick-links) | Compact link panel; external links open in new tab | Article & section pages |
+| 19 | [search](#19-search) | Full-text search over the query index | `/search` page |
+| 20 | [subscribe-form](#20-subscribe-form) | Media sign-up form: name, email, privacy consent | `/signup` page |
 
 ---
 
-### article-list
+### 1. article-cards
 
-Paginated article listing pulled from `/query-index.json`. Used on section archive pages (e.g. `/archive/news/`, `/section/stamps/sport/`). Shows 12 cards per page with Previous/Next pagination.
+Static card grid authored directly in DA. Each row is one card. Use this for a manually curated highlight list. For an automated feed driven by publish date use [latest-articles](#14-latest-articles) instead.
 
-**Config rows (key | value):**
+**Example page:** https://main--nr--kapilmalik84.aem.page/
+
+**DA authoring table:**
+
+| Article Cards | | |
+|---|---|---|
+| (picture) | **Card title** | |
+| | Excerpt text | |
+| | [Read more](https://...) | |
+
+Each row = one card. Column 1 = image. Column 2 = bold title, excerpt paragraph(s), and a link that becomes the "Read more" CTA.
+
+---
+
+### 2. article-list
+
+Paginated article listing pulled from `/query-index.json` at runtime. Renders 12 cards per page with Previous / Next navigation. Filter rows narrow the results before display.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/archive/news/
+
+**DA authoring table:**
+
+| Article List | |
+|---|---|
+| category | News |
+| year | 2025 |
+
+| Article List | |
+|---|---|
+| category | Stamps |
+| subcategory | Sport |
+
+**Config options:**
 
 | Key | Default | Description |
 |---|---|---|
-| `source` | `/query-index.json` | Query index URL |
-| `category` | *(all)* | Filter by category (case-insensitive) |
-| `subcategory` | *(all)* | Filter by subcategory |
-| `year` | *(all)* | Filter by publication year |
+| `category` | *(all)* | Match articles by category (case-insensitive) |
+| `subcategory` | *(all)* | Match articles by subcategory |
+| `year` | *(all)* | Match articles by publication year |
 | `limit` | `12` | Cards per page |
-
-**Example DA block table:**
-
-```
-| Article List      |             |
-|-------------------|-------------|
-| category          | News        |
-| year              | 2025        |
-```
+| `source` | `/query-index.json` | Alternative query index URL |
 
 ---
 
-### breadcrumb
+### 3. breadcrumb
 
-Renders a `Home → Section → Article title` trail. Always prepends Home. The last crumb is the page `h1` (truncated at a word boundary to 50 characters). Separator is `→`.
+Renders a `Home → Section → Article title` trail. Home is always prepended automatically. The final crumb is taken from the page `h1` (truncated at a word boundary to 50 characters). Separator is `→`. Labels matching `home` or `newsroom` are ignored.
 
-**How to author:** Add a Breadcrumb block with one row per intermediate crumb. Each row can be a plain text label or a hyperlink. Text-only labels are matched against the current URL to infer their href automatically. Labels matching `home` or `newsroom` are skipped (Home is always prepended).
+**Example page:** https://main--nr--kapilmalik84.aem.page/section/stamps/general/2024/christmas-stamp-collection
 
-**Example DA block table:**
+**DA authoring table:**
 
-```
-| Breadcrumb  |
-|-------------|
-| Stamps      |
-| Sport       |
-```
+| Breadcrumb |
+|---|
+| Stamps |
+| General |
 
-Crumbs with no corresponding published page (e.g. year folders, `/section`, `/archive`) are rendered as non-linked spans.
+Each row = one intermediate crumb. Use a plain text label (the block matches it to the URL to infer the link) or author a hyperlink directly. Year folders and intermediate paths with no published DA page render as non-linked spans.
 
 ---
 
-### cards
+### 4. cards
 
-General-purpose card grid from the AEM EDS boilerplate. Each row is one card. Any cell containing only a `<picture>` becomes the image column; anything else becomes the body.
+General-purpose card grid from the AEM EDS boilerplate. Unlike `article-cards`, the column layout is inferred: any cell containing only a `<picture>` becomes the image; the remaining cell is the body.
 
-Used for generic content grids where `article-cards` is not appropriate.
+**DA authoring table:**
 
----
-
-### columns
-
-Splits content into side-by-side columns. The number of cells in the first row determines the column count. Cells containing only an image get the `columns-img-col` class for full-bleed image styling.
-
----
-
-### downloads
-
-Used on press release and media pages to list downloadable files and high-resolution photos. Each row is either:
-
-- **File row** — a link to a PDF or other file (no image): renders as a "Downloads" list.
-- **Photo row** — a picture element plus optional caption: renders in a "High Resolution Photos" grid where each photo links to the full-size file.
-
-**Example DA block table:**
-
-```
-| Downloads                               |                   |
-|-----------------------------------------|-------------------|
-| [Media release PDF](/.../file.pdf)      |                   |
-| (picture cell)                          | Caption text here |
-```
-
----
-
-### embed
-
-Embeds third-party video players in a responsive 16:9 iframe. Supported platforms:
-
-| Platform | URL format |
+| Cards | |
 |---|---|
-| Vimeo | `vimeo.com/{id}` or `vimeo.com/{id}/{hash}` (private) |
-| YouTube | `youtube.com/watch?v={id}` or `youtu.be/{id}` |
-| Other | Any URL — embedded as a generic iframe |
-
-An optional second link in the block renders as a "Download video" link below the player.
-
-**Example DA block table:**
-
-```
-| Embed                                           |
-|-------------------------------------------------|
-| https://vimeo.com/123456789                     |
-| https://vimeo.com/123456789/abc123 (download)   |
-```
+| (picture) | Body text or links |
+| (picture) | Body text or links |
 
 ---
 
-### featured-article
+### 5. columns
 
-Two-column editorial feature used on the home page. Left column: image. Right column: heading, description, CTA button.
+Splits content into a side-by-side column layout. The number of cells in the first row sets the column count. Cells containing only an image get full-bleed image styling.
 
-**Columns:**
+**DA authoring table (2 columns):**
 
-| Column | Content |
+| Columns | |
 |---|---|
-| 1 | Picture |
-| 2 | Heading, body text, link (auto-styled as a button) |
+| Left column content | Right column content |
+
+**DA authoring table (3 columns):**
+
+| Columns | | |
+|---|---|---|
+| Column 1 | Column 2 | Column 3 |
 
 ---
 
-### footer
+### 6. downloads
 
-Auto-loaded from the `/footer` DA fragment. Renders:
+Renders a "Downloads" file list and/or a "High Resolution Photos" grid. Row type is detected automatically — a row with a picture is treated as a photo; a row with only a link is treated as a file download.
 
-- **Legal row** — copyright text (left) and Facebook/LinkedIn social icons (right).
-- **Acknowledgement of Country row** — artwork image and acknowledgement text.
+**Example page:** https://main--nr--kapilmalik84.aem.page/archive/news/2024/last-sending-dates-reminder
 
-Content is authored in the `/footer` DA page as plain paragraphs. The block identifies the paragraph containing "Copyright" for the legal row and the one containing "Traditional Custodians" for the acknowledgement row.
+**DA authoring table:**
 
----
-
-### fragment
-
-Includes the HTML of another DA page inline. Used for shared content (nav, footer, reusable sections). The path to the fragment is the link text inside the block.
-
-**Example DA block table:**
-
-```
-| Fragment                     |
-|------------------------------|
-| /fragments/about-auspost     |
-```
-
----
-
-### header
-
-Auto-loaded from the `/nav` DA fragment. Features:
-
-- Australia Post logo (SVG) linking to `/`
-- Primary navigation with hover dropdowns on desktop, hamburger drawer on mobile
-- Contact links (phone/email) extracted from the nav fragment
-- Search icon linking to `/search`
-
-The nav is authored as a bulleted list in the `/nav` DA page. Top-level items with sub-items become dropdown menus.
-
----
-
-### hero
-
-Full-width banner with background image, heading, body text, and an optional CTA button. The image is applied as a CSS `background-image`.
-
-**Authored content:**
-
-| Element | Role |
+| Downloads | |
 |---|---|
-| Picture | Background image |
-| `h1` or `h2` | Headline |
-| Paragraphs | Body copy (any `<p>` without a picture or link) |
-| Link | CTA button (auto-styled) |
+| [Media release — Last sending dates (PDF)](https://...file.pdf) | |
+| (picture) | Caption: Australia Post delivery driver |
+| (picture) | Caption: Parcel locker location |
+
+Rows with a picture become the photo grid. Rows with only a link become the file list. The order of rows in the table determines order of display.
 
 ---
 
-### image-gallery
+### 7. embed
 
-Slideshow carousel for multiple images with optional captions. Each row is one slide.
+Embeds a video in a responsive 16:9 iframe. Supports Vimeo (including private hash links), YouTube, and any generic URL.
 
-**Columns per row:**
+**Example page:** https://main--nr--kapilmalik84.aem.page/archive/video/video-australia-post-expands-community-grants-program
 
-| Column | Content |
+**DA authoring table — Vimeo:**
+
+| Embed |
+|---|
+| https://vimeo.com/123456789 |
+
+**DA authoring table — Vimeo private + download link:**
+
+| Embed |
+|---|
+| https://vimeo.com/123456789/abcdef012345 |
+| [Download video](https://vimeo.com/123456789/abcdef012345) |
+
+The second link row is optional — if present it renders as a "Download video" link below the player.
+
+---
+
+### 8. featured-article
+
+Two-column editorial feature: image fills the left, heading + body + CTA button fill the right. The link is automatically styled as a red button.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/
+
+**DA authoring table:**
+
+| Featured Article | |
 |---|---|
-| 1 | Picture |
-| 2 | Caption text (optional) |
+| (picture) | ## Heading text |
+| | Body copy paragraph |
+| | [Read the story](/archive/news/2026/article-slug) |
 
-Rendered with Previous (`‹`) / Next (`›`) buttons and a `1 / N` counter. Controls are hidden when only one image is present.
+Single row, two columns. Column 1 = picture. Column 2 = heading, body text, and a link.
 
 ---
 
-### latest-articles
+### 9. footer
 
-Dynamic article card grid fetched from `/query-index.json` at runtime. Sorted by publication date descending. Used on the home page and section landing pages for "Latest news" feeds.
+Auto-loaded from the `/footer` DA page. No block table authoring needed on individual pages — edit `/footer` in DA to update the footer sitewide.
 
-**Config rows (key | value):**
+**DA page to edit:** https://da.live/#/kapilmalik84/nr/footer
+
+The footer DA page should contain two paragraphs:
+- One containing "Copyright" — becomes the legal row with social icons.
+- One containing "Traditional Custodians" — becomes the Acknowledgement of Country row.
+
+---
+
+### 10. fragment
+
+Includes the full rendered HTML of another DA page inline. Used internally by `header` and `footer`, and available for any shared content section (e.g. about blurbs, promo panels).
+
+**DA authoring table:**
+
+| Fragment |
+|---|
+| [/fragments/about-australia-post](/fragments/about-australia-post) |
+
+The link href is the DA path to the page to include.
+
+---
+
+### 11. header
+
+Auto-loaded from the `/nav` DA page. No block table authoring needed on individual pages — edit `/nav` in DA to update the navigation sitewide.
+
+**DA page to edit:** https://da.live/#/kapilmalik84/nr/nav
+
+The nav DA page structure:
+- First link → logo href (homepage URL)
+- Bulleted list → primary nav items; nested lists become dropdown menus
+- `tel:` or `mailto:` links → rendered in the contact area
+
+---
+
+### 12. hero
+
+Full-width banner. The image is applied as a CSS `background-image` for cover sizing. Heading, body copy, and a CTA button are overlaid on top.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/
+
+**DA authoring table:**
+
+| Hero |
+|---|
+| (picture) |
+| # Australia Post Newsroom |
+| Your source for the latest news, stories and media releases. |
+| [Explore news](/archive/news/) |
+
+All content in a single column. The block identifies the `h1`/`h2` as the headline, paragraphs without links as body copy, and the link as the CTA button.
+
+---
+
+### 13. image-gallery
+
+Slideshow carousel. Each row is one slide. Controls (‹ ›) and a `1 / N` counter are added automatically when there are two or more images. Single-image blocks render without controls.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/section/stamps/general/2024/christmas-stamp-collection
+
+**DA authoring table:**
+
+| Image Gallery | |
+|---|---|
+| (picture) | First image caption |
+| (picture) | Second image caption |
+| (picture) | |
+
+Column 1 = picture. Column 2 = caption text (optional).
+
+---
+
+### 14. latest-articles
+
+Dynamic card grid fetched from `/query-index.json` at page load, sorted by publication date descending. Falls back to a newsroom default image for any article missing its own image.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/
+
+**DA authoring table — home page (latest news, all categories):**
+
+| Latest Articles | |
+|---|---|
+| limit | 6 |
+| view-all | /archive/news/ |
+
+**DA authoring table — stamps section feed:**
+
+| Latest Articles | |
+|---|---|
+| limit | 4 |
+| filter | /section/stamps/ |
+| view-all | /section/stamps/ |
+
+**Config options:**
 
 | Key | Default | Description |
 |---|---|---|
-| `limit` | `6` | Number of cards to display |
-| `filter` | *(none)* | Path prefix to restrict results (e.g. `/section/stamps/`) |
-| `view-all` | *(none)* | URL for "View all articles" CTA button |
-| `source` | `/query-index.json` | Custom query index URL |
-
-**Example — home page latest news:**
-
-```
-| Latest Articles |                  |
-|-----------------|------------------|
-| limit           | 6                |
-| view-all        | /archive/news/   |
-```
-
-**Example — stamps section feed:**
-
-```
-| Latest Articles |                      |
-|-----------------|----------------------|
-| limit           | 4                    |
-| filter          | /section/stamps/     |
-| view-all        | /section/stamps/     |
-```
+| `limit` | `6` | Number of cards to show |
+| `filter` | *(none)* | Path prefix — only articles whose path starts with this value are shown (e.g. `/section/stamps/`) |
+| `view-all` | *(none)* | URL for the "View all articles" pill button below the grid |
+| `source` | `/query-index.json` | Alternative query index URL |
 
 ---
 
-### media-contact
+### 15. media-contact
 
-Renders a "Media contact:" section at the bottom of press releases. Parses contact details from plain text rows and formats them with name/role, mobile number, and email as a `mailto:` link.
+Renders a "Media contact:" heading followed by structured contact entries (name/role, mobile, email). Parses plain text rows from the block — no special markup needed.
 
-**Authored as plain text rows — one row per line:**
+**Example page:** https://main--nr--kapilmalik84.aem.page/archive/news/2024/last-sending-dates-reminder
 
-```
-| Media Contact                                 |
-|-----------------------------------------------|
-| Tracy Hicks, General Manager, Australia Post  |
-| M: 0477 027 860                               |
-| E: tracy.hicks@auspost.com.au                 |
-```
+**DA authoring table:**
 
-Multiple contacts are supported by repeating the name/M/E pattern.
+| Media Contact |
+|---|
+| Tracy Hicks, General Manager Corporate Affairs, Australia Post |
+| M: 0477 027 860 |
+| E: tracy.hicks@auspost.com.au |
+
+Each line is a separate row. For multiple contacts repeat the Name / M: / E: pattern. The "Media contact:" heading rows (`Media contact:`, `National Media Line`) are detected and skipped automatically.
 
 ---
 
-### photo-grid
+### 16. photo-grid
 
-Paginated photo card grid (12 per page). Used on stamps and media photo library pages. Each row is one photo item.
+Paginated photo card grid (12 per page). Used on stamps and media library pages where a large set of images needs to be browsed.
 
-**Columns per row:**
+**Example page:** https://main--nr--kapilmalik84.aem.page/section/stamps/sport/
 
-| Column | Content |
+**DA authoring table:**
+
+| Photo Grid | |
 |---|---|
-| 1 | Picture |
-| 2 | Caption paragraph; optional date/category paragraph in the format `DD Mon YYYY \| Category`; optional link |
+| (picture) | Caption text for this photo |
+| | 15 Jan 2025 \| Stamps |
+| | [Article link](/section/stamps/sport/2025/article-slug) |
+| (picture) | Another caption |
+| | 10 Mar 2024 \| Sport |
+
+Column 1 = picture. Column 2 = caption paragraph; optional date/category paragraph (`DD Mon YYYY | Category`); optional link shown as "Details".
 
 ---
 
-### publications-promo
+### 17. publications-promo
 
-Sidebar promotional widget for the Stamps & Collecting publications catalogue. Renders a book icon badge, heading, description, navigation link list, and a CTA button.
+Sidebar promotional widget for the Stamps & Collecting publications catalogue. Renders a book icon, heading, description, a navigation link list, and a CTA button.
 
-**Columns:**
+**Example page:** https://main--nr--kapilmalik84.aem.page/section/stamps/sport/2024/paralympian-commemorative-stamp
 
-| Column | Content |
+**DA authoring table:**
+
+| Publications Promo | |
 |---|---|
-| 1 | *(unused — leave empty)* |
-| 2 | `h2`/`h3` heading, description `<p>`, `<ul>` of nav links, CTA link paragraph |
+| | ### Stamps & Collecting |
+| | Browse our publications catalogue. |
+| | - [Sport stamps](/section/stamps/sport/) |
+| | - [Royal stamps](/section/stamps/royal/) |
+| | [View all publications](/editions/) |
 
-Used on stamps section pages in the right sidebar.
-
----
-
-### quick-links
-
-Compact link panel with an optional title. External links open in a new tab with an `↗` indicator. Used on article pages and section landing pages for related resources.
-
-**Authored content:**
-
-| Element | Role |
-|---|---|
-| `**Bold text**` or heading | Panel title |
-| Links (one per line) | List items |
+Two columns. Column 1 is unused (leave empty). Column 2 contains the heading, description paragraph, bulleted nav link list, and a CTA link.
 
 ---
 
-### search
+### 18. quick-links
 
-Full-text search over the query index. Searches title, description, and category fields. Results update as the user types (minimum 2 characters). Rendered on the `/search` page.
+Compact link panel with an optional title. External links open in a new tab and display an `↗` indicator. Used in article page sidebars for related resources or quick navigation.
 
-The placeholder text is taken from the block's text content (default: `Search the newsroom`).
+**Example page:** https://main--nr--kapilmalik84.aem.page/
+
+**DA authoring table:**
+
+| Quick Links |
+|---|
+| **Related links** |
+| [About Australia Post](https://auspost.com.au/about-us) |
+| [Media contacts](/signup) |
+| [Photo library](/section/stamps/) |
+
+First row = optional bold title. Remaining rows = one link per row. External URLs (different hostname) automatically open in a new tab.
 
 ---
 
-### subscribe-form
+### 19. search
 
-Media sign-up form collecting first name, last name, email, and privacy policy acceptance. Includes client-side validation. Submission handling requires a backend endpoint to be configured.
+Full-text search over `/query-index.json`. Searches across `title`, `description`, and `category` fields. Results update as the user types (minimum 2 characters). Lives on the `/search` page.
 
-**Authored content:**
+**Example page:** https://main--nr--kapilmalik84.aem.page/search
 
-| Element | Role |
-|---|---|
-| `**Bold text**` or heading | Form heading (default: "Media sign up") |
-| Plain paragraph | Description text below the heading |
+**DA authoring table:**
+
+| Search |
+|---|
+| Search the newsroom |
+
+The text content of the block is used as the input placeholder. Leave the cell empty to use the default `Search the newsroom` placeholder.
+
+---
+
+### 20. subscribe-form
+
+Media sign-up form with client-side validation. Collects first name, last name, email address, and privacy policy consent. Submission handling requires a backend endpoint to be wired up.
+
+**Example page:** https://main--nr--kapilmalik84.aem.page/signup
+
+**DA authoring table:**
+
+| Subscribe Form |
+|---|
+| **Media sign up** |
+| Sign up to receive the latest news and media releases from Australia Post. |
+
+First row = form heading (`**bold**` or heading level). Second row = description paragraph shown above the form fields.
 
 ---
 
@@ -353,14 +442,14 @@ The site uses a single query index at `/query-index.json` (configured in `helix-
 
 **Fields indexed:**
 
-| Field | Source |
+| Field | Source metadata |
 |---|---|
-| `title` | `og:title` meta tag |
-| `description` | `description` meta tag |
-| `image` | `og:image` meta tag |
-| `date` | `publication-date` meta tag (Unix timestamp, `DD/MM/YYYY` input) |
-| `category` | `category` meta tag |
-| `subcategory` | `sub-category` meta tag |
+| `title` | `og:title` |
+| `description` | `description` |
+| `image` | `og:image` |
+| `date` | `publication-date` (input format `DD/MM/YYYY`, stored as Unix timestamp) |
+| `category` | `category` |
+| `subcategory` | `sub-category` |
 | `lastModified` | Last modified time from the CDN |
 
 The `article-list`, `latest-articles`, and `search` blocks all read from this index at runtime.
