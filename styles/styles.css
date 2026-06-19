@@ -472,7 +472,37 @@ main .section p > em:only-child {
   }
 }
 
+/* ===== LISTING PAGES ===== */
+
+/* Used by topic/category pages (e.g., /section/community) via section-metadata style: listing-intro */
+main .section.listing-intro {
+  max-width: 1264px;
+  margin: 0 auto;
+  padding: 48px var(--sp-lg) 0;
+}
+
+main .section.listing-intro .default-content-wrapper > h1 {
+  font: 800 48px / 1 var(--font-family-heading);
+  letter-spacing: -0.025em;
+  color: var(--ap-ink);
+  margin: 14px 0 12px;
+}
+
+main .section.listing-intro .default-content-wrapper > p {
+  font: 400 18px / 1.5 var(--font-family-body);
+  color: #55555C;
+  max-width: 620px;
+  margin: 0;
+}
+
+@media (width <= 768px) {
+  main .section.listing-intro { padding: 32px var(--sp-sm) 0; }
+
+  main .section.listing-intro .default-content-wrapper > h1 { font-size: 32px; }
+}
+
 /* ===== RESPONSIVE ===== */
+
 @media (width >= 600px) {
   :root {
     --nav-height: 72px;

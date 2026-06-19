@@ -22,6 +22,7 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  */
 
 const CONFIG_KEYS = new Set(['eyebrow', 'title', 'source', 'limit', 'view-all']);
+const COLLECTION_KEYS = new Set(['eyebrow', 'title', 'description', 'filters']);
 const CELL = ['image', 'category', 'title', 'date', 'excerpt'];
 const DEFAULT_SOURCE = '/archive/news/query-index.json';
 
@@ -131,6 +132,158 @@ function buildCard(data, isList = false) {
   a.append(body);
   article.append(a);
   return article;
+}
+
+/* ── Collection variant (stamps / year grids) ── */
+function readCollectionCard(row) {
+  const cells = [...row.children];
+  const pic = cells[0]?.querySelector('picture');
+  const imgEl = pic?.querySelector('img');
+  return {
+    picture: pic,
+    imgSrc: imgEl?.src || '',
+    imgAlt: imgEl?.alt || '',
+    yearLabel: cells[1]?.textContent.trim() || '',
+    titleText: cells[2]?.textContent.trim() || '',
+    link: cells[2]?.querySelector('a')?.getAttribute('href') || '#',
+    meta: cells[3]?.textContent.trim() || '',
+    theme: cells[4]?.textContent.trim() || '',
+  };
+}
+
+function buildCollectionCard(data) {
+  const article = document.createElement('article');
+  article.className = 'collection-card';
+  if (data.theme) article.dataset.theme = data.theme;
+
+  const a = document.createElement('a');
+  a.className = 'collection-card-link';
+  a.href = data.link;
+
+  const media = document.createElement('div');
+  media.className = 'collection-card-media';
+
+  if (data.picture) {
+    const pic = data.imgSrc
+      ? createOptimizedPicture(data.imgSrc, data.imgAlt, false, [{ width: '400' }])
+      : data.picture;
+    media.append(pic);
+  }
+
+  if (data.yearLabel) {
+    const pill = document.createElement('span');
+    pill.className = 'collection-year-pill';
+    pill.textContent = data.yearLabel;
+    media.append(pill);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'collection-card-body';
+
+  if (data.titleText) {
+    const title = document.createElement('p');
+    title.className = 'collection-card-title';
+    title.textContent = data.titleText;
+    body.append(title);
+  }
+
+  if (data.meta) {
+    const metaEl = document.createElement('p');
+    metaEl.className = 'collection-card-meta';
+    metaEl.textContent = data.meta;
+    body.append(metaEl);
+  }
+
+  a.append(media, body);
+  article.append(a);
+  return article;
+}
+
+function buildCollectionFilters(names, grid) {
+  const tablist = document.createElement('div');
+  tablist.className = 'collection-filters';
+  tablist.setAttribute('role', 'tablist');
+  tablist.setAttribute('aria-label', 'Filter by theme');
+
+  const first = names[0] || '';
+  const els = names.map((name, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'collection-filter-btn';
+    btn.setAttribute('role', 'tab');
+    btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    btn.textContent = name;
+    tablist.append(btn);
+    return btn;
+  });
+
+  function selectFilter(name) {
+    els.forEach((btn) => {
+      btn.setAttribute('aria-selected', String(btn.textContent === name));
+    });
+    [...grid.children].forEach((card) => {
+      card.hidden = name !== first && card.dataset.theme !== name;
+    });
+  }
+
+  els.forEach((btn, i) => {
+    btn.addEventListener('click', () => { selectFilter(btn.textContent); btn.focus(); });
+    btn.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + els.length) % els.length;
+      selectFilter(els[next].textContent);
+      els[next].focus();
+    });
+  });
+
+  return tablist;
+}
+
+function decorateCollection(block, cfg, cardRows) {
+  const crumb = document.createElement('nav');
+  crumb.className = 'collection-breadcrumb';
+  crumb.setAttribute('aria-label', 'Breadcrumb');
+  const homeA = document.createElement('a');
+  homeA.href = '/';
+  homeA.textContent = 'Home';
+  const sep = document.createElement('span');
+  sep.className = 'collection-crumb-sep';
+  sep.setAttribute('aria-hidden', 'true');
+  sep.textContent = '›';
+  const curr = document.createElement('span');
+  curr.textContent = cfg.title || '';
+  crumb.append(homeA, sep, curr);
+
+  const h1 = document.createElement('h1');
+  h1.className = 'collection-title';
+  h1.textContent = cfg.title || '';
+
+  const grid = document.createElement('div');
+  grid.className = 'collection-grid';
+  cardRows.forEach((row) => {
+    grid.append(buildCollectionCard(readCollectionCard(row)));
+  });
+
+  const filterNames = cfg.filters
+    ? cfg.filters.split(',').map((f) => f.trim()).filter(Boolean)
+    : [];
+
+  block.textContent = '';
+  block.append(crumb, h1);
+
+  if (cfg.description) {
+    const desc = document.createElement('p');
+    desc.className = 'collection-desc';
+    desc.textContent = cfg.description;
+    block.append(desc);
+  }
+
+  if (filterNames.length > 0) {
+    block.append(buildCollectionFilters(filterNames, grid));
+  }
+
+  block.append(grid);
 }
 
 /* ── Category filter (tablist) ── */
@@ -273,6 +426,20 @@ async function decorateDynamic(block, cfg) {
 /* ── Main decorate ── */
 export default async function decorate(block) {
   const rows = [...block.children];
+
+  // Collection variant (stamps / year grids)
+  if (block.classList.contains('collection')) {
+    const isCollCfg = (r) => {
+      if (r.children.length !== 2) return false;
+      return COLLECTION_KEYS.has(r.children[0].textContent.trim().toLowerCase());
+    };
+    const cfg = {};
+    rows.filter(isCollCfg).forEach((r) => {
+      cfg[r.children[0].textContent.trim().toLowerCase()] = r.children[1].textContent.trim();
+    });
+    decorateCollection(block, cfg, rows.filter((r) => !isCollCfg(r)));
+    return;
+  }
 
   // Detect dynamic (config) vs static (article rows) mode
   const cfgRows = rows.filter(isConfigRow);

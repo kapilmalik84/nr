@@ -1,0 +1,194 @@
+/* Gallery block — Australia Post Newsroom redesign
+ * Relies on --ap-* tokens in /styles/styles.css :root */
+
+main .gallery-wrapper { padding: 0; }
+
+main .gallery {
+  max-width: 1264px;
+  margin: 0 auto;
+  padding: 44px var(--sp-lg) var(--sp-section);
+}
+
+/* ── Header row: title left, filters right ── */
+.gallery .gallery-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+/* ── Breadcrumb ── */
+.gallery .gallery-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 400 13px / 1 var(--font-family-body);
+  color: var(--ap-muted);
+  margin-bottom: 10px;
+}
+
+.gallery .gallery-breadcrumb a {
+  color: var(--ap-red);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.gallery .gallery-breadcrumb a:hover { color: var(--ap-red-700); }
+
+.gallery .gallery-crumb-sep { color: var(--ap-muted); }
+
+/* ── Page title ── */
+.gallery .gallery-page-title {
+  font: 800 44px / 1 var(--font-family-heading);
+  letter-spacing: -0.025em;
+  color: var(--ap-ink);
+  margin: 0 0 10px;
+}
+
+.gallery .gallery-desc {
+  font: 400 17px / 1.5 var(--font-family-body);
+  color: #55555C;
+  max-width: 520px;
+  margin: 0;
+}
+
+/* ── Category filters ── */
+.gallery .gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-self: flex-end;
+}
+
+.gallery .gallery-filter-btn {
+  padding: 9px 17px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--ap-surface);
+  color: #44444C;
+  font: 600 13.5px / 1 var(--font-family-body);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  min-height: 40px;
+}
+
+.gallery .gallery-filter-btn[aria-selected='true'] {
+  background: var(--ap-ink);
+  color: var(--ap-white);
+  font-weight: 700;
+}
+
+.gallery .gallery-filter-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.gallery .gallery-filter-btn:hover:not([aria-selected='true']) {
+  background: var(--ap-hairline);
+}
+
+/* ── Image grid ── */
+.gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* ── Gallery item ── */
+.gallery .gallery-item { margin: 0; }
+
+.gallery .gallery-img-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 200px;
+  background: var(--ap-surface);
+  cursor: pointer;
+}
+
+.gallery .gallery-img-wrap picture,
+.gallery .gallery-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--dur) var(--ease);
+}
+
+.gallery .gallery-item:hover .gallery-img-wrap img { transform: scale(1.05); }
+
+/* Overlay (gradient + caption + download) */
+.gallery .gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 50%), transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 12px 14px;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.gallery .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+.gallery .gallery-caption {
+  font: 600 13px / 1 var(--font-family-body);
+  color: var(--ap-white);
+}
+
+/* Download button */
+.gallery .gallery-download {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 92%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background var(--dur) var(--ease);
+}
+
+.gallery .gallery-download:hover { background: var(--ap-white); }
+
+.gallery .gallery-download:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Responsive ── */
+@media (width <= 1100px) {
+  .gallery .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (width <= 700px) {
+  .gallery .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .gallery .gallery-page-title { font-size: 32px; }
+
+  .gallery .gallery-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (width <= 480px) {
+  main .gallery { padding: 32px var(--sp-sm) var(--sp-lg); }
+
+  .gallery .gallery-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery .gallery-img-wrap img,
+  .gallery .gallery-overlay,
+  .gallery .gallery-filter-btn,
+  .gallery .gallery-download { transition: none; }
+
+  .gallery .gallery-item:hover .gallery-img-wrap img { transform: none; }
+
+  .gallery .gallery-item:hover .gallery-overlay { opacity: 1; }
+}
