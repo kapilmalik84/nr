@@ -176,7 +176,10 @@ header nav .nav-sections > ul > li > ul > li:first-child > a::after {
   font-weight: 700;
 }
 
-header nav .nav-sections > ul > li > ul > li:first-child > a:hover { color: var(--ap-red); background: none; }
+header nav .nav-sections > ul > li > ul > li:first-child > a:hover {
+  color: var(--ap-red);
+  background: none;
+}
 
 header nav .nav-sections > ul > li > ul > li > a {
   display: block;
@@ -400,4 +403,8 @@ header nav .nav-hamburger-icon::after  { top: 7px; }
 }
 
 header nav p { margin: 0; }
-header nav a:any-link { color: currentcolor; text-decoration: none; }
+
+header nav a:any-link {
+  color: currentcolor;
+  text-decoration: none;
+}

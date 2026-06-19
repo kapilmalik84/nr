@@ -142,7 +142,9 @@ function buildPagination(total, current, perPage, onPageChange) {
 
   const delta = 1;
   const pages = new Set([1, totalPages]);
-  for (let p = Math.max(2, current - delta); p <= Math.min(totalPages - 1, current + delta); p += 1) {
+  const rangeStart = Math.max(2, current - delta);
+  const rangeEnd = Math.min(totalPages - 1, current + delta);
+  for (let p = rangeStart; p <= rangeEnd; p += 1) {
     pages.add(p);
   }
 
@@ -400,19 +402,22 @@ export default async function decorate(block) {
 
     // Active chips
     chipsEl.textContent = '';
-    const chips = buildChips({ activeType, selectedYear, activeCategories }, (filterType, value) => {
-      if (filterType === 'type') {
-        typeBtns?.forEach((b) => {
-          b.classList.toggle('active', b.dataset.type === 'all');
-          b.setAttribute('aria-pressed', b.dataset.type === 'all' ? 'true' : 'false');
-        });
-      } else if (filterType === 'year' && yearSelect) {
-        yearSelect.value = '';
-      } else if (filterType === 'category') {
-        categoryCbs?.forEach((cb) => { if (cb.value === value) cb.checked = false; });
-      }
-      doSearch(1);
-    });
+    const chips = buildChips(
+      { activeType, selectedYear, activeCategories },
+      (filterType, value) => {
+        if (filterType === 'type') {
+          typeBtns?.forEach((b) => {
+            b.classList.toggle('active', b.dataset.type === 'all');
+            b.setAttribute('aria-pressed', b.dataset.type === 'all' ? 'true' : 'false');
+          });
+        } else if (filterType === 'year' && yearSelect) {
+          yearSelect.value = '';
+        } else if (filterType === 'category') {
+          categoryCbs?.forEach((cb) => { if (cb.value === value) cb.checked = false; });
+        }
+        doSearch(1);
+      },
+    );
     if (chips.children.length > 0) chipsEl.append(chips);
 
     // Paginate

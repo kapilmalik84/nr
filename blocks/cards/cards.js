@@ -183,46 +183,6 @@ function buildFilter(categories, grid, statusEl) {
   return tablist;
 }
 
-/* ── Dynamic loading from query-index ── */
-async function decorateDynamic(block, cfg) {
-  const source = cfg['source'] || DEFAULT_SOURCE;
-  const limit = parseInt(cfg['limit'] || '6', 10);
-  const viewAllHref = cfg['view-all'];
-
-  let data = [];
-  try {
-    const resp = await fetch(source);
-    if (resp.ok) {
-      const json = await resp.json();
-      data = (json.data || [])
-        .filter((r) => r.path && r.title)
-        .sort((a, b) => (Number(b.date) || 0) - (Number(a.date) || 0))
-        .slice(0, limit);
-    }
-  } catch (_) { /* network error — block stays empty */ }
-
-  block.textContent = '';
-
-  const grid = document.createElement('div');
-  grid.className = 'cards-grid';
-  const categories = new Set();
-
-  data.forEach((item) => {
-    const cardData = {
-      path: item.path,
-      image: item.image,
-      category: item.category || '',
-      titleText: item.title,
-      date: formatDate(item.date),
-      description: item.description,
-    };
-    if (cardData.category) categories.add(cardData.category);
-    grid.append(buildCard(cardData));
-  });
-
-  buildArticlesSection(block, cfg, [...categories], grid, viewAllHref);
-}
-
 /* ── Section header + filter + grid assembly (articles variant) ── */
 function buildArticlesSection(block, cfg, categories, grid, viewAllHref) {
   const statusEl = document.createElement('p');
@@ -268,6 +228,46 @@ function buildArticlesSection(block, cfg, categories, grid, viewAllHref) {
     viewAllRow.append(btn);
     block.append(viewAllRow);
   }
+}
+
+/* ── Dynamic loading from query-index ── */
+async function decorateDynamic(block, cfg) {
+  const source = cfg.source || DEFAULT_SOURCE;
+  const limit = parseInt(cfg.limit || '6', 10);
+  const viewAllHref = cfg['view-all'];
+
+  let data = [];
+  try {
+    const resp = await fetch(source);
+    if (resp.ok) {
+      const json = await resp.json();
+      data = (json.data || [])
+        .filter((r) => r.path && r.title)
+        .sort((a, b) => (Number(b.date) || 0) - (Number(a.date) || 0))
+        .slice(0, limit);
+    }
+  } catch (_) { /* network error — block stays empty */ }
+
+  block.textContent = '';
+
+  const grid = document.createElement('div');
+  grid.className = 'cards-grid';
+  const categories = new Set();
+
+  data.forEach((item) => {
+    const cardData = {
+      path: item.path,
+      image: item.image,
+      category: item.category || '',
+      titleText: item.title,
+      date: formatDate(item.date),
+      description: item.description,
+    };
+    if (cardData.category) categories.add(cardData.category);
+    grid.append(buildCard(cardData));
+  });
+
+  buildArticlesSection(block, cfg, [...categories], grid, viewAllHref);
 }
 
 /* ── Main decorate ── */

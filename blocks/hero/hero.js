@@ -1,11 +1,3 @@
-export default function decorate(block) {
-  if (block.classList.contains('newsroom')) {
-    decorateNewsroomHero(block);
-    return;
-  }
-  decorateImageHero(block);
-}
-
 /* ── Newsroom variant: red full-bleed section ── */
 function decorateNewsroomHero(block) {
   const heading = block.querySelector('h1, h2');
@@ -84,4 +76,12 @@ function decorateImageHero(block) {
   }
 
   block.append(inner);
+}
+
+export default function decorate(block) {
+  if (block.classList.contains('newsroom')) {
+    decorateNewsroomHero(block);
+    return;
+  }
+  decorateImageHero(block);
 }

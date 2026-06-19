@@ -7,14 +7,14 @@ export default function decorate(block) {
   // row 0: [image]    | [category text]
   // row 1: [heading]  | [date / meta]
   // row 2: [excerpt]  | [CTA text]
-  const imgCell     = rows[0]?.children[0];
-  const catCell     = rows[0]?.children[1];
-  const headCell    = rows[1]?.children[0];
-  const dateCell    = rows[1]?.children[1];
+  const imgCell = rows[0]?.children[0];
+  const catCell = rows[0]?.children[1];
+  const headCell = rows[1]?.children[0];
+  const dateCell = rows[1]?.children[1];
   const excerptCell = rows[2]?.children[0];
-  const ctaCell     = rows[2]?.children[1];
+  const ctaCell = rows[2]?.children[1];
 
-  const headingEl  = headCell?.querySelector('h1,h2,h3,h4');
+  const headingEl = headCell?.querySelector('h1,h2,h3,h4');
   const articleLink = headingEl?.querySelector('a') || headCell?.querySelector('a');
   const articleHref = articleLink?.href || ctaCell?.querySelector('a')?.href || '#';
 

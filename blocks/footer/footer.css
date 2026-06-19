@@ -12,6 +12,14 @@ footer .footer-inner {
   padding: var(--sp-section) var(--sp-lg) 0;
 }
 
+/* ── Base link styles (must come before more-specific column overrides) ── */
+footer a:any-link {
+  color: #A8A8B0;
+  text-decoration: none;
+}
+
+footer a:hover { color: var(--ap-white); }
+
 /* ── 4-column grid ── */
 footer .footer-grid {
   display: grid;
@@ -26,11 +34,18 @@ footer .footer-grid {
 }
 
 @media (width >= 900px) {
-  footer .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+  footer .footer-grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
 }
 
 /* Col 1: brand */
-footer .footer-brand-col { display: flex; flex-direction: column; gap: var(--sp-sm); }
+footer .footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
 
 footer .footer-brand-lockup {
   display: flex;
@@ -64,7 +79,11 @@ footer .footer-brand-desc {
 }
 
 /* Cols 2-4: nav */
-footer .footer-nav-col { display: flex; flex-direction: column; gap: var(--sp-sm); }
+footer .footer-nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
 
 footer .footer-col-heading {
   margin: 0;
@@ -127,7 +146,11 @@ footer .footer-social-link {
 }
 
 footer .footer-social-link:hover { background: #3C3C44; }
-footer .footer-social-link:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+footer .footer-social-link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
 
 footer .footer-social-link img {
   width: 18px;
@@ -155,10 +178,6 @@ footer .footer-acknowledgement img {
   object-fit: contain;
   align-self: center;
 }
-
-/* ── Links ── */
-footer a:any-link { color: #A8A8B0; text-decoration: none; }
-footer a:hover    { color: var(--ap-white); }
 
 /* ── Responsive ── */
 @media (width >= 900px) {

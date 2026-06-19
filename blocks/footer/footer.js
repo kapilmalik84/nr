@@ -90,7 +90,6 @@ export default async function decorate(block) {
   // ── Parse fragment ──────────────────────────────────────────────────────────
   const allEls = [...(fragment?.children || [])].flatMap((sec) => [...sec.children]);
 
-  const paras = allEls.filter((el) => el.tagName === 'P' || el.matches('div > p'));
   const lists = allEls.filter((el) => el.tagName === 'UL');
 
   const copyrightP = allEls.find((el) => el.textContent.includes('©') || el.textContent.includes('Copyright'));
@@ -107,7 +106,7 @@ export default async function decorate(block) {
   // Cols 2-4: built from <ul> elements in the fragment, using the preceding heading
   lists.forEach((ul) => {
     let headingText = '';
-    let prev = ul.previousElementSibling;
+    const prev = ul.previousElementSibling;
     if (prev) {
       headingText = (prev.querySelector('strong') || prev).textContent.trim();
     }

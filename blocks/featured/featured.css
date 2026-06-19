@@ -151,7 +151,7 @@ main .featured .featured-link:hover .featured-cta {
   main .featured .featured-image { min-height: 300px; }
 
   main .featured .featured-text {
-    padding: 36px 36px;
+    padding: 36px;
   }
 
   main .featured .featured-headline {
