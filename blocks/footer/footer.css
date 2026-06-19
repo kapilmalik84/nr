@@ -53,22 +53,31 @@ footer .footer-brand-lockup {
   gap: 10px;
 }
 
-footer .footer-roundel {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--ap-red);
-  color: var(--ap-white);
-  font: 900 15px / 30px var(--font-family-heading);
+footer .footer-brand-svg {
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
-footer .footer-brand-name {
-  font: 800 16px / 1.2 var(--font-family-heading);
+footer .footer-brand-svg svg {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+footer .footer-brand-svg .brand-text { fill: var(--ap-white); }
+
+footer .footer-brand-hairline {
+  width: 1px;
+  height: 16px;
+  background: #2C2C32;
+  flex-shrink: 0;
+}
+
+footer .footer-brand-sub {
+  font: 700 16px / 1 var(--font-family-heading);
   color: var(--ap-white);
+  white-space: nowrap;
 }
 
 footer .footer-brand-desc {

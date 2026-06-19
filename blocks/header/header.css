@@ -41,33 +41,17 @@ header nav .nav-brand-logo {
   text-decoration: none;
 }
 
-/* P roundel */
-header nav .nav-roundel {
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--ap-red);
-  color: var(--ap-white);
-  font: 900 17px / 34px var(--font-family-heading);
-  text-align: center;
-  letter-spacing: -0.01em;
+/* Brand SVG logo */
+header nav .nav-brand-svg {
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
-header nav .nav-wordmark {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-header nav .nav-org-name {
-  font: 900 18px / 1 var(--font-family-heading);
-  color: var(--ap-red);
-  letter-spacing: -0.01em;
-  white-space: nowrap;
+header nav .nav-brand-svg svg {
+  height: 22px;
+  width: auto;
+  display: block;
 }
 
 header nav .nav-hairline {
