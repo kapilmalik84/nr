@@ -65,9 +65,9 @@ export default function decorate(block) {
   main.querySelector('p.article-category')?.setAttribute('hidden', '');
   main.querySelector('p.article-date')?.setAttribute('hidden', '');
 
-  // Hide existing breadcrumb block (we build our own)
+  // Remove existing auto-injected breadcrumb block — article-header provides its own
   const bcWrapper = main.querySelector('.breadcrumb-wrapper');
-  if (bcWrapper) bcWrapper.setAttribute('hidden', '');
+  if (bcWrapper) bcWrapper.remove();
 
   block.textContent = '';
 
@@ -173,4 +173,32 @@ export default function decorate(block) {
 
   // ── Assemble ────────────────────────────────────────────────────────────────
   block.append(breadcrumb, badges, h1, byline);
+
+  // ── schema.org NewsArticle JSON-LD ──────────────────────────────────────────
+  const pubDateIso = (() => {
+    if (!rawDate) return '';
+    const [d, m, y] = rawDate.split('/');
+    if (!d || !m || !y) return rawDate;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  })();
+
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: titleText,
+    datePublished: pubDateIso,
+    author: { '@type': 'Organization', name: author },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Australia Post',
+      url: 'https://auspost.com.au',
+    },
+    url: pageUrl,
+  };
+  if (category) ld.articleSection = category;
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(ld);
+  document.head.append(script);
 }

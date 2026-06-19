@@ -274,6 +274,49 @@ main .cards-wrapper {
   .cards .card:hover { transform: none; }
 }
 
+/* ── Paginated list result count ── */
+.cards .article-list-count {
+  font: 400 14px / 1 var(--font-family-body);
+  color: var(--ap-muted);
+  margin: 0 0 var(--sp-sm);
+}
+
+/* ── Shared pagination (list variant + photo-grid) ── */
+.cards .cards-pagination,
+.photo-grid .cards-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: var(--sp-lg);
+  padding: var(--sp-sm) 0;
+}
+
+.cards .cards-pagination button,
+.photo-grid .cards-pagination button {
+  min-width: 40px;
+  height: 40px;
+  border: 2px solid var(--ap-hairline);
+  border-radius: var(--radius-pill);
+  background: var(--ap-white);
+  cursor: pointer;
+  font: 600 14px / 1 var(--font-family-body);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.cards .cards-pagination button:hover,
+.photo-grid .cards-pagination button:hover {
+  background: var(--ap-surface);
+  border-color: var(--ap-red);
+}
+
+.cards .cards-pagination button.active,
+.photo-grid .cards-pagination button.active {
+  background: var(--ap-red);
+  border-color: var(--ap-red);
+  color: var(--ap-white);
+  font-weight: 700;
+}
+
 /* ── Collection variant (stamps / year grids) ── */
 main .cards.collection {
   max-width: 1264px;
@@ -298,7 +341,7 @@ main .cards.collection {
 
 .cards.collection .collection-breadcrumb a:hover { color: var(--ap-red-700); }
 
-.cards.collection .collection-crumb-sep { color: var(--ap-muted); }
+.cards.collection .crumb-sep { color: var(--ap-muted); }
 
 .cards.collection .collection-title {
   font: 800 52px / 1 var(--font-family-heading);

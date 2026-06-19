@@ -107,4 +107,27 @@ export default function decorate(block) {
   nav.append(ol);
   block.textContent = '';
   block.append(nav);
+
+  // ── schema.org BreadcrumbList JSON-LD ──────────────────────────────────────
+  const items = [...ol.querySelectorAll('.breadcrumb-item')].map((li, i) => {
+    const a = li.querySelector('a');
+    const entry = {
+      '@type': 'ListItem',
+      position: i + 1,
+      name: (a || li.querySelector('span'))?.textContent.trim() || '',
+    };
+    if (a) entry.item = new URL(a.getAttribute('href'), window.location.href).href;
+    return entry;
+  });
+
+  if (items.length > 0) {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items,
+    });
+    document.head.append(script);
+  }
 }

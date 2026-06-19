@@ -1,3 +1,12 @@
+import { createOptimizedPicture } from '../../scripts/aem.js';
+
+/**
+ * featured-article — simple two-column: image left, freeform text right.
+ *
+ * @deprecated Prefer the "Featured" block for new content.
+ * This block remains for backward compatibility with migrated DA content.
+ * Authoring: | image | heading / body / link |
+ */
 export default function decorate(block) {
   const row = block.children[0];
   if (!row) return;
@@ -5,8 +14,14 @@ export default function decorate(block) {
 
   const imageCol = document.createElement('div');
   imageCol.className = 'feature-image';
-  const picture = cols[0] ? cols[0].querySelector('picture') : null;
-  if (picture) imageCol.append(picture);
+  const origImg = cols[0]?.querySelector('img');
+  if (origImg) {
+    const opt = createOptimizedPicture(origImg.src, origImg.alt || '', false, [
+      { media: '(min-width: 768px)', width: '600' },
+      { width: '400' },
+    ]);
+    imageCol.append(opt);
+  }
 
   const textCol = document.createElement('div');
   textCol.className = 'feature-text';

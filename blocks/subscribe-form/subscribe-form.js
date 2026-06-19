@@ -62,7 +62,7 @@ export default function decorate(block) {
     input.id = field.name;
     input.placeholder = field.label;
     input.required = field.required;
-    input.setAttribute('aria-label', field.label);
+    // aria-label omitted — the <label htmlFor> association is sufficient and preferred
     const label = document.createElement('label');
     label.htmlFor = field.name;
     label.textContent = field.label;
@@ -79,7 +79,12 @@ export default function decorate(block) {
   checkbox.required = true;
   const privacyLabel = document.createElement('label');
   privacyLabel.htmlFor = 'privacy';
-  privacyLabel.innerHTML = 'Accept our <a href="https://auspost.com.au/privacy" target="_blank" rel="noopener">privacy policy</a>';
+  const privacyLink = document.createElement('a');
+  privacyLink.href = 'https://auspost.com.au/privacy';
+  privacyLink.target = '_blank';
+  privacyLink.rel = 'noopener noreferrer';
+  privacyLink.textContent = 'privacy policy';
+  privacyLabel.append('Accept our ', privacyLink);
   privacyGroup.append(checkbox, privacyLabel);
   form.append(privacyGroup);
 

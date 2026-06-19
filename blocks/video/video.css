@@ -29,7 +29,7 @@ main .video {
 
 .video .video-breadcrumb a:hover { color: var(--ap-red-700); }
 
-.video .video-crumb-sep { color: var(--ap-muted); }
+.video .crumb-sep { color: var(--ap-muted); }
 
 /* ── Page title ── */
 .video .video-page-title {

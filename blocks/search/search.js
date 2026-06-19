@@ -395,9 +395,12 @@ export default async function decorate(block) {
       });
     }
 
-    // Result count announcement
-    const queryLabel = hasQuery ? ` for "${query}"` : '';
-    infoEl.innerHTML = `<strong>${matched.length} result${matched.length !== 1 ? 's' : ''}</strong>${queryLabel}`;
+    // Result count announcement — use DOM nodes to avoid XSS via raw query string
+    infoEl.textContent = '';
+    const countStrong = document.createElement('strong');
+    countStrong.textContent = `${matched.length} result${matched.length !== 1 ? 's' : ''}`;
+    infoEl.append(countStrong);
+    if (hasQuery) infoEl.append(` for "${query}"`);
     infoEl.hidden = false;
 
     // Active chips

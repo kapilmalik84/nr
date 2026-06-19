@@ -26,7 +26,7 @@ export default function decorate(block) {
       const a = document.createElement('a');
       a.href = link ? link.href : (picture?.querySelector('img')?.src || '#');
       a.target = '_blank';
-      a.rel = 'noopener';
+      a.rel = 'noopener noreferrer';
       const altText = caption || 'Download high resolution photo';
       if (picture) {
         const img = picture.querySelector('img');
@@ -47,7 +47,7 @@ export default function decorate(block) {
       const a = document.createElement('a');
       a.href = link.href;
       a.target = '_blank';
-      a.rel = 'noopener';
+      a.rel = 'noopener noreferrer';
       a.textContent = link.textContent.trim() || 'Download';
       li.append(a);
       fileLinks.append(li);

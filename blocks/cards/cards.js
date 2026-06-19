@@ -1,31 +1,35 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { resolveImage } from '../../scripts/article-card.js';
+import { getQueryIndex } from '../../scripts/query-index.js';
+import { buildPagination } from '../../scripts/pagination.js';
+import { buildInlineBreadcrumb } from '../../scripts/breadcrumb-builder.js';
 
 /**
  * Cards block — Australia Post Newsroom
  *
- * Variants:
- *   "Cards (articles)" → .cards.articles  : 3-col dynamic grid + category filter
- *   "Cards (list)"     → .cards.list      : horizontal list rows (listing/topic pages)
- *   "Cards"            → default          : plain authored grid, no filter
+ * Variants (set via block name modifier):
+ *   "Cards (articles)"   → .cards.articles  : dynamic 3-col grid + category filter tabs
+ *   "Cards (list)"       → .cards.list      : dynamic paginated horizontal rows
+ *   "Cards (collection)" → .cards.collection: stamps / year collection grids
+ *   "Cards"              → default          : static authored grid
  *
- * Dynamic mode (articles variant): author key→value config rows, no article rows.
- *   | Cards (articles) | |
- *   |---|---|
- *   | eyebrow  | Latest news            |
- *   | title    | Stay across the latest |
- *   | source   | /archive/news/query-index.json |
- *   | limit    | 6                      |
- *   | view-all | /archive/news/         |
- *
- * Static mode: one row per article, cells in order:
- *   | :image: | Category | Headline (with link) | Date | Excerpt |
+ * Dynamic mode config rows (key | value):
+ *   source      | /query-index.json
+ *   limit       | 6
+ *   filter      | /archive/news/           ← path-prefix filter (latest-articles compat)
+ *   category    | Community                ← exact category match
+ *   subcategory | Service Updates          ← exact subcategory match
+ *   year        | 2025                     ← year filter (list variant)
+ *   view-all    | /archive/news/           ← "View all" CTA link
+ *   eyebrow     | Latest news
+ *   title       | Stay across the latest
  */
 
-const CONFIG_KEYS = new Set(['eyebrow', 'title', 'source', 'limit', 'view-all']);
+const CONFIG_KEYS = new Set(['eyebrow', 'title', 'source', 'limit', 'filter', 'category', 'subcategory', 'year', 'view-all']);
 const COLLECTION_KEYS = new Set(['eyebrow', 'title', 'description', 'filters']);
 const CELL = ['image', 'category', 'title', 'date', 'excerpt'];
 const DEFAULT_SOURCE = '/archive/news/query-index.json';
+const PAGE_SIZE = 12;
 
 /* ── Utilities ── */
 export function formatDate(ts) {
@@ -40,6 +44,14 @@ function isConfigRow(row) {
   if (row.children.length !== 2) return false;
   const key = row.children[0].textContent.trim().toLowerCase();
   return CONFIG_KEYS.has(key);
+}
+
+function readConfig(rows) {
+  const cfg = {};
+  rows.filter(isConfigRow).forEach((r) => {
+    cfg[r.children[0].textContent.trim().toLowerCase()] = r.children[1].textContent.trim();
+  });
+  return cfg;
 }
 
 /* ── Static card building (authored rows) ── */
@@ -65,11 +77,16 @@ export function buildCard(data, isList = false) {
   article.className = 'card';
   if (data.category) article.dataset.category = data.category;
 
+  const titleText = data.link?.textContent.trim()
+    || data.titleEl?.textContent.trim()
+    || data.titleText || '';
+
   const href = data.link?.getAttribute('href') || data.path || '#';
   const a = document.createElement('a');
   a.className = 'card-link';
   a.href = href;
-  a.setAttribute('aria-label', data.title?.textContent?.trim() || data.titleText || 'Read article');
+  // aria-label must always include the article title so screen readers announce it
+  a.setAttribute('aria-label', titleText || 'Read article');
 
   if (data.picture || data.image) {
     const media = document.createElement('div');
@@ -82,7 +99,7 @@ export function buildCard(data, isList = false) {
         ? createOptimizedPicture(img.src, img.alt || '', false, [{ width: '600' }])
         : data.picture;
     } else {
-      pic = createOptimizedPicture(data.image, data.titleText || '', false, [{ width: '600' }]);
+      pic = createOptimizedPicture(data.image, titleText, false, [{ width: '600' }]);
     }
     const cardImg = pic.querySelector('img');
     if (cardImg) cardImg.addEventListener('error', () => { media.remove(); });
@@ -108,9 +125,6 @@ export function buildCard(data, isList = false) {
     body.append(meta);
   }
 
-  const titleText = data.link?.textContent.trim()
-    || data.titleEl?.textContent.trim()
-    || data.titleText || '';
   if (titleText) {
     const h3 = document.createElement('h3');
     h3.className = 'card-title';
@@ -202,61 +216,57 @@ function buildCollectionCard(data) {
   return article;
 }
 
-function buildCollectionFilters(names, grid) {
+function buildTablist(names, gridId, onSelect) {
   const tablist = document.createElement('div');
-  tablist.className = 'collection-filters';
   tablist.setAttribute('role', 'tablist');
   tablist.setAttribute('aria-label', 'Filter by theme');
 
-  const first = names[0] || '';
   const els = names.map((name, i) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'collection-filter-btn';
     btn.setAttribute('role', 'tab');
     btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    btn.setAttribute('aria-controls', gridId);
+    btn.id = `collection-tab-${i}`;
     btn.textContent = name;
     tablist.append(btn);
     return btn;
   });
 
-  function selectFilter(name) {
-    els.forEach((btn) => {
-      btn.setAttribute('aria-selected', String(btn.textContent === name));
-    });
-    [...grid.children].forEach((card) => {
-      card.hidden = name !== first && card.dataset.theme !== name;
-    });
-  }
-
   els.forEach((btn, i) => {
-    btn.addEventListener('click', () => { selectFilter(btn.textContent); btn.focus(); });
+    btn.addEventListener('click', () => { onSelect(btn.textContent); btn.focus(); });
     btn.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       e.preventDefault();
       const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + els.length) % els.length;
-      selectFilter(els[next].textContent);
+      onSelect(els[next].textContent);
       els[next].focus();
     });
   });
 
+  return { tablist, els };
+}
+
+function buildCollectionFilters(names, grid) {
+  const gridId = grid.id || `collection-grid-${Math.random().toString(36).slice(2, 7)}`;
+  grid.id = gridId;
+
+  const first = names[0] || '';
+  const { tablist, els } = buildTablist(names, gridId, (name) => {
+    els.forEach((btn) => btn.setAttribute('aria-selected', String(btn.textContent === name)));
+    [...grid.children].forEach((card) => {
+      card.hidden = name !== first && card.dataset.theme !== name;
+    });
+  });
+
+  tablist.className = 'collection-filters';
   return tablist;
 }
 
 function decorateCollection(block, cfg, cardRows) {
-  const crumb = document.createElement('nav');
-  crumb.className = 'collection-breadcrumb';
-  crumb.setAttribute('aria-label', 'Breadcrumb');
-  const homeA = document.createElement('a');
-  homeA.href = '/';
-  homeA.textContent = 'Home';
-  const sep = document.createElement('span');
-  sep.className = 'collection-crumb-sep';
-  sep.setAttribute('aria-hidden', 'true');
-  sep.textContent = '›';
-  const curr = document.createElement('span');
-  curr.textContent = cfg.title || '';
-  crumb.append(homeA, sep, curr);
+  const crumbs = [{ href: '/', text: 'Home' }, { text: cfg.title || '' }];
+  const crumb = buildInlineBreadcrumb(crumbs, 'collection-breadcrumb');
 
   const h1 = document.createElement('h1');
   h1.className = 'collection-title';
@@ -289,8 +299,11 @@ function decorateCollection(block, cfg, cardRows) {
   block.append(grid);
 }
 
-/* ── Category filter (tablist) ── */
+/* ── Category filter tablist (articles variant) ── */
 function buildFilter(categories, grid, statusEl) {
+  const gridId = grid.id || `cards-grid-${Math.random().toString(36).slice(2, 7)}`;
+  grid.id = gridId;
+
   const tablist = document.createElement('div');
   tablist.className = 'cards-filter';
   tablist.setAttribute('role', 'tablist');
@@ -303,6 +316,7 @@ function buildFilter(categories, grid, statusEl) {
     btn.type = 'button';
     btn.setAttribute('role', 'tab');
     btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    btn.setAttribute('aria-controls', gridId);
     btn.tabIndex = i === 0 ? 0 : -1;
     btn.textContent = name;
     tablist.append(btn);
@@ -322,7 +336,9 @@ function buildFilter(categories, grid, statusEl) {
       card.hidden = !match;
       if (match) shown += 1;
     });
-    if (statusEl) statusEl.textContent = `Showing ${shown} article${shown === 1 ? '' : 's'}${idx === 0 ? '' : ` in ${cat}`}`;
+    if (statusEl) {
+      statusEl.textContent = `Showing ${shown} article${shown === 1 ? '' : 's'}${idx === 0 ? '' : ` in ${cat}`}`;
+    }
   }
 
   els.forEach((btn, i) => {
@@ -339,7 +355,7 @@ function buildFilter(categories, grid, statusEl) {
   return tablist;
 }
 
-/* ── Section header + filter + grid assembly (articles variant) ── */
+/* ── Section header + filter + grid (articles variant) ── */
 function buildArticlesSection(block, cfg, categories, grid, viewAllHref) {
   const statusEl = document.createElement('p');
   statusEl.className = 'cards-status';
@@ -386,22 +402,26 @@ function buildArticlesSection(block, cfg, categories, grid, viewAllHref) {
   }
 }
 
-/* ── Dynamic loading from query-index ── */
+/* ── Dynamic loading: articles variant ──
+ * Supports: source, limit, filter (path prefix), view-all, eyebrow, title */
 async function decorateDynamic(block, cfg) {
   const source = cfg.source || DEFAULT_SOURCE;
   const limit = parseInt(cfg.limit || '6', 10);
   const viewAllHref = cfg['view-all'];
+  const filterPath = (cfg.filter || '').trim().replace(/\/?$/, '/');
 
   let data = [];
   try {
-    const resp = await fetch(source);
-    if (resp.ok) {
-      const json = await resp.json();
-      data = (json.data || [])
-        .filter((r) => r.path && r.title)
-        .sort((a, b) => (Number(b.date) || 0) - (Number(a.date) || 0))
-        .slice(0, limit);
+    let all = await getQueryIndex(source);
+
+    if (filterPath && filterPath !== '/') {
+      all = all.filter((a) => (a.path || '').startsWith(filterPath));
     }
+
+    data = [...all]
+      .filter((r) => r.path && r.title)
+      .sort((a, b) => (Number(b.date) || 0) - (Number(a.date) || 0))
+      .slice(0, limit);
   } catch (_) { /* network error — block stays empty */ }
 
   block.textContent = '';
@@ -426,6 +446,108 @@ async function decorateDynamic(block, cfg) {
   buildArticlesSection(block, cfg, [...categories], grid, viewAllHref);
 }
 
+/* ── Dynamic loading: list variant ──
+ * Supports: source, limit (page size), category, subcategory, year, filter (path prefix) */
+async function decorateDynamicList(block, cfg) {
+  const source = cfg.source || DEFAULT_SOURCE;
+  const category = (cfg.category || '').toLowerCase().trim();
+  const subcategory = (cfg.subcategory || '').toLowerCase().trim();
+  const year = cfg.year ? parseInt(cfg.year, 10) : null;
+  const pageSize = parseInt(cfg.limit, 10) || PAGE_SIZE;
+  const filterPath = (cfg.filter || '').trim().replace(/\/?$/, '/');
+  const isStampPage = block.closest('main')?.dataset.template === 'stamps'
+    || window.location.pathname.includes('/section/stamps');
+
+  block.textContent = '';
+  const loadingMsg = document.createElement('p');
+  loadingMsg.setAttribute('aria-live', 'polite');
+  loadingMsg.textContent = 'Loading articles…';
+  block.append(loadingMsg);
+
+  const NAV_HEIGHT = parseInt(
+    getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72',
+    10,
+  );
+
+  try {
+    let articles = await getQueryIndex(source);
+
+    if (filterPath && filterPath !== '/') {
+      articles = articles.filter((a) => (a.path || '').startsWith(filterPath));
+    }
+
+    if (subcategory) {
+      const subNorm = subcategory.replace(/-/g, ' ');
+      articles = articles.filter((a) => (a.subcategory || '').toLowerCase() === subNorm
+        || (a.category || '').toLowerCase() === subNorm);
+    } else if (category) {
+      articles = articles.filter((a) => (a.category || '').toLowerCase() === category
+        || (a.subcategory || '').toLowerCase() === category);
+    }
+
+    if (year) {
+      articles = articles.filter((a) => {
+        if (!a.date) return false;
+        return new Date(a.date * 1000).getFullYear() === year;
+      });
+    }
+
+    articles = [...articles].sort((a, b) => (b.date || 0) - (a.date || 0));
+
+    loadingMsg.remove();
+    block.textContent = '';
+
+    if (articles.length === 0) {
+      block.textContent = 'No articles found.';
+      return;
+    }
+
+    const totalPages = Math.ceil(articles.length / pageSize);
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    const resultCount = document.createElement('p');
+    resultCount.className = 'article-list-count';
+
+    block.append(resultCount);
+    block.append(grid);
+
+    const showPage = (page) => {
+      const pageStart = (page - 1) * pageSize;
+      const pageArticles = articles.slice(pageStart, pageStart + pageSize);
+
+      resultCount.textContent = `${pageStart + 1}–${Math.min(pageStart + pageSize, articles.length)} of ${articles.length} results`;
+
+      grid.innerHTML = '';
+      pageArticles.forEach((article) => {
+        const data = {
+          path: article.path,
+          image: resolveImage(article.image, isStampPage),
+          category: article.category || '',
+          titleText: article.title,
+          date: formatDate(article.date),
+          description: article.description,
+        };
+        grid.append(buildCard(data, true));
+      });
+
+      const existingNav = block.querySelector('.cards-pagination');
+      if (existingNav) existingNav.remove();
+      const paginationNav = buildPagination(articles.length, page, pageSize, showPage);
+      if (paginationNav && totalPages > 1) block.append(paginationNav);
+
+      resultCount.tabIndex = -1;
+      resultCount.focus();
+
+      const blockTop = block.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT - 16;
+      window.scrollTo({ top: Math.max(0, blockTop), behavior: 'smooth' });
+    };
+
+    showPage(1);
+  } catch (e) {
+    block.textContent = 'Unable to load articles.';
+  }
+}
+
 /* ── Main decorate ── */
 export default async function decorate(block) {
   const rows = [...block.children];
@@ -444,19 +566,22 @@ export default async function decorate(block) {
     return;
   }
 
-  // Detect dynamic (config) vs static (article rows) mode
   const cfgRows = rows.filter(isConfigRow);
   const articleRows = rows.filter((r) => !isConfigRow(r));
 
   const isArticles = block.classList.contains('articles');
   const isList = block.classList.contains('list');
 
+  // Dynamic list mode (article-list compat): config rows + list variant
+  if (isList && cfgRows.length > 0) {
+    const cfg = readConfig(rows);
+    await decorateDynamicList(block, cfg);
+    return;
+  }
+
+  // Dynamic articles mode: config rows + articles variant
   if (isArticles && cfgRows.length > 0) {
-    // Dynamic mode: read config, fetch from query-index
-    const cfg = {};
-    cfgRows.forEach((r) => {
-      cfg[r.children[0].textContent.trim().toLowerCase()] = r.children[1].textContent.trim();
-    });
+    const cfg = readConfig(rows);
     await decorateDynamic(block, cfg);
     return;
   }

@@ -67,7 +67,12 @@ export default function decorate(block) {
       emailInput.focus();
       return;
     }
+    // Only redirect to same-origin or relative paths to prevent open-redirect abuse
     const dest = new URL(signupHref, window.location.href);
+    if (dest.origin !== window.location.origin) {
+      emailInput.focus();
+      return;
+    }
     dest.searchParams.set('email', email);
     window.location.href = dest.toString();
   });

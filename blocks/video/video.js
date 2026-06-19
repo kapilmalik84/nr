@@ -1,4 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { buildInlineBreadcrumb } from '../../scripts/breadcrumb-builder.js';
 
 const VIDEO_KEYS = new Set(['title']);
 
@@ -35,14 +36,14 @@ function readVideoRow(row) {
   };
 }
 
-function embedVideo(wrapper, videoUrl, ytId) {
+function embedVideo(wrapper, videoUrl, ytId, title = '') {
   const id = ytId || extractYouTubeId(videoUrl);
   if (!id) return;
   const iframe = document.createElement('iframe');
   iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
   iframe.setAttribute('allowfullscreen', '');
-  iframe.title = 'Video player';
+  iframe.title = title || 'Video player';
   iframe.className = 'video-iframe';
   wrapper.replaceWith(iframe);
 }
@@ -78,7 +79,7 @@ function buildFeaturedPanel(data) {
   }
 
   const playBtn = buildPlayBtn('lg');
-  playBtn.addEventListener('click', () => embedVideo(panel, data.videoUrl, data.ytId));
+  playBtn.addEventListener('click', () => embedVideo(panel, data.videoUrl, data.ytId, data.title));
 
   const info = document.createElement('div');
   info.className = 'video-featured-info';
@@ -117,7 +118,7 @@ function buildVideoCard(data) {
   }
 
   const playBtn = buildPlayBtn('sm');
-  playBtn.addEventListener('click', () => embedVideo(media, data.videoUrl, data.ytId));
+  playBtn.addEventListener('click', () => embedVideo(media, data.videoUrl, data.ytId, data.title));
   media.append(playBtn);
 
   if (data.duration) {
@@ -164,19 +165,10 @@ export default function decorate(block) {
   block.textContent = '';
 
   // Page header
-  const crumb = document.createElement('nav');
-  crumb.className = 'video-breadcrumb';
-  crumb.setAttribute('aria-label', 'Breadcrumb');
-  const homeA = document.createElement('a');
-  homeA.href = '/';
-  homeA.textContent = 'Home';
-  const sep = document.createElement('span');
-  sep.className = 'video-crumb-sep';
-  sep.setAttribute('aria-hidden', 'true');
-  sep.textContent = '›';
-  const curr = document.createElement('span');
-  curr.textContent = cfg.title || 'Video';
-  crumb.append(homeA, sep, curr);
+  const crumb = buildInlineBreadcrumb(
+    [{ href: '/', text: 'Home' }, { text: cfg.title || 'Video' }],
+    'video-breadcrumb',
+  );
 
   const h1 = document.createElement('h1');
   h1.className = 'video-page-title';

@@ -86,6 +86,7 @@ export default function decorate(block) {
 
   const viewport = document.createElement('div');
   viewport.className = 'gallery-viewport';
+  viewport.setAttribute('role', 'region');
   viewport.setAttribute('tabindex', '0');
   viewport.setAttribute('aria-label', 'Image gallery — use arrow keys to navigate');
   viewport.append(track);

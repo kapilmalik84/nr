@@ -25,7 +25,7 @@ export default function decorate(block) {
       a.append(label);
       if (link.hostname && link.hostname !== window.location.hostname) {
         a.target = '_blank';
-        a.rel = 'noopener';
+        a.rel = 'noopener noreferrer';
         const ext = document.createElement('span');
         ext.className = 'link-ext';
         ext.setAttribute('aria-hidden', 'true');

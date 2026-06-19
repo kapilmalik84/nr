@@ -5,7 +5,7 @@
 
 import { createOptimizedPicture } from './aem.js';
 
-export const DEFAULT_IMAGE = 'https://main--nr--kapilmalik84.aem.page/assets/images/defaults/female-with-express-post-parcel-optimised.jpg';
+export const DEFAULT_IMAGE = '/assets/images/defaults/female-with-express-post-parcel-optimised.jpg';
 export const STAMP_DEFAULT_IMAGE = '/assets/images/stamp-placeholder.png';
 
 const BAD_DEFAULTS = ['photo-man-reading-on-tablet', 'default-meta-image'];
