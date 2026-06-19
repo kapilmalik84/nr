@@ -1,5 +1,6 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { renderCard } from '../../scripts/article-card.js';
+import { resolveImage } from '../../scripts/article-card.js';
+import { buildCard, formatDate } from '../cards/cards.js';
 import { getQueryIndex } from '../../scripts/query-index.js';
 
 const PAGE_SIZE = 12;
@@ -50,14 +51,20 @@ export default async function decorate(block) {
   const subcategory = (config.subcategory || '').toLowerCase().trim();
   const year = config.year ? parseInt(config.year, 10) : null;
   const pageSize = parseInt(config.limit, 10) || PAGE_SIZE;
+  const isStampPage = block.closest('main')?.dataset.template === 'stamps'
+    || window.location.pathname.includes('/section/stamps');
 
+  block.classList.add('cards');
   block.textContent = '';
   const loadingMsg = document.createElement('p');
   loadingMsg.setAttribute('aria-live', 'polite');
   loadingMsg.textContent = 'Loading articles…';
   block.append(loadingMsg);
 
-  const NAV_HEIGHT = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72', 10);
+  const NAV_HEIGHT = parseInt(
+    getComputedStyle(document.documentElement).getPropertyValue('--nav-height') || '72',
+    10,
+  );
 
   try {
     let articles = await getQueryIndex(source);
@@ -89,7 +96,7 @@ export default async function decorate(block) {
     }
 
     const totalPages = Math.ceil(articles.length / pageSize);
-    const grid = document.createElement('ul');
+    const grid = document.createElement('div');
     grid.className = 'cards-grid';
     const resultCount = document.createElement('p');
     resultCount.className = 'article-list-count';
@@ -98,13 +105,23 @@ export default async function decorate(block) {
     block.append(grid);
 
     const showPage = (page) => {
-      const start = (page - 1) * pageSize;
-      const pageArticles = articles.slice(start, start + pageSize);
+      const pageStart = (page - 1) * pageSize;
+      const pageArticles = articles.slice(pageStart, pageStart + pageSize);
 
-      resultCount.textContent = `${start + 1}-${Math.min(start + pageSize, articles.length)} of ${articles.length} results.`;
+      resultCount.textContent = `${pageStart + 1}–${Math.min(pageStart + pageSize, articles.length)} of ${articles.length} results`;
 
       grid.innerHTML = '';
-      pageArticles.forEach((article) => grid.append(renderCard(article)));
+      pageArticles.forEach((article) => {
+        const data = {
+          path: article.path,
+          image: resolveImage(article.image, isStampPage),
+          category: article.category || '',
+          titleText: article.title,
+          date: formatDate(article.date),
+          description: article.description,
+        };
+        grid.append(buildCard(data));
+      });
 
       const existingNav = block.querySelector('.article-list-pagination');
       if (existingNav) existingNav.remove();
@@ -112,7 +129,6 @@ export default async function decorate(block) {
         block.append(renderPagination(totalPages, page, showPage));
       }
 
-      // Move focus to result count so screen readers announce page change
       resultCount.tabIndex = -1;
       resultCount.focus();
 

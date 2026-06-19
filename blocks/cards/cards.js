@@ -1,4 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { resolveImage } from '../../scripts/article-card.js';
 
 /**
  * Cards block — Australia Post Newsroom
@@ -27,7 +28,7 @@ const CELL = ['image', 'category', 'title', 'date', 'excerpt'];
 const DEFAULT_SOURCE = '/archive/news/query-index.json';
 
 /* ── Utilities ── */
-function formatDate(ts) {
+export function formatDate(ts) {
   if (!ts) return '';
   const d = new Date(Number(ts) * 1000);
   return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-AU', {
@@ -42,7 +43,7 @@ function isConfigRow(row) {
 }
 
 /* ── Static card building (authored rows) ── */
-function readCard(row) {
+export function readCard(row) {
   const cells = [...row.children];
   const data = {};
   cells.forEach((cell, i) => {
@@ -59,7 +60,7 @@ function readCard(row) {
   return data;
 }
 
-function buildCard(data, isList = false) {
+export function buildCard(data, isList = false) {
   const article = document.createElement('article');
   article.className = 'card';
   if (data.category) article.dataset.category = data.category;
@@ -83,6 +84,8 @@ function buildCard(data, isList = false) {
     } else {
       pic = createOptimizedPicture(data.image, data.titleText || '', false, [{ width: '600' }]);
     }
+    const cardImg = pic.querySelector('img');
+    if (cardImg) cardImg.addEventListener('error', () => { media.remove(); });
     media.append(pic);
 
     if (data.category) {
@@ -410,7 +413,7 @@ async function decorateDynamic(block, cfg) {
   data.forEach((item) => {
     const cardData = {
       path: item.path,
-      image: item.image,
+      image: resolveImage(item.image, false),
       category: item.category || '',
       titleText: item.title,
       date: formatDate(item.date),
