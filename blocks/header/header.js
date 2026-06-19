@@ -87,16 +87,28 @@ export default async function decorate(block) {
   brandA.className = 'nav-brand-logo';
   brandA.setAttribute('aria-label', 'Australia Post Newsroom home');
 
-  const logoImg = document.createElement('img');
-  logoImg.src = '/icons/auspost-logo.svg';
-  logoImg.alt = 'Australia Post';
-  logoImg.setAttribute('aria-hidden', 'true');
+  const roundel = document.createElement('span');
+  roundel.className = 'nav-roundel';
+  roundel.setAttribute('aria-hidden', 'true');
+  roundel.textContent = 'P';
+
+  const wordmark = document.createElement('span');
+  wordmark.className = 'nav-wordmark';
+
+  const orgName = document.createElement('span');
+  orgName.className = 'nav-org-name';
+  orgName.textContent = 'Australia Post';
+
+  const hairline = document.createElement('span');
+  hairline.className = 'nav-hairline';
+  hairline.setAttribute('aria-hidden', 'true');
 
   const newsroomLabel = document.createElement('span');
   newsroomLabel.className = 'nav-brand-newsroom';
   newsroomLabel.textContent = 'Newsroom';
 
-  brandA.append(logoImg, newsroomLabel);
+  wordmark.append(orgName, hairline, newsroomLabel);
+  brandA.append(roundel, wordmark);
   brandDiv.append(brandA);
 
   // ── Nav sections ──────────────────────────────────────────────────────────

@@ -1,23 +1,19 @@
-/* stylelint-disable no-descending-specificity */
+/* Header block — Australia Post Newsroom redesign
+ * Relies on --ap-* tokens in /styles/styles.css :root */
 
-/* =============================================
-   AUSPOST NEWSROOM NAV — matches stest.npe.auspost.com.au
-   Single-row, hover dropdowns, pill utilities
-   ============================================= */
+/* stylelint-disable no-descending-specificity */
 
 header {
   height: var(--nav-height, 72px);
 }
 
 header .nav-wrapper {
-  /* stest pattern: transparent at bottom → opaque white at top */
-  background: linear-gradient(0deg, hsl(0deg 0% 100% / 0%) 0%, #fff 40%);
-  backdrop-filter: blur(50px);
+  background: var(--ap-white);
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--neutral-300, #eee);
+  border-bottom: 1px solid var(--ap-hairline);
 }
 
 header nav {
@@ -25,50 +21,70 @@ header nav {
   align-items: center;
   max-width: 1264px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--sp-lg);
   height: var(--nav-height, 72px);
   gap: 0;
-  position: relative;
 }
 
-/* === BRAND === */
+/* ── Brand wordmark ── */
 header nav .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-right: 1.5rem;
+  margin-right: var(--sp-lg);
   flex-shrink: 0;
-  text-decoration: none;
 }
 
 header nav .nav-brand-logo {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0;
+  gap: 11px;
   text-decoration: none;
 }
 
-header nav .nav-brand-logo img {
-  width: 110px;
-  height: auto;
-  display: block;
+/* P roundel */
+header nav .nav-roundel {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ap-red);
+  color: var(--ap-white);
+  font: 900 17px / 34px var(--font-family-heading);
+  text-align: center;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header nav .nav-wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+header nav .nav-org-name {
+  font: 900 18px / 1 var(--font-family-heading);
+  color: var(--ap-red);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+header nav .nav-hairline {
+  width: 1px;
+  height: 17px;
+  background: var(--ap-hairline);
+  align-self: center;
   flex-shrink: 0;
 }
 
 header nav .nav-brand-newsroom {
-  font-size: var(--body-font-size-m, 1rem);
-  font-weight: 700;
-  color: var(--ink-900, #0d0d10);
-  letter-spacing: 0;
-  text-transform: none;
-  line-height: 1;
-  padding-left: 0.875rem;
-  margin-left: 0.875rem;
-  border-left: 1.5px solid var(--neutral-300, #eee);
+  font: 700 18px / 1 var(--font-family-heading);
+  color: var(--ap-ink);
+  white-space: nowrap;
 }
 
-/* === NAV SECTIONS (desktop) === */
+/* ── Nav links (desktop) ── */
 header nav .nav-sections {
   display: none;
   flex: 1;
@@ -80,10 +96,9 @@ header nav .nav-sections > ul {
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--sp-md);
 }
 
-/* Top-level nav items */
 header nav .nav-sections > ul > li {
   position: relative;
 }
@@ -91,51 +106,35 @@ header nav .nav-sections > ul > li {
 header nav .nav-sections > ul > li > a {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.625rem 1.5rem;
-  border-radius: 1000px;
-  border: none;
-  color: var(--ink-800, #202027);
-  font-weight: 500;
-  font-size: 0.9375rem;
+  gap: 5px;
+  padding: 6px 0;
+  color: var(--ap-ink);
+  font: 600 15px / 1 var(--font-family-body);
   text-decoration: none;
-
-  /* stest: each pill has its own semi-transparent white background */
-  background: hsl(0deg 0% 100% / 80%);
-  transition: background 0.2s, color 0.2s;
+  transition: color var(--dur) var(--ease);
   white-space: nowrap;
-  line-height: 1.4;
 }
 
-/* All nav items: neutral-300 on hover — stest secondary-button-bg pattern */
+header nav .nav-sections > ul > li > a:hover,
 header nav .nav-sections > ul > li:hover > a {
-  background: var(--neutral-300, #eee);
+  color: var(--ap-red);
   text-decoration: none;
 }
 
-/* Current page and open/active dropdown trigger: inverted dark + white text (stest active pattern) */
 header nav .nav-sections > ul > li > a.nav-current-page,
-header nav .nav-sections .nav-drop[aria-expanded='true'] > a,
-header nav .nav-sections .nav-drop > a.nav-current-section {
-  background: var(--bg-inverted, #212129);
-  color: var(--text-inverted, #fff);
-  text-decoration: none;
+header nav .nav-sections > ul > li > a.nav-current-section,
+header nav .nav-sections .nav-drop[aria-expanded='true'] > a {
+  color: var(--ap-red);
 }
 
-/* Chevron — rendered via aria-hidden span so screen readers never hear ∨/∧ noise */
+/* Chevron */
 header nav .nav-sections .nav-drop > a .nav-chevron::after {
   content: '∨';
-  font-size: 0.8em;
-  line-height: 1;
-
-  /* inherits colour from parent <a> — turns white on inverted dark background */
+  font-size: 0.75em;
   color: currentcolor;
   display: inline-block;
-  flex-shrink: 0;
-  transition: color 0.2s;
 }
 
-/* ∧ chevron (up) when hovered or dropdown is open */
 header nav .nav-sections .nav-drop:hover > a .nav-chevron::after,
 header nav .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after {
   content: '∧';
@@ -145,127 +144,108 @@ header nav .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after
 header nav .nav-sections > ul > li > ul {
   display: none;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   left: 0;
-  background: var(--neutral-0, #fff);
-  box-shadow: 0 8px 32px rgb(0 0 0 / 14%), 0 2px 8px rgb(0 0 0 / 8%);
-  border-top: 3px solid var(--auspost-red-500, #dc1928);
-  border-radius: 0 var(--radius-l, 12px) var(--radius-l, 12px) var(--radius-l, 12px);
-  padding: 0.75rem 0;
+  background: var(--ap-white);
+  box-shadow: var(--shadow-overlay);
+  border-top: 3px solid var(--ap-red);
+  border-radius: 0 var(--radius-card) var(--radius-card) var(--radius-card);
+  padding: var(--sp-xs) 0;
   min-width: 240px;
   z-index: 10;
   list-style: none;
 }
 
-header nav .nav-sections > ul > li[aria-expanded='true'] > ul {
-  display: block;
-}
+header nav .nav-sections > ul > li[aria-expanded='true'] > ul { display: block; }
 
-/* Dropdown section heading (first link = parent category) */
 header nav .nav-sections > ul > li > ul > li:first-child > a {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--ink-900, #0d0d10);
+  gap: 6px;
+  padding: 10px var(--sp-md) 11px;
+  font: 700 15px / 1 var(--font-family-body);
+  color: var(--ap-ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--neutral-300, #eee);
-  margin-bottom: 0.375rem;
+  border-bottom: 1px solid var(--ap-hairline);
+  margin-bottom: 4px;
 }
 
 header nav .nav-sections > ul > li > ul > li:first-child > a::after {
   content: '→';
-  color: var(--auspost-red-500, #dc1928);
+  color: var(--ap-red);
   font-weight: 700;
 }
 
-header nav .nav-sections > ul > li > ul > li:first-child > a:hover {
-  color: var(--auspost-red-500, #dc1928);
-  background: none;
-}
+header nav .nav-sections > ul > li > ul > li:first-child > a:hover { color: var(--ap-red); background: none; }
 
-/* Sub-items */
 header nav .nav-sections > ul > li > ul > li > a {
   display: block;
-  padding: 0.45rem 1.25rem;
-  font-size: var(--body-font-size-s, 0.875rem);
-  font-weight: 400;
-  color: var(--ink-700, #31313d);
+  padding: 7px var(--sp-md);
+  font: 400 14px / 1 var(--font-family-body);
+  color: var(--ap-body);
   text-decoration: none;
-  transition: color 0.15s, background 0.15s;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
 header nav .nav-sections > ul > li > ul > li > a:hover {
-  color: var(--auspost-red-500, #dc1928);
-  background: var(--auspost-red-100, #fff4f4);
+  color: var(--ap-red);
+  background: var(--ap-red-50);
 }
 
 @media (width >= 900px) {
-  header nav .nav-sections {
-    display: flex;
-  }
+  header nav .nav-sections { display: flex; }
 }
 
-/* === UTILITY AREA (right side) === */
+/* ── Utilities (right) ── */
 header nav .nav-utilities {
   display: none;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--sp-sm);
   margin-left: auto;
   flex-shrink: 0;
 }
 
 header nav .nav-utilities .nav-contact-link {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: var(--body-font-size-s, 0.875rem);
-  color: var(--ink-700, #31313d);
+  font: 400 13.5px / 1 var(--font-family-body);
+  color: var(--ap-body);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.15s;
+  transition: color var(--dur) var(--ease);
 }
 
-header nav .nav-utilities .nav-contact-link:hover {
-  color: var(--auspost-red-500, #dc1928);
-}
+header nav .nav-utilities .nav-contact-link:hover { color: var(--ap-red); }
 
-/* Track-or-search style pill button */
+/* Search pill */
 header nav .nav-utilities .nav-search-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 1rem;
-  border: 1.5px solid var(--neutral-400, #e2e2e2);
-  border-radius: var(--radius-pill, 9999px);
-  background: var(--neutral-100, #f5f5f5);
-  color: var(--ink-800, #202027);
-  font-size: var(--body-font-size-s, 0.875rem);
-  font-weight: 500;
+  gap: var(--sp-xs);
+  padding: 9px var(--sp-sm);
+  min-width: 200px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--ap-surface);
   cursor: text;
-  transition: border-color 0.15s;
+  transition: background var(--dur) var(--ease);
 }
 
 header nav .nav-utilities .nav-search-pill:focus-within {
-  border-color: var(--auspost-red-500, #dc1928);
-  background: var(--neutral-0, #fff);
+  background: var(--ap-hairline);
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 header nav .nav-utilities .nav-search-pill input {
+  flex: 1;
   border: none;
   background: transparent;
   outline: transparent;
-  font-size: var(--body-font-size-s, 0.875rem);
-  font-family: var(--body-font-family);
-  width: 140px;
-  color: var(--text-primary, #212129);
+  font: 400 14px / 1 var(--font-family-body);
+  color: var(--ap-ink);
+  min-width: 0;
 }
 
-header nav .nav-utilities .nav-search-pill input::placeholder {
-  color: var(--neutral-600, #6d6d72);
-}
+header nav .nav-utilities .nav-search-pill input::placeholder { color: var(--ap-muted); }
 
 header nav .nav-utilities .nav-search-pill button {
   background: none;
@@ -274,21 +254,18 @@ header nav .nav-utilities .nav-search-pill button {
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: var(--ink-700, #31313d);
-  transition: color 0.15s;
+  color: var(--ap-muted);
+  transition: color var(--dur) var(--ease);
+  flex-shrink: 0;
 }
 
-header nav .nav-utilities .nav-search-pill button:hover {
-  color: var(--auspost-red-500, #dc1928);
-}
+header nav .nav-utilities .nav-search-pill button:hover { color: var(--ap-red); }
 
 @media (width >= 900px) {
-  header nav .nav-utilities {
-    display: flex;
-  }
+  header nav .nav-utilities { display: flex; }
 }
 
-/* === HAMBURGER (mobile) === */
+/* ── Hamburger (mobile) ── */
 header nav .nav-hamburger {
   display: flex;
   align-items: center;
@@ -296,13 +273,15 @@ header nav .nav-hamburger {
 }
 
 header nav .nav-hamburger button {
-  height: 24px;
+  height: 44px;
+  width: 44px;
   border: 0;
   padding: 0;
   background: transparent;
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 5px;
   justify-content: center;
 }
@@ -314,7 +293,7 @@ header nav .nav-hamburger-icon::after {
   width: 22px;
   height: 2px;
   border-radius: 2px;
-  background: var(--ink-800, #202027);
+  background: var(--ap-ink);
 }
 
 header nav .nav-hamburger-icon {
@@ -327,21 +306,14 @@ header nav .nav-hamburger-icon::after {
   position: absolute;
 }
 
-header nav .nav-hamburger-icon::before {
-  top: -7px;
-}
-
-header nav .nav-hamburger-icon::after {
-  top: 7px;
-}
+header nav .nav-hamburger-icon::before { top: -7px; }
+header nav .nav-hamburger-icon::after  { top: 7px; }
 
 @media (width >= 900px) {
-  header nav .nav-hamburger {
-    display: none;
-  }
+  header nav .nav-hamburger { display: none; }
 }
 
-/* === MOBILE EXPANDED NAV === */
+/* ── Mobile expanded nav ── */
 @media (width < 900px) {
   header nav.is-open .nav-sections {
     display: block;
@@ -349,10 +321,10 @@ header nav .nav-hamburger-icon::after {
     top: var(--nav-height, 72px);
     left: 0;
     right: 0;
-    background: var(--neutral-0, #fff);
-    border-top: 1px solid var(--neutral-300, #eee);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
-    padding: 1rem 1.5rem 1.5rem;
+    background: var(--ap-white);
+    border-top: 1px solid var(--ap-hairline);
+    box-shadow: var(--shadow-overlay);
+    padding: var(--sp-sm) var(--sp-lg) var(--sp-md);
     max-height: calc(100vh - var(--nav-height, 72px));
     overflow-y: auto;
   }
@@ -364,43 +336,29 @@ header nav .nav-hamburger-icon::after {
   }
 
   header nav.is-open .nav-sections > ul > li {
-    border-bottom: 1px solid var(--neutral-300, #eee);
+    border-bottom: 1px solid var(--ap-hairline);
   }
 
   header nav.is-open .nav-sections > ul > li > a {
     width: 100%;
-    padding: 0.875rem 0.5rem;
-    border-radius: 0;
+    padding: 14px 0;
     justify-content: space-between;
-    border: none;
-    background: transparent;
   }
 
-  /* Mobile chevron: › (right) for items with children */
   header nav.is-open .nav-sections .nav-drop > a .nav-chevron::after {
     content: '›';
     font-size: 1.2em;
-    color: var(--ink-700, #4d4d54);
+    color: var(--ap-muted);
   }
 
-  /* Mobile: ∨ when sub-menu is expanded on mobile */
   header nav.is-open .nav-sections .nav-drop[aria-expanded='true'] > a .nav-chevron::after {
     content: '∨';
-    color: var(--auspost-red-500, #dc1928);
+    color: var(--ap-red);
   }
 
-  /* Mobile: red text for active section or current page */
   header nav.is-open .nav-sections > ul > li > a.nav-current-section,
   header nav.is-open .nav-sections > ul > li > a.nav-current-page {
-    color: var(--auspost-red-500, #dc1928);
-    background: transparent;
-    border-color: transparent;
-  }
-
-  /* Mobile: active section right chevron also red */
-  header nav.is-open .nav-sections .nav-drop > a.nav-current-section .nav-chevron::after {
-    content: '›';
-    color: var(--auspost-red-500, #dc1928);
+    color: var(--ap-red);
   }
 
   header nav.is-open .nav-sections > ul > li > ul {
@@ -408,43 +366,38 @@ header nav .nav-hamburger-icon::after {
     box-shadow: none;
     border-top: none;
     border-radius: 0;
-    padding: 0.25rem 0 0.75rem 0.75rem;
-    background: var(--neutral-100, #f5f5f5);
+    padding: 4px 0 12px var(--sp-sm);
+    background: var(--ap-surface);
     min-width: unset;
   }
 
-  header nav.is-open .nav-sections > ul > li[aria-expanded='true'] > ul {
-    display: block;
-  }
+  header nav.is-open .nav-sections > ul > li[aria-expanded='true'] > ul { display: block; }
 
   header nav.is-open .nav-sections > ul > li > ul > li:first-child > a {
     border-bottom: none;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
+    padding: 8px var(--sp-sm);
+    font-size: 14px;
     margin-bottom: 0;
   }
 
   header nav.is-open .nav-sections > ul > li > ul > li > a {
-    padding: 0.45rem 0.75rem;
+    padding: 7px var(--sp-sm);
   }
 
   header nav.is-open .nav-utilities {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem 0.5rem 0;
-    border-top: 1px solid var(--neutral-300, #eee);
-    margin-top: 0.5rem;
+    gap: var(--sp-sm);
+    padding: var(--sp-sm) 0 0;
+    border-top: 1px solid var(--ap-hairline);
+    margin-top: var(--sp-xs);
+  }
+
+  header nav.is-open .nav-utilities .nav-search-pill {
+    width: 100%;
   }
 }
 
-header nav p {
-  margin: 0;
-}
-
-header nav a:any-link {
-  color: currentcolor;
-  text-decoration: none;
-}
+header nav p { margin: 0; }
+header nav a:any-link { color: currentcolor; text-decoration: none; }

@@ -1,90 +1,166 @@
+/* Footer block — Australia Post Newsroom redesign
+ * Relies on --ap-* tokens in /styles/styles.css :root */
+
 footer {
-  background-color: var(--neutral-800, #2b2b32);
-  color: var(--neutral-300, #eee);
-  font-size: var(--body-font-size-xs);
+  background: var(--ap-ink);
+  color: var(--ap-white);
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+footer .footer-inner {
+  max-width: 1264px;
+  margin: 0 auto;
+  padding: var(--sp-section) var(--sp-lg) 0;
 }
 
-footer .footer p {
-  margin: 0 0 1rem;
-  line-height: 1.6;
+/* ── 4-column grid ── */
+footer .footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-lg);
+  padding-bottom: var(--sp-lg);
+  border-bottom: 1px solid #2C2C32;
 }
 
-/* Copyright row */
+@media (width >= 600px) {
+  footer .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (width >= 900px) {
+  footer .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+}
+
+/* Col 1: brand */
+footer .footer-brand-col { display: flex; flex-direction: column; gap: var(--sp-sm); }
+
+footer .footer-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+footer .footer-roundel {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ap-red);
+  color: var(--ap-white);
+  font: 900 15px / 30px var(--font-family-heading);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer .footer-brand-name {
+  font: 800 16px / 1.2 var(--font-family-heading);
+  color: var(--ap-white);
+}
+
+footer .footer-brand-desc {
+  margin: 0;
+  font: 400 14px / 1.55 var(--font-family-body);
+  color: #A8A8B0;
+  max-width: 280px;
+}
+
+/* Cols 2-4: nav */
+footer .footer-nav-col { display: flex; flex-direction: column; gap: var(--sp-sm); }
+
+footer .footer-col-heading {
+  margin: 0;
+  font: 700 14px / 1 var(--font-family-body);
+  color: var(--ap-white);
+}
+
+footer .footer-col-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+footer .footer-col-links li { margin: 0; }
+
+footer .footer-col-links a,
+footer .footer-col-links li {
+  font: 400 14px / 1 var(--font-family-body);
+  color: #A8A8B0;
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+footer .footer-col-links a:hover { color: var(--ap-white); }
+
+/* ── Legal row ── */
 footer .footer-legal {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin: 0 0 1.5rem;
+  gap: var(--sp-md);
+  padding: 22px 0;
   flex-wrap: wrap;
 }
 
 footer .footer-copyright {
-  line-height: 1.6;
+  font: 400 13px / 1 var(--font-family-body);
+  color: var(--ap-muted);
 }
 
 footer .footer-social {
   display: flex;
-  gap: 0.5rem;
+  gap: 14px;
   align-items: center;
   flex-shrink: 0;
 }
 
-footer .footer-social a {
+footer .footer-social-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgb(255 255 255 / 10%);
-  transition: background 0.2s;
+  background: #2C2C32;
+  transition: background var(--dur) var(--ease);
 }
 
-footer .footer-social a:hover {
-  background: rgb(255 255 255 / 20%);
-}
+footer .footer-social-link:hover { background: #3C3C44; }
+footer .footer-social-link:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
-footer .footer a:any-link {
-  color: var(--neutral-300, #eee);
-}
-
-footer .footer a:hover {
-  color: var(--neutral-0, #fff);
-}
-
-footer .footer-social img {
+footer .footer-social-link img {
   width: 18px;
   height: 18px;
   display: block;
+  filter: brightness(0) invert(1);
 }
 
-/* Acknowledgement of Country row */
+/* ── Acknowledgement strip ── */
 footer .footer-acknowledgement {
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  border-top: 1px solid rgb(255 255 255 / 12%);
-  padding-top: 1.25rem;
-  margin-top: 0.5rem;
-  line-height: 1.6;
+  align-items: flex-start;
+  gap: var(--sp-md);
+  background: #0E0E12;
+  margin: 0 calc(-1 * var(--sp-lg));
+  padding: 18px var(--sp-lg);
+  font: 400 12.5px / 1.55 var(--font-family-body);
+  color: var(--ap-muted);
 }
 
 footer .footer-acknowledgement img {
-  width: 72px;
-  height: 72px;
   flex-shrink: 0;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
+  align-self: center;
 }
 
+/* ── Links ── */
+footer a:any-link { color: #A8A8B0; text-decoration: none; }
+footer a:hover    { color: var(--ap-white); }
+
+/* ── Responsive ── */
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
-  }
+  footer .footer-inner { padding: var(--sp-section) var(--sp-lg) 0; }
 }
