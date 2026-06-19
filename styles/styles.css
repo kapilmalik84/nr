@@ -39,6 +39,53 @@
 
 /* ===== DESIGN TOKENS ===== */
 :root {
+  /* ---- Redesign tokens (design-tokens.css) — use these in all new/reworked blocks ---- */
+  --ap-red:        #DC1928;
+  --ap-red-700:    #B0140F;
+  --ap-red-50:     #FCE9EA;
+  --ap-ink:        #15151A;
+  --ap-body:       #44444C;
+  --ap-muted:      #8A8A92;
+  --ap-hairline:   #E6E6EA;
+  --ap-surface:    #F4F4F6;
+  --ap-white:      #FFFFFF;
+
+  --color-background: var(--ap-white);
+  --color-text:       var(--ap-ink);
+  --color-link:       var(--ap-red);
+  --color-link-hover: var(--ap-red-700);
+
+  --font-family-body:    "AP Type", "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-family-heading: "AP Type", "Hanken Grotesk", system-ui, sans-serif;
+
+  --fs-display: 64px;  --lh-display: 0.98;  --ls-display: -0.03em; --fw-display: 900;
+  --fs-h1:      40px;  --lh-h1:      1.08;  --ls-h1:      -0.02em; --fw-h1:      800;
+  --fs-h2:      28px;  --lh-h2:      1.15;  --ls-h2:      -0.015em;--fw-h2:      800;
+  --fs-title:   21px;  --lh-title:   1.25;  --fw-title:   700;
+  --fs-body:    17px;  --lh-body:    1.6;   --fw-body:    400;
+  --fs-meta:    14px;  --lh-meta:    1.5;
+  --fs-eyebrow: 12.5px;--ls-eyebrow: 0.1em; --fw-eyebrow: 700;
+
+  --sp-xs: 8px;
+  --sp-sm: 16px;
+  --sp-md: 24px;
+  --sp-lg: 48px;
+  --sp-section: 88px;
+
+  --radius-input:  8px;
+  --radius-card:   16px;
+  --radius-hero:   24px;
+
+  --shadow-card:    0 1px 3px rgba(0,0,0,.08);
+  --shadow-raised:  0 6px 16px rgba(0,0,0,.10);
+  --shadow-overlay: 0 14px 30px rgba(0,0,0,.14);
+  --shadow-feature: 0 14px 40px rgba(0,0,0,.13);
+
+  --ease: cubic-bezier(.2,.6,.2,1);
+  --dur:  .18s;
+  --focus-ring: 0 0 0 3px rgba(220,25,40,.40);
+
+  /* ---- Legacy tokens (kept for blocks not yet migrated) ---- */
   /* ---- Brand: Auspost Red ---- */
   --auspost-red-100: #fff4f4;
   --auspost-red-200: #fbe8e9;
@@ -129,8 +176,8 @@
   --border-disabled: var(--neutral-300);
 
   /* ---- Typography ---- */
-  --body-font-family: 'APTypeProText', -apple-system, sans-serif;
-  --heading-font-family: 'APTypeProText', -apple-system, sans-serif;
+  --body-font-family:    var(--font-family-body);
+  --heading-font-family: var(--font-family-heading);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, monospace;
 
   /* ---- Font sizes ---- */
@@ -157,6 +204,10 @@
   --radius-pill: 9999px;
   --card-shadow: 0 2px 8px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 6%);
   --card-shadow-hover: 0 8px 24px rgb(0 0 0 / 12%), 0 2px 6px rgb(0 0 0 / 8%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0s; }
 }
 
 /* ===== RESET ===== */

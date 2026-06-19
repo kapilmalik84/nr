@@ -2,9 +2,18 @@ import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
 import { resolveImage } from '../../scripts/article-card.js';
 import { getQueryIndex } from '../../scripts/query-index.js';
 
+const PAGE_SIZE = 20;
+
+function deriveType(path = '') {
+  return path.startsWith('/section/') ? 'stamps' : 'news';
+}
+
+/* ── Result row ── */
 function renderResult(article) {
-  const isStamp = (article.path || '').startsWith('/section/');
-  const imageUrl = resolveImage(article.image, isStamp);
+  const type = deriveType(article.path);
+  const typeLabel = type === 'stamps' ? 'Stamps' : 'News';
+  const eyebrow = article.year ? `${typeLabel} · ${article.year}` : typeLabel;
+  const imageUrl = resolveImage(article.image, type === 'stamps');
 
   const item = document.createElement('div');
   item.className = 'search-result';
@@ -12,27 +21,34 @@ function renderResult(article) {
   if (imageUrl) {
     const imgWrap = document.createElement('div');
     imgWrap.className = 'result-image';
-    const link = document.createElement('a');
-    link.href = article.path;
-    link.setAttribute('aria-hidden', 'true');
-    link.tabIndex = -1;
-    link.append(createOptimizedPicture(imageUrl, article.title || '', false, [{ width: '200' }]));
-    imgWrap.append(link);
+    const a = document.createElement('a');
+    a.href = article.path;
+    a.setAttribute('aria-hidden', 'true');
+    a.tabIndex = -1;
+    a.append(createOptimizedPicture(imageUrl, article.title || '', false, [{ width: '200' }]));
+    imgWrap.append(a);
     item.append(imgWrap);
   }
 
   const text = document.createElement('div');
   text.className = 'result-text';
 
-  const title = document.createElement('h4');
-  const titleLink = document.createElement('a');
-  titleLink.href = article.path;
-  titleLink.textContent = article.title || '';
-  title.append(titleLink);
-  text.append(title);
+  const eyebrowEl = document.createElement('p');
+  eyebrowEl.className = 'result-eyebrow';
+  eyebrowEl.textContent = eyebrow;
+  text.append(eyebrowEl);
+
+  const titleEl = document.createElement('p');
+  titleEl.className = 'result-title';
+  const titleA = document.createElement('a');
+  titleA.href = article.path;
+  titleA.textContent = article.title || '';
+  titleEl.append(titleA);
+  text.append(titleEl);
 
   if (article.description) {
     const desc = document.createElement('p');
+    desc.className = 'result-excerpt';
     desc.textContent = article.description;
     text.append(desc);
   }
@@ -41,12 +57,112 @@ function renderResult(article) {
   return item;
 }
 
+/* ── Live category counts ──
+ * Counts categories in the subset filtered by type + year + query,
+ * deliberately NOT filtered by category — so counts show what's available. */
+function computeCounts(data, { activeType, selectedYear, query }) {
+  let base = data.filter((a) => a.title);
+  if (query.length >= 2) {
+    const q = query.toLowerCase();
+    base = base.filter((a) => [a.title, a.description, a.category]
+      .filter(Boolean).join(' ').toLowerCase().includes(q));
+  }
+  if (selectedYear) base = base.filter((a) => a.year === Number(selectedYear));
+  if (activeType === 'news') base = base.filter((a) => !a.path.startsWith('/section/'));
+  else if (activeType === 'stamps') base = base.filter((a) => a.path.startsWith('/section/'));
+
+  const counts = {};
+  base.forEach((a) => {
+    if (a.category) counts[a.category] = (counts[a.category] || 0) + 1;
+  });
+  return counts;
+}
+
+/* ── Active filter chips ── */
+function buildChips(filters, onRemove) {
+  const { activeType, selectedYear, activeCategories } = filters;
+  const wrapper = document.createElement('div');
+  wrapper.className = 'active-chips';
+
+  const makeChip = (label, onRemoveChip) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'active-chip';
+    btn.innerHTML = `${label} <span class="chip-x" aria-hidden="true">✕</span>`;
+    btn.setAttribute('aria-label', `Remove filter: ${label}`);
+    btn.addEventListener('click', onRemoveChip);
+    return btn;
+  };
+
+  if (activeType !== 'all') {
+    wrapper.append(makeChip(activeType === 'stamps' ? 'Stamps' : 'News', () => onRemove('type', activeType)));
+  }
+  if (selectedYear) {
+    wrapper.append(makeChip(selectedYear, () => onRemove('year', selectedYear)));
+  }
+  activeCategories.forEach((cat) => {
+    wrapper.append(makeChip(cat, () => onRemove('category', cat)));
+  });
+
+  return wrapper;
+}
+
+/* ── Numbered pagination ── */
+function buildPagination(total, current, perPage, onPageChange) {
+  const totalPages = Math.ceil(total / perPage);
+  if (totalPages <= 1) return null;
+
+  const nav = document.createElement('nav');
+  nav.className = 'search-pagination';
+  nav.setAttribute('aria-label', 'Search results pages');
+
+  const makeBtn = (label, page, isActive = false, isDisabled = false, ariaLabel = '') => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `page-btn${isActive ? ' active' : ''}`;
+    btn.textContent = label;
+    btn.disabled = isDisabled;
+    if (ariaLabel) btn.setAttribute('aria-label', ariaLabel);
+    if (isActive) btn.setAttribute('aria-current', 'page');
+    if (!isDisabled && !isActive) {
+      btn.addEventListener('click', () => onPageChange(page));
+    }
+    return btn;
+  };
+
+  const ellipsis = () => {
+    const span = document.createElement('span');
+    span.className = 'page-ellipsis';
+    span.textContent = '…';
+    span.setAttribute('aria-hidden', 'true');
+    return span;
+  };
+
+  nav.append(makeBtn('←', current - 1, false, current === 1, 'Previous page'));
+
+  const delta = 1;
+  const pages = new Set([1, totalPages]);
+  for (let p = Math.max(2, current - delta); p <= Math.min(totalPages - 1, current + delta); p += 1) {
+    pages.add(p);
+  }
+
+  let prev = 0;
+  [...pages].sort((a, b) => a - b).forEach((p) => {
+    if (p - prev > 1) nav.append(ellipsis());
+    nav.append(makeBtn(p, p, p === current, false, `Page ${p}`));
+    prev = p;
+  });
+
+  nav.append(makeBtn('→', current + 1, false, current === totalPages, 'Next page'));
+  return nav;
+}
+
+/* ── Filter panel ── */
 function buildFilterPanel(categories, years) {
   const panel = document.createElement('aside');
   panel.className = 'search-filter-panel';
   panel.setAttribute('aria-label', 'Search filters');
 
-  // Mobile toggle button
   const toggleBtn = document.createElement('button');
   toggleBtn.className = 'filter-toggle';
   toggleBtn.type = 'button';
@@ -63,52 +179,44 @@ function buildFilterPanel(categories, years) {
     const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
     toggleBtn.setAttribute('aria-expanded', String(!expanded));
     inner.classList.toggle('is-open', !expanded);
-    if (!expanded) {
-      const firstControl = inner.querySelector('button, select, input');
-      if (firstControl) firstControl.focus();
-    }
+    if (!expanded) inner.querySelector('button, select, input')?.focus();
   });
 
-  // Clear filters button — at top
+  // Clear button
   const clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'filter-clear';
-  clearBtn.textContent = 'Clear filters';
+  clearBtn.textContent = 'Clear all filters';
   clearBtn.hidden = true;
   inner.append(clearBtn);
 
-  // ── Content Type ──
+  // Content type
   const typeGroup = document.createElement('div');
   typeGroup.className = 'filter-group';
-
   const typeHeading = document.createElement('h3');
   typeHeading.className = 'filter-heading';
   typeHeading.textContent = 'Content Type';
   typeGroup.append(typeHeading);
 
-  const toggleGroup = document.createElement('div');
-  toggleGroup.className = 'toggle-group';
-  toggleGroup.setAttribute('role', 'group');
-  toggleGroup.setAttribute('aria-label', 'Content type');
+  const typePills = document.createElement('div');
+  typePills.className = 'type-pills';
 
   [['all', 'All'], ['news', 'News'], ['stamps', 'Stamps']].forEach(([val, lbl]) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'type-btn';
+    b.className = `type-btn${val === 'all' ? ' active' : ''}`;
     b.dataset.type = val;
     b.textContent = lbl;
     b.setAttribute('aria-pressed', val === 'all' ? 'true' : 'false');
-    if (val === 'all') b.classList.add('active');
-    toggleGroup.append(b);
+    typePills.append(b);
   });
 
-  typeGroup.append(toggleGroup);
+  typeGroup.append(typePills);
   inner.append(typeGroup);
 
-  // ── Year ──
+  // Year
   const yearGroup = document.createElement('div');
   yearGroup.className = 'filter-group';
-
   const yearLbl = document.createElement('label');
   yearLbl.className = 'filter-heading';
   yearLbl.setAttribute('for', 'search-year-select');
@@ -118,26 +226,22 @@ function buildFilterPanel(categories, years) {
   const yearSel = document.createElement('select');
   yearSel.className = 'year-select';
   yearSel.id = 'search-year-select';
-
   const allYrOpt = document.createElement('option');
   allYrOpt.value = '';
   allYrOpt.textContent = 'All Years';
   yearSel.append(allYrOpt);
-
   years.forEach((yr) => {
     const opt = document.createElement('option');
     opt.value = String(yr);
     opt.textContent = String(yr);
     yearSel.append(opt);
   });
-
   yearGroup.append(yearSel);
   inner.append(yearGroup);
 
-  // ── Category ──
+  // Category
   const catGroup = document.createElement('div');
   catGroup.className = 'filter-group';
-
   const catHeading = document.createElement('h3');
   catHeading.className = 'filter-heading';
   catHeading.textContent = 'Category';
@@ -145,7 +249,6 @@ function buildFilterPanel(categories, years) {
 
   const catList = document.createElement('div');
   catList.className = 'category-list';
-
   categories.forEach((cat) => {
     const lbl = document.createElement('label');
     lbl.className = 'category-item';
@@ -153,12 +256,14 @@ function buildFilterPanel(categories, years) {
     cb.type = 'checkbox';
     cb.value = cat;
     cb.className = 'category-cb';
-    const span = document.createElement('span');
-    span.textContent = cat;
-    lbl.append(cb, span);
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = cat;
+    const countSpan = document.createElement('span');
+    countSpan.className = 'category-count';
+    countSpan.dataset.cat = cat;
+    lbl.append(cb, nameSpan, countSpan);
     catList.append(lbl);
   });
-
   catGroup.append(catList);
   inner.append(catGroup);
 
@@ -166,13 +271,13 @@ function buildFilterPanel(categories, years) {
   return panel;
 }
 
+/* ── Main block decorator ── */
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const source = config.source || '/query-index.json';
-  const placeholderText = config.placeholder || block.textContent.trim() || 'Search the newsroom';
+  const placeholderText = config.placeholder || 'Search the newsroom';
   block.textContent = '';
 
-  // Use <form> with role="search" for proper landmark
   const form = document.createElement('form');
   form.className = 'search-form';
   form.setAttribute('role', 'search');
@@ -182,7 +287,7 @@ export default async function decorate(block) {
   input.type = 'search';
   input.className = 'search-input';
   input.placeholder = placeholderText;
-  input.setAttribute('aria-label', 'Search');
+  input.setAttribute('aria-label', 'Search the Newsroom');
 
   const searchBtn = document.createElement('button');
   searchBtn.type = 'submit';
@@ -199,7 +304,6 @@ export default async function decorate(block) {
   resultsArea.setAttribute('role', 'region');
   resultsArea.setAttribute('aria-label', 'Search results');
 
-  // Live region for result count announcements
   const infoEl = document.createElement('p');
   infoEl.className = 'search-info';
   infoEl.setAttribute('role', 'status');
@@ -207,16 +311,18 @@ export default async function decorate(block) {
   infoEl.setAttribute('aria-atomic', 'true');
   infoEl.hidden = true;
 
+  const chipsEl = document.createElement('div');
   const resultsEl = document.createElement('div');
   resultsEl.className = 'search-results';
+  const paginationEl = document.createElement('div');
 
-  resultsArea.append(infoEl, resultsEl);
+  resultsArea.append(infoEl, chipsEl, resultsEl, paginationEl);
   body.append(resultsArea);
   block.append(form, body);
 
-  // Defer data fetch until first interaction (focus/submit)
-  let dataPromise = null;
+  // ── Lazy data loading ──
   let enrichedData = null;
+  let dataPromise = null;
 
   const ensureData = async () => {
     if (enrichedData) return enrichedData;
@@ -229,12 +335,111 @@ export default async function decorate(block) {
     return enrichedData;
   };
 
+  // ── Filter panel (built once on first interaction) ──
   let filterPanel = null;
   let typeBtns;
   let yearSelect;
   let categoryCbs;
   let clearBtn;
 
+  const getFilters = () => ({
+    activeType: [...(typeBtns || [])].find((b) => b.classList.contains('active'))?.dataset?.type || 'all',
+    selectedYear: yearSelect?.value || '',
+    activeCategories: [...(categoryCbs || [])].filter((cb) => cb.checked).map((cb) => cb.value),
+  });
+
+  // ── Core search: filter → count → chips → paginate → render ──
+  const doSearch = async (page = 1) => {
+    const allData = await ensureData();
+    const query = input.value.trim();
+    const { activeType, selectedYear, activeCategories } = getFilters();
+    const hasQuery = query.length >= 2;
+    const hasFacet = activeCategories.length > 0 || selectedYear || activeType !== 'all';
+
+    // Update clear button visibility
+    if (clearBtn) clearBtn.hidden = !hasQuery && !hasFacet;
+
+    if (!hasQuery && !hasFacet) {
+      infoEl.hidden = true;
+      chipsEl.textContent = '';
+      resultsEl.textContent = '';
+      paginationEl.textContent = '';
+      return;
+    }
+
+    // Filter data
+    let matched = allData.filter((a) => a.title);
+    if (hasQuery) {
+      const q = query.toLowerCase();
+      matched = matched.filter((a) => [a.title, a.description, a.category]
+        .filter(Boolean).join(' ').toLowerCase().includes(q));
+    }
+    if (activeCategories.length > 0) {
+      matched = matched.filter((a) => activeCategories.includes(a.category));
+    }
+    if (selectedYear) matched = matched.filter((a) => a.year === Number(selectedYear));
+    if (activeType === 'news') matched = matched.filter((a) => !a.path.startsWith('/section/'));
+    else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
+
+    // Live category counts (without category filter applied)
+    const counts = computeCounts(allData, { activeType, selectedYear, query: hasQuery ? query : '' });
+    if (categoryCbs) {
+      categoryCbs.forEach((cb) => {
+        const countSpan = cb.closest('.category-item')?.querySelector('.category-count');
+        if (countSpan) {
+          const n = counts[cb.value] || 0;
+          countSpan.textContent = n > 0 ? ` (${n})` : '';
+        }
+      });
+    }
+
+    // Result count announcement
+    const queryLabel = hasQuery ? ` for "${query}"` : '';
+    infoEl.innerHTML = `<strong>${matched.length} result${matched.length !== 1 ? 's' : ''}</strong>${queryLabel}`;
+    infoEl.hidden = false;
+
+    // Active chips
+    chipsEl.textContent = '';
+    const chips = buildChips({ activeType, selectedYear, activeCategories }, (filterType, value) => {
+      if (filterType === 'type') {
+        typeBtns?.forEach((b) => {
+          b.classList.toggle('active', b.dataset.type === 'all');
+          b.setAttribute('aria-pressed', b.dataset.type === 'all' ? 'true' : 'false');
+        });
+      } else if (filterType === 'year' && yearSelect) {
+        yearSelect.value = '';
+      } else if (filterType === 'category') {
+        categoryCbs?.forEach((cb) => { if (cb.value === value) cb.checked = false; });
+      }
+      doSearch(1);
+    });
+    if (chips.children.length > 0) chipsEl.append(chips);
+
+    // Paginate
+    const totalPages = Math.ceil(matched.length / PAGE_SIZE);
+    const safePage = Math.min(Math.max(1, page), totalPages || 1);
+    const pageSlice = matched.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+    resultsEl.textContent = '';
+    if (matched.length === 0) {
+      const noResults = document.createElement('div');
+      noResults.className = 'search-no-results';
+      noResults.innerHTML = '<strong>No results found</strong><p>Try adjusting your filters or search terms.</p>';
+      resultsEl.append(noResults);
+    } else {
+      pageSlice.forEach((a) => resultsEl.append(renderResult(a)));
+    }
+
+    // Pagination
+    paginationEl.textContent = '';
+    const paginationNav = buildPagination(matched.length, safePage, PAGE_SIZE, (p) => {
+      doSearch(p);
+      resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    if (paginationNav) paginationEl.append(paginationNav);
+  };
+
+  // ── Build filter panel once on first interaction ──
   const buildPanel = async () => {
     if (filterPanel) return;
     const data = await ensureData();
@@ -249,67 +454,6 @@ export default async function decorate(block) {
     categoryCbs = filterPanel.querySelectorAll('.category-cb');
     clearBtn = filterPanel.querySelector('.filter-clear');
 
-    const getFilters = () => ({
-      activeType: ([...typeBtns].find((b) => b.classList.contains('active')) || {}).dataset?.type || 'all',
-      selectedYear: yearSelect.value,
-      activeCategories: [...categoryCbs].filter((cb) => cb.checked).map((cb) => cb.value),
-    });
-
-    const updateClearBtn = () => {
-      const { activeType, selectedYear, activeCategories } = getFilters();
-      clearBtn.hidden = activeType === 'all' && !selectedYear && activeCategories.length === 0;
-    };
-
-    const doSearch = async () => {
-      const allData = await ensureData();
-      const query = input.value.trim().toLowerCase();
-      const hasQuery = query.length >= 2;
-      const { activeType, selectedYear, activeCategories } = getFilters();
-      const hasFacet = activeCategories.length > 0 || selectedYear || activeType !== 'all';
-
-      updateClearBtn();
-
-      if (!hasQuery && !hasFacet) {
-        infoEl.hidden = true;
-        resultsEl.textContent = '';
-        return;
-      }
-
-      let matched = allData.filter((a) => a.title);
-
-      if (hasQuery) {
-        matched = matched.filter((a) => [a.title, a.description, a.category]
-          .filter(Boolean).join(' ').toLowerCase()
-          .includes(query));
-      }
-
-      if (activeCategories.length > 0) {
-        matched = matched.filter((a) => activeCategories.includes(a.category));
-      }
-
-      if (selectedYear) {
-        const yr = Number(selectedYear);
-        matched = matched.filter((a) => a.year === yr);
-      }
-
-      if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
-      else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
-
-      resultsEl.textContent = '';
-      const queryLabel = hasQuery ? ` for "${input.value.trim()}"` : '';
-      infoEl.textContent = `${matched.length} result${matched.length !== 1 ? 's' : ''}${queryLabel}`;
-      infoEl.hidden = false;
-
-      if (matched.length === 0) {
-        const noResults = document.createElement('div');
-        noResults.className = 'search-no-results';
-        noResults.innerHTML = '<strong>No results found</strong>Try adjusting your filters or search terms.';
-        resultsEl.append(noResults);
-      } else {
-        matched.slice(0, 20).forEach((a) => resultsEl.append(renderResult(a)));
-      }
-    };
-
     typeBtns.forEach((b) => {
       b.addEventListener('click', () => {
         typeBtns.forEach((other) => {
@@ -318,92 +462,39 @@ export default async function decorate(block) {
         });
         b.classList.add('active');
         b.setAttribute('aria-pressed', 'true');
-        doSearch();
+        doSearch(1);
       });
     });
 
-    yearSelect.addEventListener('change', doSearch);
-    categoryCbs.forEach((cb) => cb.addEventListener('change', doSearch));
+    yearSelect.addEventListener('change', () => doSearch(1));
+    categoryCbs.forEach((cb) => cb.addEventListener('change', () => doSearch(1)));
 
     clearBtn.addEventListener('click', () => {
+      input.value = '';
       typeBtns.forEach((b) => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-        if (b.dataset.type === 'all') {
-          b.classList.add('active');
-          b.setAttribute('aria-pressed', 'true');
-        }
+        b.classList.toggle('active', b.dataset.type === 'all');
+        b.setAttribute('aria-pressed', b.dataset.type === 'all' ? 'true' : 'false');
       });
       yearSelect.value = '';
       categoryCbs.forEach((cb) => { cb.checked = false; });
-      doSearch();
+      doSearch(1);
     });
-
-    // If URL param already present, run search immediately
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get('q');
-    if (q) {
-      input.value = q;
-      doSearch();
-    }
   };
 
-  // Trigger panel build + search on first focus or form submit
-  input.addEventListener('focus', () => buildPanel(), { once: true });
-
+  // ── Form submit ──
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     await buildPanel();
-    const { activeType, selectedYear, activeCategories } = filterPanel
-      ? {
-        activeType: ([...filterPanel.querySelectorAll('.type-btn')].find((b) => b.classList.contains('active')) || {}).dataset?.type || 'all',
-        selectedYear: filterPanel.querySelector('.year-select')?.value || '',
-        activeCategories: [...filterPanel.querySelectorAll('.category-cb')].filter((cb) => cb.checked).map((cb) => cb.value),
-      }
-      : { activeType: 'all', selectedYear: '', activeCategories: [] };
-
-    const allData = await ensureData();
-    const query = input.value.trim().toLowerCase();
-    const hasQuery = query.length >= 2;
-    const hasFacet = activeCategories.length > 0 || selectedYear || activeType !== 'all';
-
-    if (!hasQuery && !hasFacet) {
-      infoEl.hidden = true;
-      resultsEl.textContent = '';
-      return;
-    }
-
-    let matched = allData.filter((a) => a.title);
-    if (hasQuery) {
-      matched = matched.filter((a) => [a.title, a.description, a.category]
-        .filter(Boolean).join(' ').toLowerCase().includes(query));
-    }
-    if (activeCategories.length > 0) {
-      matched = matched.filter((a) => activeCategories.includes(a.category));
-    }
-    if (selectedYear) matched = matched.filter((a) => a.year === Number(selectedYear));
-    if (activeType === 'news') matched = matched.filter((a) => a.path.startsWith('/archive/'));
-    else if (activeType === 'stamps') matched = matched.filter((a) => a.path.startsWith('/section/'));
-
-    resultsEl.textContent = '';
-    const queryLabel = hasQuery ? ` for "${input.value.trim()}"` : '';
-    infoEl.textContent = `${matched.length} result${matched.length !== 1 ? 's' : ''}${queryLabel}`;
-    infoEl.hidden = false;
-
-    if (matched.length === 0) {
-      const noResults = document.createElement('div');
-      noResults.className = 'search-no-results';
-      noResults.innerHTML = '<strong>No results found</strong>Try adjusting your filters or search terms.';
-      resultsEl.append(noResults);
-    } else {
-      matched.slice(0, 20).forEach((a) => resultsEl.append(renderResult(a)));
-    }
+    doSearch(1);
   });
 
-  // If URL already has ?q= on page load, pre-fetch and search
+  // ── Pre-populate from ?q= on page load ──
   const params = new URLSearchParams(window.location.search);
-  if (params.get('q')) {
-    input.value = params.get('q');
-    buildPanel();
+  const q = params.get('q');
+  if (q) {
+    input.value = q;
+    buildPanel().then(() => doSearch(1));
+  } else {
+    input.addEventListener('focus', () => buildPanel(), { once: true });
   }
 }

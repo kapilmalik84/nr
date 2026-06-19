@@ -1,6 +1,11 @@
+/* Hanken Grotesk — open metric-compatible proxy for AP Type weights 600/800/900 */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap');
+
+/* AP Type — licensed typeface. Family renamed from APTypeProText to match design tokens. */
+
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
   font-style: normal;
   font-weight: 400;
   src: url('/fonts/APTypeProText-Regular.woff2') format('woff2');
@@ -8,7 +13,7 @@
 
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
   font-style: italic;
   font-weight: 400;
   src: url('/fonts/APTypeProText-RegularItalic.woff2') format('woff2');
@@ -16,7 +21,7 @@
 
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
   font-style: normal;
   font-weight: 500;
   src: url('/fonts/APTypeProText-Medium.woff2') format('woff2');
@@ -24,15 +29,24 @@
 
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
   font-style: italic;
   font-weight: 500;
   src: url('/fonts/APTypeProText-MediumItalic.woff2') format('woff2');
 }
 
+/* Weight 600 maps to Medium until licensed 600 file is available */
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/APTypeProText-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "AP Type";
   font-style: normal;
   font-weight: 700;
   src: url('/fonts/APTypeProText-Bold.woff2') format('woff2');
@@ -40,8 +54,18 @@
 
 @font-face {
   font-display: swap;
-  font-family: APTypeProText;
+  font-family: "AP Type";
   font-style: italic;
   font-weight: 700;
   src: url('/fonts/APTypeProText-BoldItalic.woff2') format('woff2');
+}
+
+/* Weights 800/900 map to Bold until licensed heavy files are supplied;
+   Hanken Grotesk in the stack will supply these when AP Type files are swapped in. */
+@font-face {
+  font-display: swap;
+  font-family: "AP Type";
+  font-style: normal;
+  font-weight: 800 900;
+  src: url('/fonts/APTypeProText-Bold.woff2') format('woff2');
 }
