@@ -1,0 +1,126 @@
+/* CTA block — newsletter band
+ * Relies on --ap-* tokens in /styles/styles.css :root */
+
+main .cta-wrapper {
+  padding: 64px var(--sp-lg) 80px;
+}
+
+/* ── Band card ── */
+main .cta {
+  background: var(--ap-red);
+  border-radius: var(--radius-hero);
+  padding: 52px 56px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1264px;
+  margin: 0 auto;
+}
+
+/* ── Text column ── */
+main .cta .cta-text { display: flex; flex-direction: column; }
+
+main .cta .cta-heading {
+  font: 800 32px / 1.1 var(--font-family-heading);
+  letter-spacing: -0.02em;
+  color: var(--ap-white);
+  margin: 0 0 14px;
+}
+
+main .cta .cta-subtitle {
+  font: 400 16.5px / 1.5 var(--font-family-body);
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 440px;
+  margin: 0;
+}
+
+/* ── Form column ── */
+main .cta .cta-form-col { display: flex; align-items: center; }
+
+main .cta .cta-form {
+  display: flex;
+  width: 100%;
+  background: var(--ap-white);
+  border-radius: var(--radius-pill);
+  padding: 6px 6px 6px 22px;
+  align-items: center;
+  gap: 8px;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+main .cta .cta-form:focus-within {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.55);
+}
+
+main .cta .cta-email {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font: 400 15.5px / 1 var(--font-family-body);
+  color: var(--ap-ink);
+  min-width: 0;
+  outline: none;
+  padding: 8px 0;
+}
+
+main .cta .cta-email::placeholder { color: var(--ap-muted); }
+
+main .cta .cta-submit {
+  flex-shrink: 0;
+  border: none;
+  background: var(--ap-ink);
+  color: var(--ap-white);
+  border-radius: var(--radius-pill);
+  padding: 14px 26px;
+  font: 700 15px / 1 var(--font-family-body);
+  cursor: pointer;
+  min-height: 44px;
+  transition: background var(--dur) var(--ease);
+}
+
+main .cta .cta-submit:hover { background: #2C2C38; }
+
+main .cta .cta-submit:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+/* ── Responsive ── */
+@media (width < 900px) {
+  main .cta {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 40px 36px;
+  }
+}
+
+@media (width < 600px) {
+  main .cta-wrapper { padding: 40px var(--sp-sm) 56px; }
+
+  main .cta {
+    padding: 32px 24px;
+    border-radius: var(--radius-card);
+  }
+
+  main .cta .cta-heading { font-size: 26px; }
+
+  main .cta .cta-form {
+    flex-direction: column;
+    border-radius: var(--radius-card);
+    padding: 16px;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  main .cta .cta-email {
+    border-bottom: 1px solid var(--ap-hairline);
+    padding-bottom: 12px;
+  }
+
+  main .cta .cta-submit { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main .cta .cta-form { transition: none; }
+}

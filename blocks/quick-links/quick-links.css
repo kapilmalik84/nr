@@ -1,16 +1,19 @@
+/* Quick-links block — red text-link rail
+ * Relies on --ap-* tokens in /styles/styles.css :root */
+
 main .quick-links .links-panel {
-  background: var(--neutral-0, #fff);
-  border: 1px solid var(--neutral-300, #eee);
-  border-radius: var(--radius-m, 8px);
-  padding: 1.5rem 1.5rem 0;
+  background: var(--ap-white);
+  border: 1px solid var(--ap-hairline);
+  border-radius: var(--radius-card);
+  padding: var(--sp-md);
 }
 
 main .quick-links .links-title {
-  margin: 0 0 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--neutral-300, #eee);
-  color: var(--ink-900, #0d0d10);
-  font-size: var(--heading-font-size-m, 1.25rem);
+  font: 700 15px / 1 var(--font-family-heading);
+  color: var(--ap-ink);
+  margin: 0 0 var(--sp-sm);
+  padding-bottom: var(--sp-sm);
+  border-bottom: 1px solid var(--ap-hairline);
 }
 
 main .quick-links .links-list {
@@ -20,7 +23,7 @@ main .quick-links .links-list {
 }
 
 main .quick-links .links-list li {
-  border-bottom: 1px solid var(--neutral-300, #eee);
+  border-bottom: 1px solid var(--ap-hairline);
 }
 
 main .quick-links .links-list li:last-child {
@@ -31,29 +34,34 @@ main .quick-links .links-list a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
-  color: var(--ink-700, #212129);
-  font-weight: 400;
-  font-size: var(--body-font-size-m, 1rem);
+  padding: 12px 0;
+  color: var(--ap-red);
+  font: 600 14.5px / 1 var(--font-family-body);
   text-decoration: none;
-  transition: color 0.2s;
+  gap: 12px;
+  transition: color var(--dur) var(--ease);
 }
 
 main .quick-links .links-list a:hover {
-  color: var(--auspost-red-500, #dc1928);
+  color: var(--ap-red-700);
 }
 
 main .quick-links .links-list a::after {
-  content: '›';
-  font-size: 1.5rem;
-  color: var(--neutral-500, #919194);
+  content: '→';
+  font-weight: 700;
   flex-shrink: 0;
-  margin-left: 1rem;
+  transition: transform var(--dur) var(--ease);
 }
 
-main .quick-links .links-list .link-ext {
-  font-size: 0.75rem;
-  margin-left: 0.25rem;
-  opacity: 0.55;
-  vertical-align: super;
+main .quick-links .links-list a:hover::after {
+  transform: translateX(3px);
 }
+
+main .quick-links .links-list a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 4px;
+}
+
+/* Hide visual external indicator — screen reader text still announces new tab */
+main .quick-links .link-ext { display: none; }
