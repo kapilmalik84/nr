@@ -227,9 +227,9 @@ def preview_page(token, da_path):
     path = da_path
     if path.endswith(".html"):
         path = path[:-5]
-    # /foo/index → /foo (no trailing slash; HLX preview API returns 404 for trailing slash)
+    # /foo/index → /foo/ (trailing slash; HLX returns 404 without it for directory URLs)
     if path.endswith("/index"):
-        path = path[:-6]  # remove "/index"
+        path = path[:-5]  # remove "index", keep trailing slash
     if not path:
         path = "/"
     url = HLX_PREVIEW + path
