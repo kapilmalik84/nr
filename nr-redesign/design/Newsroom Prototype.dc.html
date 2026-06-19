@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #fff; font-family: 'Hanken Grotesk', system-ui, sans-serif; color: #15151A; -webkit-font-smoothing: antialiased; }
+  .ap-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .ap-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.13) !important; }
+  .ap-pill { cursor: pointer; transition: background .15s ease, color .15s ease; }
+  button, .ap-card, .ap-pill { outline-offset: 3px; }
+  button:focus-visible, .ap-pill:focus-visible, .ap-card:focus-visible { outline: 3px solid rgba(220,25,40,.4); }
+  @media (prefers-reduced-motion: reduce) { .ap-card { transition: none; } .ap-card:hover { transform: none; } }
+</style>
+</helmet>
+
+<!-- header -->
+<div style="display:flex; align-items:center; gap:30px; padding:18px 56px; border-bottom:1px solid #EEE; max-width:1280px; margin:0 auto;">
+  <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+  <div style="flex:1;"></div>
+  <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span>Photos</span></div>
+  <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+</div>
+
+<!-- hero -->
+<div style="background:#DC1928; padding:56px 56px 96px;">
+  <div style="max-width:1280px; margin:0 auto;">
+    <div style="max-width:760px;">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:7px 15px; font-weight:700; font-size:13px; letter-spacing:0.04em; margin-bottom:22px;">AUSTRALIA POST NEWSROOM</div>
+      <div style="font-size:54px; line-height:1.02; font-weight:900; letter-spacing:-0.025em; color:#fff;">News, media releases<br>and stories from<br>Australia Post</div>
+      <div style="font-size:18px; line-height:1.5; color:rgba(255,255,255,.9); margin-top:20px; max-width:560px;">The latest announcements, community impact and the people behind Australia's largest delivery network.</div>
+    </div>
+  </div>
+</div>
+
+<!-- featured -->
+<div style="max-width:1280px; margin:-56px auto 0; padding:0 56px; position:relative; z-index:2;">
+  <div class="ap-card" style="background:#fff; border-radius:24px; box-shadow:0 14px 40px rgba(0,0,0,.13); overflow:hidden; display:grid; grid-template-columns:1.05fr 1fr; cursor:pointer;">
+    <div style="background:linear-gradient(135deg,#F0A39C,#E8443B); min-height:380px; position:relative;">
+      <div style="position:absolute; left:24px; top:24px; background:#fff; color:#DC1928; border-radius:999px; padding:8px 16px; font-weight:700; font-size:13px;">Featured · Community</div>
+    </div>
+    <div style="padding:46px 48px; display:flex; flex-direction:column; justify-content:center;">
+      <div style="font-size:13px; color:#8A8A92; font-weight:600; margin-bottom:14px;">07 May 2026 · 3 min read</div>
+      <div style="font-size:34px; line-height:1.12; font-weight:800; letter-spacing:-0.02em; margin-bottom:16px;">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</div>
+      <div style="font-size:16.5px; line-height:1.55; color:#55555C; margin-bottom:28px;">Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</div>
+      <button style="align-self:flex-start; border:none; background:#DC1928; color:#fff; border-radius:999px; padding:15px 30px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">Read the story</button>
+    </div>
+  </div>
+</div>
+
+<!-- latest + filter -->
+<div style="max-width:1280px; margin:0 auto; padding:80px 56px 24px;">
+  <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; flex-wrap:wrap;">
+    <div>
+      <div style="font-size:12.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#DC1928; margin-bottom:10px;">Latest news</div>
+      <div style="font-size:34px; font-weight:800; letter-spacing:-0.02em;">Stay across the latest</div>
+    </div>
+    <div role="tablist" aria-label="Filter by category" style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+        <span role="tab" class="ap-pill" tabindex="0" aria-selected="{{ cat.selected }}" onClick="{{ cat.onSelect }}" style="border-radius:999px; padding:9px 17px; font-weight:{{ cat.weight }}; font-size:13.5px; background:{{ cat.bg }}; color:{{ cat.fg }};">{{ cat.name }}</span>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" aria-live="polite">
+    <sc-for list="{{ visibleArticles }}" as="a" hint-placeholder-count="6">
+      <article class="ap-card" tabindex="0" style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08); cursor:pointer;">
+        <div style="height:172px; background:{{ a.image }}; position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">{{ a.category }}</span></div>
+        <div style="padding:20px 22px 24px;">
+          <div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">{{ a.date }}</div>
+          <div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">{{ a.title }}</div>
+          <div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">{{ a.excerpt }}</div>
+          <span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+
+  <div style="display:flex; justify-content:center; margin-top:40px;"><button style="border:1.5px solid #DC1928; background:#fff; color:#DC1928; border-radius:999px; padding:14px 30px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">View all articles</button></div>
+</div>
+
+<!-- newsletter -->
+<div style="max-width:1280px; margin:0 auto; padding:64px 56px 80px;">
+  <div style="background:#DC1928; border-radius:24px; padding:52px 56px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center;">
+    <div>
+      <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:#fff; line-height:1.1;">Get the Newsroom in your inbox</div>
+      <div style="font-size:16.5px; line-height:1.5; color:rgba(255,255,255,.9); margin-top:14px; max-width:440px;">Media releases, community stories and corporate updates — delivered weekly.</div>
+    </div>
+    <div style="display:flex; background:#fff; border-radius:999px; padding:6px 6px 6px 22px; align-items:center;">
+      <span style="flex:1; color:#8A8A92; font-size:15.5px;">your.email@example.com</span>
+      <button style="border:none; background:#15151A; color:#fff; border-radius:999px; padding:14px 26px; font-weight:700; font-size:15px; font-family:inherit; cursor:pointer;">Subscribe</button>
+    </div>
+  </div>
+</div>
+
+<!-- footer -->
+<div style="background:#15151A; color:#fff; padding:56px 56px 0;">
+  <div style="max-width:1280px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:32px; padding-bottom:44px; border-bottom:1px solid #2C2C32;">
+      <div><div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;"><div style="width:30px; height:30px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:15px; display:flex; align-items:center; justify-content:center;">P</div><span style="font-weight:800; font-size:16px;">Australia Post Newsroom</span></div><div style="font-size:14px; line-height:1.55; color:#A8A8B0; max-width:280px;">The official source for Australia Post news, media releases and stories.</div></div>
+      <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Newsroom</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>Latest news</span><span>Media releases</span><span>Topics</span><span>Executive profiles</span></div></div>
+      <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Media centre</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>Media contacts</span><span>Brand assets</span><span>Fast facts</span><span>Image library</span></div></div>
+      <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Australia Post</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>auspost.com.au</span><span>About us</span><span>Careers</span><span>Contact</span></div></div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 0; flex-wrap:wrap; gap:14px;"><div style="font-size:13px; color:#8A8A92;">© 2026 Australia Post. All rights reserved.</div><div style="display:flex; gap:14px;"><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">f</span><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">in</span><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">X</span></div></div>
+  </div>
+  <div style="background:#0E0E12; padding:18px 56px;"><div style="max-width:1280px; margin:0 auto; font-size:12.5px; line-height:1.55; color:#8A8A92;">Australia Post acknowledges the Traditional Custodians of the land on which we operate, live and gather as employees, and recognises their continuing connection to land, water and community. We pay respect to Elders past, present and emerging.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { active: 'All news' };
+
+  allArticles() {
+    return [
+      { title: 'Bluey is back at Australia Post — for real life', category: 'People', date: '06 May 2026', excerpt: 'Dust off your coin purses — Bluey returns with the very first $2 Bluey Dollarbuck coin collection.', image: 'linear-gradient(135deg,#9AC9E8,#5B8FB8)' },
+      { title: 'Australia Post statement regarding fuel surcharge — 1 May 2026', category: 'Corporate', date: '01 May 2026', excerpt: 'Like many businesses, Australia Post regularly reviews and updates its fuel surcharge to recover costs.', image: 'linear-gradient(135deg,#B7B7BD,#7E7E86)' },
+      { title: 'Australia Post taps global AI expertise to supercharge cyber threat detection', category: 'Technology', date: '30 Apr 2026', excerpt: 'Partnering with Alpha Level, a next-generation AI security company, to protect customer data.', image: 'linear-gradient(135deg,#A6D6B8,#5BA47C)' },
+      { title: 'Australia Post invests in Western Sydney with new parcel centre in Blacktown', category: 'Corporate', date: '06 Aug 2025', excerpt: 'A new parcel delivery centre officially opens in Blacktown, strengthening the network.', image: 'linear-gradient(135deg,#C9B79A,#A4895B)' },
+      { title: 'Australia Post announces the 2025 ORIAS Impact Award winners', category: 'Community', date: '25 Jul 2025', excerpt: 'Recognising the standout performers across the Australia Post Online Retail Industry Awards.', image: 'linear-gradient(135deg,#D69AC4,#A45B8E)' },
+      { title: 'A lighter footprint: our electric delivery fleet hits a new milestone', category: 'Sustainability', date: '18 Jul 2025', excerpt: 'More electric vehicles on the road than ever as we work toward a net-zero delivery network.', image: 'linear-gradient(135deg,#9A9AE8,#5B5BA4)' },
+      { title: 'Volunteers help deliver thousands of care parcels this winter', category: 'Community', date: '02 Jun 2025', excerpt: 'Local teams partner with charities to reach vulnerable Australians during the colder months.', image: 'linear-gradient(135deg,#E8B89A,#C47C5B)' },
+      { title: 'Meet the posties going the extra mile in regional Australia', category: 'People', date: '20 May 2025', excerpt: 'The faces behind the deliveries who keep remote communities connected every day.', image: 'linear-gradient(135deg,#9AE8D6,#5BA493)' },
+      { title: 'New solar arrays power five major parcel facilities', category: 'Sustainability', date: '11 May 2025', excerpt: 'Renewable energy now offsets a growing share of our processing footprint nationwide.', image: 'linear-gradient(135deg,#E89A9A,#A45B5B)' }
+    ];
+  }
+
+  renderVals() {
+    const cats = ['All news', 'Corporate', 'Community', 'People', 'Sustainability'];
+    const active = this.state.active;
+    const categories = cats.map(name => {
+      const selected = name === active;
+      return {
+        name,
+        selected: String(selected),
+        bg: selected ? '#DC1928' : '#F4F4F6',
+        fg: selected ? '#ffffff' : '#44444C',
+        weight: selected ? 700 : 600,
+        onSelect: () => this.setState({ active: name })
+      };
+    });
+    const all = this.allArticles();
+    const visibleArticles = active === 'All news' ? all : all.filter(a => a.category === active);
+    return { categories, visibleArticles };
+  }
+}
+</script>
+</body>
+</html>

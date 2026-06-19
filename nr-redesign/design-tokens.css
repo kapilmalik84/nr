@@ -1,0 +1,62 @@
+/* Australia Post Newsroom — design tokens
+ * Paste into /styles/styles.css :root. Names are stable; reference them everywhere.
+ * Swap the font stack for licensed "AP Type" in /styles/fonts.css (Hanken Grotesk is the metric-compatible proxy). */
+
+:root {
+  /* ---- Color ---- */
+  --ap-red:        #DC1928;   /* primary brand */
+  --ap-red-700:    #B0140F;   /* hover / pressed */
+  --ap-red-50:     #FCE9EA;   /* tint surface */
+  --ap-ink:        #15151A;   /* headings, footer bg */
+  --ap-body:       #44444C;   /* body copy */
+  --ap-muted:      #8A8A92;   /* meta, captions */
+  --ap-hairline:   #E6E6EA;   /* borders */
+  --ap-surface:    #F4F4F6;   /* idle pills, section bands */
+  --ap-white:      #FFFFFF;
+
+  /* semantic */
+  --color-background: var(--ap-white);
+  --color-text:       var(--ap-ink);
+  --color-link:       var(--ap-red);
+  --color-link-hover: var(--ap-red-700);
+
+  /* ---- Type ---- */
+  --font-family-body:    "AP Type", "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-family-heading: "AP Type", "Hanken Grotesk", system-ui, sans-serif;
+
+  --fs-display: 64px;  --lh-display: 0.98; --ls-display: -0.03em; --fw-display: 900;
+  --fs-h1:      40px;  --lh-h1:      1.08; --ls-h1:      -0.02em; --fw-h1:      800;
+  --fs-h2:      28px;  --lh-h2:      1.15; --ls-h2:      -0.015em;--fw-h2:      800;
+  --fs-title:   21px;  --lh-title:   1.25; --fw-title:   700;
+  --fs-body:    17px;  --lh-body:    1.6;  --fw-body:    400;
+  --fs-meta:    14px;  --lh-meta:    1.5;
+  --fs-eyebrow: 12.5px;--ls-eyebrow: 0.1em; /* uppercase */ --fw-eyebrow: 700;
+
+  /* ---- Spacing (4px base) ---- */
+  --sp-xs: 8px;
+  --sp-sm: 16px;
+  --sp-md: 24px;
+  --sp-lg: 48px;
+  --sp-section: 88px;
+
+  /* ---- Radius ---- */
+  --radius-input:  8px;
+  --radius-card:   16px;
+  --radius-hero:   24px;
+  --radius-pill:   999px;
+
+  /* ---- Elevation ---- */
+  --shadow-card:    0 1px 3px rgba(0,0,0,.08);
+  --shadow-raised:  0 6px 16px rgba(0,0,0,.10);
+  --shadow-overlay: 0 14px 30px rgba(0,0,0,.14);
+  --shadow-feature: 0 14px 40px rgba(0,0,0,.13);
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(.2,.6,.2,1);
+  --dur:  .18s;
+  --focus-ring: 0 0 0 3px rgba(220,25,40,.40);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0s; }
+}

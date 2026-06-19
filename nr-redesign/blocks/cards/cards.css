@@ -1,0 +1,83 @@
+/* Cards block — Australia Post Newsroom
+ * Relies on tokens declared in /styles/styles.css :root (see handoff/design-tokens.css). */
+
+.cards .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+}
+
+/* ---- Card ---- */
+.cards .card {
+  background: var(--ap-white);
+  border: 1px solid var(--ap-hairline);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.cards .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-raised); }
+.cards .card:focus-within { box-shadow: var(--focus-ring); }
+
+.cards .card-link { text-decoration: none; color: inherit; display: block; }
+
+.cards .card-media { position: relative; aspect-ratio: 16 / 9; background: var(--ap-surface); }
+.cards .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.cards .card-category {
+  position: absolute;
+  inset: 14px auto auto 14px;
+  background: rgba(255, 255, 255, .92);
+  color: var(--ap-red);
+  border-radius: var(--radius-pill);
+  padding: 6px 13px;
+  font: 700 12px/1 var(--font-family-body);
+}
+
+.cards .card-body { padding: 20px 22px 24px; }
+.cards .card-date { margin: 0 0 9px; color: var(--ap-muted); font: 600 12.5px/1 var(--font-family-body); }
+.cards .card-title { margin: 0 0 10px; font: var(--fw-title) 18.5px/1.25 var(--font-family-heading); letter-spacing: -0.01em;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cards .card-excerpt { margin: 0 0 15px; color: var(--ap-body); font: 400 14px/1.5 var(--font-family-body);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cards .card-cta { display: inline-flex; align-items: center; gap: 7px; color: var(--ap-red); font: 700 14px/1 var(--font-family-body); }
+
+/* ---- Category filter ---- */
+.cards.articles .cards-filter { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 28px; }
+.cards .cards-tab {
+  border: 0;
+  background: var(--ap-surface);
+  color: var(--ap-body);
+  border-radius: var(--radius-pill);
+  padding: 9px 17px;
+  font: 600 13.5px/1 var(--font-family-body);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.cards .cards-tab[aria-selected="true"] { background: var(--ap-red); color: var(--ap-white); font-weight: 700; }
+.cards .cards-tab:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.cards .cards-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---- List variant (topic / listing pages) ---- */
+.cards.list .cards-grid { grid-template-columns: 1fr; gap: 0; }
+.cards.list .card { display: grid; grid-template-columns: 200px 1fr; gap: var(--sp-md); align-items: center;
+  border: 0; border-top: 1px solid var(--ap-hairline); border-radius: 0; box-shadow: none; overflow: visible; }
+.cards.list .card:hover { transform: none; box-shadow: none; }
+.cards.list .card-link { display: contents; }
+.cards.list .card-media { border-radius: 14px; overflow: hidden; aspect-ratio: auto; height: 130px; }
+.cards.list .card-title { font-size: 23px; -webkit-line-clamp: 2; }
+.cards.list .card-category { display: none; }
+
+/* ---- Responsive ---- */
+@media (width <= 900px) { .cards .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (width <= 600px) {
+  .cards .cards-grid { grid-template-columns: 1fr; }
+  .cards.list .card { grid-template-columns: 1fr; }
+  .cards.list .card-media { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cards .card { transition: none; }
+  .cards .card:hover { transform: none; }
+}

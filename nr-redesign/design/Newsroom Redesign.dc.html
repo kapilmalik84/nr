@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #ECECEE; font-family: 'Hanken Grotesk', system-ui, sans-serif; color: #15151A; -webkit-font-smoothing: antialiased; }
+  ::selection { background: #DC1928; color: #fff; }
+</style>
+</helmet>
+
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 36px 140px;">
+
+  <!-- ============================ COVER ============================ -->
+  <div data-sec style="padding: 84px 0 64px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:0.18em; text-transform:uppercase; color:#DC1928; font-weight:600; margin-bottom:22px;">Australia Post · Design Handoff · v1.0</div>
+    <h1 style="font-size:72px; line-height:0.98; font-weight:900; letter-spacing:-0.03em; margin:0 0 24px; max-width:900px;">Newsroom<br><span style="color:#DC1928;">Redesign</span> system</h1>
+    <p style="font-size:21px; line-height:1.5; color:#44444C; max-width:680px; margin:0 0 40px;">A complete visual + structural rebuild of the AEM Edge Delivery Newsroom, realigned to the modern auspost.com.au design language — built to be read and implemented directly by Claude Code, block by block.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">Design tokens</span>
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">Component library</span>
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">Hi-fi page mockups</span>
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">EDS block inventory</span>
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">Redline annotations</span>
+      <span style="font-size:13.5px; background:#fff; border:1px solid #E2E2E6; color:#15151A; padding:9px 16px; border-radius:999px; font-weight:600;">WCAG 2.1 AA</span>
+    </div>
+  </div>
+
+  <!-- contents -->
+  <div data-sec style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:96px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">01</div><div style="font-weight:700; font-size:16px;">Analysis</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Current state vs reference language</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">02</div><div style="font-weight:700; font-size:16px;">Design tokens</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Color · type · spacing · radius</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">03</div><div style="font-weight:700; font-size:16px;">Components</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Buttons · cards · nav · footer</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">04</div><div style="font-weight:700; font-size:16px;">Page mockups</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Home · article · listing</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">05</div><div style="font-weight:700; font-size:16px;">EDS block inventory</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Current block → new design</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:22px 24px;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#DC1928; font-weight:600; margin-bottom:8px;">06</div><div style="font-weight:700; font-size:16px;">Redlines &amp; A11y</div><div style="font-size:13.5px; color:#7A7A82; margin-top:3px;">Spacing specs · WCAG AA</div></div>
+  </div>
+
+  <!-- ============================ 01 ANALYSIS ============================ -->
+  <div data-sec id="analysis"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">01 — ANALYSIS</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">Where the Newsroom stands today</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:740px; margin:0 0 36px;">The Newsroom is functionally complete but visually disconnected from the flagship auspost.com.au experience. It reads as a default AEM EDS theme rather than an Australia Post property. Five gaps drive the redesign.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:36px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><span style="width:24px; height:24px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center;">1</span><span style="font-weight:700; font-size:16.5px;">No brand expression</span></div>
+      <div style="font-size:14.5px; line-height:1.55; color:#55555C;">Flat white header, system-default type rhythm, and a thin red band that doesn't carry the confident red-hero identity of the main site. The logo lockup and "Newsroom" wordmark feel bolted on.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><span style="width:24px; height:24px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center;">2</span><span style="font-weight:700; font-size:16.5px;">Broken / empty blocks</span></div>
+      <div style="font-size:14.5px; line-height:1.55; color:#55555C;">A stray red "Read more" panel sits with no heading or context, and the EDS edit toolbar bleeds into the hero. Content hierarchy collapses below the fold.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><span style="width:24px; height:24px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center;">3</span><span style="font-weight:700; font-size:16.5px;">Weak article system</span></div>
+      <div style="font-size:14.5px; line-height:1.55; color:#55555C;">The "Latest" grid has no category filtering, inconsistent card heights, and a meta line (date · category) that's hard to scan. No featured-story treatment beyond the lead.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><span style="width:24px; height:24px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center;">4</span><span style="font-weight:700; font-size:16.5px;">Inconsistent components</span></div>
+      <div style="font-size:14.5px; line-height:1.55; color:#55555C;">Buttons, radii, and link styles vary between sections. "Quick links" uses chevron rows while other lists use arrows — no single component vocabulary.</div>
+    </div>
+  </div>
+
+  <div style="background:#15151A; color:#fff; border-radius:18px; padding:30px 34px; margin-bottom:96px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:#9A9AA2; font-weight:600; margin-bottom:16px;">What the reference gives us</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+      <div><div style="font-weight:700; font-size:16px; margin-bottom:6px; color:#fff;">Confident red hero</div><div style="font-size:14px; line-height:1.5; color:#C8C8CE;">A full-bleed red field with an overlapping rounded white card — instantly "Australia Post".</div></div>
+      <div><div style="font-weight:700; font-size:16px; margin-bottom:6px; color:#fff;">Pill geometry</div><div style="font-size:14px; line-height:1.5; color:#C8C8CE;">Fully-rounded buttons, large-radius cards, soft shadows, generous whitespace.</div></div>
+      <div><div style="font-weight:700; font-size:16px; margin-bottom:6px; color:#fff;">Editorial cards</div><div style="font-size:14px; line-height:1.5; color:#C8C8CE;">Photo-led tiles with arrow affordances and a clear category → headline → action rhythm.</div></div>
+    </div>
+  </div>
+
+  <!-- ============================ 02 TOKENS ============================ -->
+  <div data-sec id="tokens"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">02 — DESIGN TOKENS</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">The foundation</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:740px; margin:0 0 36px;">Every value below is a literal token. Names map 1:1 to CSS custom properties Claude Code can drop into <span style="font-family:'JetBrains Mono',monospace; font-size:15px;">styles.css</span> in the EDS project root.</p>
+
+  <!-- COLOR -->
+  <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:16px;">Color</div>
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:88px; background:#DC1928;"></div><div style="padding:14px 16px;"><div style="font-weight:700; font-size:14.5px;">Brand Red</div><div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A7A82; margin-top:2px;">--ap-red · #DC1928</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:88px; background:#B0140F;"></div><div style="padding:14px 16px;"><div style="font-weight:700; font-size:14.5px;">Red Hover</div><div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A7A82; margin-top:2px;">--ap-red-700 · #B0140F</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:88px; background:#FCE9EA;"></div><div style="padding:14px 16px;"><div style="font-weight:700; font-size:14.5px;">Red Tint</div><div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A7A82; margin-top:2px;">--ap-red-50 · #FCE9EA</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:88px; background:#15151A;"></div><div style="padding:14px 16px;"><div style="font-weight:700; font-size:14.5px;">Ink</div><div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A7A82; margin-top:2px;">--ap-ink · #15151A</div></div></div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:48px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#44444C;"></div><div style="padding:12px 14px;"><div style="font-weight:700; font-size:13.5px;">Body</div><div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7A7A82;">#44444C</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#8A8A92;"></div><div style="padding:12px 14px;"><div style="font-weight:700; font-size:13.5px;">Muted</div><div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7A7A82;">#8A8A92</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#E6E6EA;"></div><div style="padding:12px 14px;"><div style="font-weight:700; font-size:13.5px;">Hairline</div><div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7A7A82;">#E6E6EA</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#F4F4F6;"></div><div style="padding:12px 14px;"><div style="font-weight:700; font-size:13.5px;">Surface</div><div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7A7A82;">#F4F4F6</div></div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#fff; box-shadow:inset 0 0 0 1px #EEE;"></div><div style="padding:12px 14px;"><div style="font-weight:700; font-size:13.5px;">White</div><div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7A7A82;">#FFFFFF</div></div></div>
+  </div>
+
+  <!-- TYPE -->
+  <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:16px;">Typography — Hanken Grotesk</div>
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:34px 36px; margin-bottom:14px;">
+    <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:20px; border-bottom:1px solid #EEE; flex-wrap:wrap;"><span style="font-size:64px; font-weight:900; letter-spacing:-0.03em; line-height:1;">Display</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">64 / 900 / -3% · --fs-display</span></div>
+    <div style="display:flex; align-items:baseline; gap:18px; padding:20px 0; border-bottom:1px solid #EEE; flex-wrap:wrap;"><span style="font-size:40px; font-weight:800; letter-spacing:-0.02em; line-height:1;">Heading 1</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">40 / 800 / -2% · --fs-h1</span></div>
+    <div style="display:flex; align-items:baseline; gap:18px; padding:20px 0; border-bottom:1px solid #EEE; flex-wrap:wrap;"><span style="font-size:28px; font-weight:800; letter-spacing:-0.015em; line-height:1;">Heading 2</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">28 / 800 · --fs-h2</span></div>
+    <div style="display:flex; align-items:baseline; gap:18px; padding:20px 0; border-bottom:1px solid #EEE; flex-wrap:wrap;"><span style="font-size:21px; font-weight:700; line-height:1;">Card title</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">21 / 700 · --fs-title</span></div>
+    <div style="display:flex; align-items:baseline; gap:18px; padding:20px 0; border-bottom:1px solid #EEE; flex-wrap:wrap;"><span style="font-size:17px; font-weight:400; line-height:1;">Body copy — the quick brown fox jumps over the lazy dog.</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">17 / 400 / 1.6 · --fs-body</span></div>
+    <div style="display:flex; align-items:baseline; gap:18px; padding-top:20px; flex-wrap:wrap;"><span style="font-size:12.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#DC1928;">Eyebrow / category</span><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92;">12.5 / 700 / +10% caps · --fs-eyebrow</span></div>
+  </div>
+  <p style="font-size:14px; color:#7A7A82; margin:0 0 48px; max-width:740px;">Hanken Grotesk is the open-source proxy used in this handoff. Swap the @font-face for the licensed <strong>AP Type</strong> at build; the scale and weights are metric-compatible.</p>
+
+  <!-- SPACING / RADIUS / SHADOW -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:96px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:18px;">Spacing · 4px base</div>
+      <div style="display:flex; flex-direction:column; gap:11px;">
+        <div style="display:flex; align-items:center; gap:12px;"><div style="height:14px; width:8px; background:#DC1928; border-radius:2px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">8 · xs</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="height:14px; width:16px; background:#DC1928; border-radius:2px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">16 · sm</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="height:14px; width:24px; background:#DC1928; border-radius:2px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">24 · md</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="height:14px; width:48px; background:#DC1928; border-radius:2px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">48 · lg</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="height:14px; width:88px; background:#DC1928; border-radius:2px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">88 · section</span></div>
+      </div>
+    </div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:18px;">Radius</div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; align-items:center; gap:12px;"><div style="width:44px; height:34px; background:#F4F4F6; border:1.5px solid #DC1928; border-radius:8px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">8 · inputs</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="width:44px; height:34px; background:#F4F4F6; border:1.5px solid #DC1928; border-radius:16px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">16 · cards</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="width:44px; height:34px; background:#F4F4F6; border:1.5px solid #DC1928; border-radius:24px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">24 · hero card</span></div>
+        <div style="display:flex; align-items:center; gap:12px;"><div style="width:44px; height:34px; background:#F4F4F6; border:1.5px solid #DC1928; border-radius:999px;"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#55555C;">999 · pills/buttons</span></div>
+      </div>
+    </div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:16px; padding:24px 26px;">
+      <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:18px;">Elevation</div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; align-items:center; gap:14px;"><div style="width:50px; height:36px; background:#fff; border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,.08);"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#55555C;">card · 0 1 3 /.08</span></div>
+        <div style="display:flex; align-items:center; gap:14px;"><div style="width:50px; height:36px; background:#fff; border-radius:10px; box-shadow:0 6px 16px rgba(0,0,0,.10);"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#55555C;">raised · 0 6 16 /.10</span></div>
+        <div style="display:flex; align-items:center; gap:14px;"><div style="width:50px; height:36px; background:#fff; border-radius:10px; box-shadow:0 14px 30px rgba(0,0,0,.14);"></div><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#55555C;">overlay · 0 14 30 /.14</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ 03 COMPONENTS ============================ -->
+  <div data-sec id="components"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">03 — COMPONENTS</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">Core library</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:740px; margin:0 0 36px;">Each component maps to an EDS block or a global element. These are the live building blocks used in the mockups that follow.</p>
+
+  <!-- buttons -->
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:30px 32px; margin-bottom:16px;">
+    <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:20px;">Buttons &amp; links</div>
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <button style="border:none; background:#DC1928; color:#fff; border-radius:999px; padding:14px 28px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">Read more</button>
+      <button style="border:1.5px solid #DC1928; background:#fff; color:#DC1928; border-radius:999px; padding:12.5px 26px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">View all articles</button>
+      <button style="border:1.5px solid #DCDCE2; background:#fff; color:#15151A; border-radius:999px; padding:12.5px 26px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">Secondary</button>
+      <span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:15.5px; cursor:pointer;">Text link <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92; margin-top:18px;">Primary = solid red pill · Secondary = outline · Tertiary = red text + arrow. Min height 44px, focus ring 3px rgba(220,25,40,.35).</div>
+  </div>
+
+  <!-- pills/tags -->
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:30px 32px; margin-bottom:16px;">
+    <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:20px;">Category pills &amp; tags</div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="background:#DC1928; color:#fff; border-radius:999px; padding:8px 16px; font-weight:700; font-size:13.5px;">All news</span>
+      <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:8px 16px; font-weight:600; font-size:13.5px;">Corporate</span>
+      <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:8px 16px; font-weight:600; font-size:13.5px;">Community</span>
+      <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:8px 16px; font-weight:600; font-size:13.5px;">People</span>
+      <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:8px 16px; font-weight:600; font-size:13.5px;">Sustainability</span>
+      <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid #F2C0C4; color:#DC1928; background:#FCF2F3; border-radius:6px; padding:5px 10px; font-weight:700; font-size:12px; letter-spacing:0.04em; text-transform:uppercase;">Media release</span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#8A8A92; margin-top:18px;">Selected pill = solid red · idle = surface gray. Inline tags use the small squared style.</div>
+  </div>
+
+  <!-- article card anatomy -->
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:30px 32px; margin-bottom:96px;">
+    <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:22px;">Article card — anatomy</div>
+    <div style="display:flex; gap:36px; flex-wrap:wrap; align-items:flex-start;">
+      <div style="flex:0 0 320px; max-width:320px;">
+        <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+          <div style="height:180px; background:linear-gradient(135deg,#E8443B,#DC1928); position:relative;">
+            <div style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Community</div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.55); font-size:13px; font-family:'JetBrains Mono',monospace;">16:9 photo</div>
+          </div>
+          <div style="padding:20px 22px 24px;">
+            <div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">07 May 2026</div>
+            <div style="font-size:19px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Australia Post to deliver its 25 millionth Connection Postcard</div>
+            <div style="font-size:14.5px; line-height:1.5; color:#55555C; margin-bottom:16px;">Four million prepaid postcards reach letterboxes as research reveals loneliness affects one in three.</div>
+            <span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14.5px;">Read more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1; min-width:280px; padding-top:6px;">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; gap:12px; align-items:flex-start;"><span style="flex:0 0 26px; height:26px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center;">A</span><div><div style="font-weight:700; font-size:15px;">16:9 media, category pill overlay</div><div style="font-size:14px; color:#55555C; line-height:1.5;">Photo fills the top; category pill floats top-left. Falls back to a red gradient when no image is authored.</div></div></div>
+          <div style="display:flex; gap:12px; align-items:flex-start;"><span style="flex:0 0 26px; height:26px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center;">B</span><div><div style="font-weight:700; font-size:15px;">Date meta + headline</div><div style="font-size:14px; color:#55555C; line-height:1.5;">Muted date above a 2-line clamped headline. Title is the primary tap target (whole card is clickable).</div></div></div>
+          <div style="display:flex; gap:12px; align-items:flex-start;"><span style="flex:0 0 26px; height:26px; border-radius:50%; background:#FCE9EA; color:#DC1928; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center;">C</span><div><div style="font-weight:700; font-size:15px;">Excerpt + Read more affordance</div><div style="font-size:14px; color:#55555C; line-height:1.5;">3-line excerpt then the red text+arrow link. Card lifts on hover (translateY -4px, raised shadow).</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ 04 PAGE MOCKUPS ============================ -->
+  <div data-sec id="mockups"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">04 — PAGE MOCKUPS</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">The redesigned Newsroom</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:740px; margin:0 0 22px;">High-fidelity, full-width compositions at 1280px covering every page type on the live site. Photography is shown as placeholders — author real AP imagery in the EDS document. An interactive version of the homepage ships alongside this doc.</p>
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">A · Home</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">B · Article (News detail)</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">C · News / topic listing</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">D · Search (faceted)</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">E · Stamps landing</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">F · Video gallery</span>
+    <span style="font-size:13px; background:#fff; border:1px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600;">G · Photos / media library</span>
+  </div>
+
+  <!-- ====== HOMEPAGE MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">A</span> Homepage — newsroom landing</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <!-- browser chrome -->
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au</div>
+    </div>
+
+    <!-- ===== the page ===== -->
+    <div style="background:#fff;">
+
+      <!-- header -->
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+
+      <!-- red hero with overlapping white card -->
+      <div style="background:#DC1928; padding:56px 44px 96px; position:relative;">
+        <div style="max-width:760px;">
+          <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:7px 15px; font-weight:700; font-size:13px; letter-spacing:0.04em; margin-bottom:22px;">AUSTRALIA POST NEWSROOM</div>
+          <div style="font-size:54px; line-height:1.02; font-weight:900; letter-spacing:-0.025em; color:#fff;">News, media releases<br>and stories from<br>Australia Post</div>
+          <div style="font-size:18px; line-height:1.5; color:rgba(255,255,255,.9); margin-top:20px; max-width:560px;">The latest announcements, community impact and the people behind Australia's largest delivery network.</div>
+        </div>
+      </div>
+
+      <!-- featured lead story — overlapping card -->
+      <div style="padding:0 44px; margin-top:-56px; position:relative; z-index:2;">
+        <div style="background:#fff; border-radius:24px; box-shadow:0 14px 40px rgba(0,0,0,.13); overflow:hidden; display:grid; grid-template-columns:1.05fr 1fr;">
+          <div style="background:linear-gradient(135deg,#F0A39C,#E8443B); min-height:380px; position:relative;">
+            <div style="position:absolute; left:24px; top:24px; background:#fff; color:#DC1928; border-radius:999px; padding:8px 16px; font-weight:700; font-size:13px;">Featured · Community</div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.6); font-family:'JetBrains Mono',monospace; font-size:13px;">Lead story photo</div>
+          </div>
+          <div style="padding:46px 48px; display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:13px; color:#8A8A92; font-weight:600; margin-bottom:14px;">07 May 2026 · 3 min read</div>
+            <div style="font-size:34px; line-height:1.12; font-weight:800; letter-spacing:-0.02em; margin-bottom:16px;">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</div>
+            <div style="font-size:16.5px; line-height:1.55; color:#55555C; margin-bottom:28px;">Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</div>
+            <button style="align-self:flex-start; border:none; background:#DC1928; color:#fff; border-radius:999px; padding:15px 30px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">Read the story</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- latest + filter -->
+      <div style="padding:80px 44px 24px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:12.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#DC1928; margin-bottom:10px;">Latest news</div>
+            <div style="font-size:34px; font-weight:800; letter-spacing:-0.02em;">Stay across the latest</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
+            <span style="background:#DC1928; color:#fff; border-radius:999px; padding:9px 17px; font-weight:700; font-size:13.5px;">All news</span>
+            <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Corporate</span>
+            <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Community</span>
+            <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">People</span>
+            <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Sustainability</span>
+          </div>
+        </div>
+
+        <!-- grid -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+          <!-- card -->
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">People</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">06 May 2026</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Bluey is back at Australia Post — for real life</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">Dust off your coin purses — Bluey returns with the very first $2 Bluey Dollarbuck coin collection.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#B7B7BD,#7E7E86); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Corporate</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">01 May 2026</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Australia Post statement regarding fuel surcharge — 1 May 2026</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">Like many businesses, Australia Post regularly reviews and updates its fuel surcharge to recover costs.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#A6D6B8,#5BA47C); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Technology</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">30 Apr 2026</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Australia Post taps global AI expertise to supercharge cyber threat detection</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">Partnering with Alpha Level, a next-generation AI security company, to protect customer data.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#C9B79A,#A4895B); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Corporate</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">06 Aug 2025</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Australia Post invests in Western Sydney with new parcel centre in Blacktown</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">A new parcel delivery centre officially opens in Blacktown, strengthening the network.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#D69AC4,#A45B8E); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Community</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">25 Jul 2025</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">Australia Post announces the 2025 ORIAS Impact Award winners</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">Recognising the standout performers across the Australia Post Online Retail Industry Awards.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+          <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);">
+            <div style="height:172px; background:linear-gradient(135deg,#9A9AE8,#5B5BA4); position:relative;"><span style="position:absolute; left:14px; top:14px; background:rgba(255,255,255,.92); color:#DC1928; border-radius:999px; padding:6px 13px; font-weight:700; font-size:12px;">Sustainability</span></div>
+            <div style="padding:20px 22px 24px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:9px;">18 Jul 2025</div><div style="font-size:18.5px; font-weight:700; line-height:1.25; letter-spacing:-0.01em; margin-bottom:10px;">A lighter footprint: our electric delivery fleet hits a new milestone</div><div style="font-size:14px; line-height:1.5; color:#55555C; margin-bottom:15px;">More electric vehicles on the road than ever as we work toward a net-zero delivery network.</div><span style="display:inline-flex; align-items:center; gap:7px; color:#DC1928; font-weight:700; font-size:14px;">Read more <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; margin-top:40px;"><button style="border:1.5px solid #DC1928; background:#fff; color:#DC1928; border-radius:999px; padding:14px 30px; font-weight:700; font-size:15.5px; font-family:inherit; cursor:pointer;">View all articles</button></div>
+      </div>
+
+      <!-- newsletter CTA band -->
+      <div style="padding:64px 44px 80px;">
+        <div style="background:#DC1928; border-radius:24px; padding:52px 56px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center;">
+          <div>
+            <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:#fff; line-height:1.1;">Get the Newsroom in your inbox</div>
+            <div style="font-size:16.5px; line-height:1.5; color:rgba(255,255,255,.9); margin-top:14px; max-width:440px;">Media releases, community stories and corporate updates — delivered weekly.</div>
+          </div>
+          <div style="display:flex; background:#fff; border-radius:999px; padding:6px 6px 6px 22px; align-items:center;">
+            <span style="flex:1; color:#8A8A92; font-size:15.5px;">your.email@example.com</span>
+            <button style="border:none; background:#15151A; color:#fff; border-radius:999px; padding:14px 26px; font-weight:700; font-size:15px; font-family:inherit; cursor:pointer;">Subscribe</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <div style="background:#15151A; color:#fff; padding:56px 44px 0;">
+        <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:32px; padding-bottom:44px; border-bottom:1px solid #2C2C32;">
+          <div><div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;"><div style="width:30px; height:30px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:15px; display:flex; align-items:center; justify-content:center;">P</div><span style="font-weight:800; font-size:16px;">Australia Post Newsroom</span></div><div style="font-size:14px; line-height:1.55; color:#A8A8B0; max-width:280px;">The official source for Australia Post news, media releases and stories.</div></div>
+          <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Newsroom</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>Latest news</span><span>Media releases</span><span>Topics</span><span>Executive profiles</span></div></div>
+          <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Media centre</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>Media contacts</span><span>Brand assets</span><span>Fast facts</span><span>Image library</span></div></div>
+          <div><div style="font-weight:700; font-size:14px; margin-bottom:14px;">Australia Post</div><div style="display:flex; flex-direction:column; gap:10px; font-size:14px; color:#A8A8B0;"><span>auspost.com.au</span><span>About us</span><span>Careers</span><span>Contact</span></div></div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 0; flex-wrap:wrap; gap:14px;"><div style="font-size:13px; color:#8A8A92;">© 2026 Australia Post. All rights reserved.</div><div style="display:flex; gap:14px;"><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">f</span><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">in</span><span style="width:34px; height:34px; border-radius:50%; background:#2C2C32; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">X</span></div></div>
+        <div style="background:#0E0E12; margin:0 -44px; padding:18px 44px; font-size:12.5px; line-height:1.55; color:#8A8A92;">Australia Post acknowledges the Traditional Custodians of the land on which we operate, live and gather as employees, and recognises their continuing connection to land, water and community. We pay respect to Elders past, present and emerging.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== ARTICLE DETAIL MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">B</span> Article detail page</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/connection-postcard-25-million</div>
+    </div>
+    <div style="background:#fff;">
+      <!-- header (reused) -->
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+
+      <!-- article header -->
+      <div style="max-width:760px; margin:0 auto; padding:48px 44px 0;">
+        <div style="display:flex; align-items:center; gap:10px; font-size:13.5px; color:#8A8A92; margin-bottom:22px;"><span style="color:#DC1928; font-weight:700;">Newsroom</span><span>›</span><span style="color:#DC1928; font-weight:700;">Community</span></div>
+        <div style="display:flex; gap:10px; margin-bottom:20px;"><span style="background:#DC1928; color:#fff; border-radius:999px; padding:7px 15px; font-weight:700; font-size:13px;">Community</span><span style="display:inline-flex; align-items:center; gap:6px; border:1px solid #F2C0C4; color:#DC1928; background:#FCF2F3; border-radius:6px; padding:6px 11px; font-weight:700; font-size:12px; letter-spacing:0.04em; text-transform:uppercase;">Media release</span></div>
+        <h1 style="font-size:44px; line-height:1.08; font-weight:800; letter-spacing:-0.025em; margin:0 0 20px;">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</h1>
+        <div style="display:flex; align-items:center; gap:16px; padding-bottom:32px; border-bottom:1px solid #EEE;">
+          <div style="width:44px; height:44px; border-radius:50%; background:#F4F4F6;"></div>
+          <div style="flex:1;"><div style="font-weight:700; font-size:14.5px;">Australia Post Media Team</div><div style="font-size:13.5px; color:#8A8A92;">07 May 2026 · 3 min read</div></div>
+          <div style="display:flex; gap:8px;"><span style="width:38px; height:38px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center; font-size:13px; color:#55555C; font-weight:700;">in</span><span style="width:38px; height:38px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center; font-size:13px; color:#55555C; font-weight:700;">X</span><span style="width:38px; height:38px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#55555C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"/><polyline points="8 7 12 3 16 7"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span></div>
+        </div>
+      </div>
+
+      <!-- hero image -->
+      <div style="max-width:1000px; margin:32px auto 0; padding:0 44px;">
+        <div style="height:440px; border-radius:20px; background:linear-gradient(135deg,#F0A39C,#DC1928); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.6); font-family:'JetBrains Mono',monospace; font-size:13px;">Article hero image · 16:9</div>
+      </div>
+
+      <!-- body -->
+      <div style="max-width:720px; margin:0 auto; padding:44px 44px 0;">
+        <p style="font-size:21px; line-height:1.55; font-weight:500; color:#2A2A30; margin:0 0 28px;">Four million prepaid Connection Postcards are being delivered to letterboxes across the country, as research reveals loneliness is causing distress for one in three Australians.</p>
+        <p style="font-size:17.5px; line-height:1.7; color:#33333A; margin:0 0 22px;">As Beyond Blue celebrates 25 years of supporting Australians' mental health, Australia Post is helping spread connection the analogue way — through the simple act of sending a card to someone you care about.</p>
+        <p style="font-size:17.5px; line-height:1.7; color:#33333A; margin:0 0 22px;">The Connection Postcards are available free at participating Post Offices and can be sent anywhere in Australia at no cost, removing every barrier to reaching out.</p>
+        <blockquote style="margin:32px 0; padding:8px 0 8px 26px; border-left:4px solid #DC1928;"><div style="font-size:23px; line-height:1.4; font-weight:700; letter-spacing:-0.01em; color:#15151A;">"A handwritten note can be the moment that reminds someone they're not alone."</div></blockquote>
+        <p style="font-size:17.5px; line-height:1.7; color:#33333A; margin:0 0 22px;">Since the program launched, more than 24 million postcards have travelled across the country — and the 25 millionth marks a milestone in one of the nation's largest community wellbeing initiatives.</p>
+      </div>
+
+      <!-- related -->
+      <div style="padding:64px 44px 80px; margin-top:48px; background:#F4F4F6;">
+        <div style="max-width:1080px; margin:0 auto;">
+          <div style="font-size:26px; font-weight:800; letter-spacing:-0.02em; margin-bottom:24px;">Related stories</div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
+            <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden;"><div style="height:150px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8);"></div><div style="padding:18px 20px 22px;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:8px;">06 May 2026 · People</div><div style="font-size:17px; font-weight:700; line-height:1.25;">Bluey is back at Australia Post — for real life</div></div></div>
+            <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden;"><div style="height:150px; background:linear-gradient(135deg,#A6D6B8,#5BA47C);"></div><div style="padding:18px 20px 22px;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:8px;">30 Apr 2026 · Technology</div><div style="font-size:17px; font-weight:700; line-height:1.25;">Tapping global AI expertise for cyber threat detection</div></div></div>
+            <div style="background:#fff; border:1px solid #EAEAEE; border-radius:16px; overflow:hidden;"><div style="height:150px; background:linear-gradient(135deg,#9A9AE8,#5B5BA4);"></div><div style="padding:18px 20px 22px;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:8px;">18 Jul 2025 · Sustainability</div><div style="font-size:17px; font-weight:700; line-height:1.25;">Electric delivery fleet hits a new milestone</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== LISTING MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">C</span> Topic / category listing page</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/topics/community</div>
+    </div>
+    <div style="background:#fff;">
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+      <!-- listing header -->
+      <div style="padding:48px 44px 32px;">
+        <div style="font-size:13px; color:#8A8A92; margin-bottom:14px;"><span style="color:#DC1928; font-weight:700;">Newsroom</span> › Topics › Community</div>
+        <h1 style="font-size:48px; font-weight:800; letter-spacing:-0.025em; margin:0 0 14px;">Community</h1>
+        <p style="font-size:18px; line-height:1.5; color:#55555C; max-width:620px; margin:0;">Stories about how Australia Post connects and supports communities across the country.</p>
+        <div style="display:flex; align-items:center; gap:9px; margin-top:28px; flex-wrap:wrap;">
+          <span style="background:#15151A; color:#fff; border-radius:999px; padding:9px 17px; font-weight:700; font-size:13.5px;">Most recent</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Media releases</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Stories</span>
+          <div style="flex:1;"></div>
+          <span style="font-size:13.5px; color:#8A8A92;">48 articles</span>
+        </div>
+      </div>
+      <!-- list rows -->
+      <div style="padding:0 44px 64px;">
+        <div style="display:flex; gap:24px; padding:24px 0; border-top:1px solid #EEE; align-items:center;">
+          <div style="flex:0 0 200px; height:130px; border-radius:14px; background:linear-gradient(135deg,#F0A39C,#DC1928);"></div>
+          <div style="flex:1;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">07 May 2026 · Media release</div><div style="font-size:23px; font-weight:700; line-height:1.2; letter-spacing:-0.015em; margin-bottom:8px;">Australia Post to deliver its 25 millionth Connection Postcard with Beyond Blue</div><div style="font-size:15px; line-height:1.5; color:#55555C;">Four million prepaid postcards reach letterboxes as research reveals loneliness affects one in three Australians.</div></div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </div>
+        <div style="display:flex; gap:24px; padding:24px 0; border-top:1px solid #EEE; align-items:center;">
+          <div style="flex:0 0 200px; height:130px; border-radius:14px; background:linear-gradient(135deg,#D69AC4,#A45B8E);"></div>
+          <div style="flex:1;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">25 Jul 2025 · Story</div><div style="font-size:23px; font-weight:700; line-height:1.2; letter-spacing:-0.015em; margin-bottom:8px;">2025 ORIAS Impact Award winners announced</div><div style="font-size:15px; line-height:1.5; color:#55555C;">Recognising the standout performers across the Australia Post Online Retail Industry Awards.</div></div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </div>
+        <div style="display:flex; gap:24px; padding:24px 0; border-top:1px solid #EEE; border-bottom:1px solid #EEE; align-items:center;">
+          <div style="flex:0 0 200px; height:130px; border-radius:14px; background:linear-gradient(135deg,#C9B79A,#A4895B);"></div>
+          <div style="flex:1;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">06 Aug 2025 · Media release</div><div style="font-size:23px; font-weight:700; line-height:1.2; letter-spacing:-0.015em; margin-bottom:8px;">New parcel centre opens in Blacktown, Western Sydney</div><div style="font-size:15px; line-height:1.5; color:#55555C;">A new parcel delivery centre strengthens the network and creates local jobs.</div></div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:36px;">
+          <span style="width:40px; height:40px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center; color:#8A8A92;">‹</span>
+          <span style="width:40px; height:40px; border-radius:50%; background:#DC1928; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">1</span>
+          <span style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#44444C; font-weight:600;">2</span>
+          <span style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#44444C; font-weight:600;">3</span>
+          <span style="width:40px; height:40px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center; color:#44444C;">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SEARCH RESULTS MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">D</span> Search results — faceted (content type · year · category)</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/search?q=stamp</div>
+    </div>
+    <div style="background:#fff;">
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+      <!-- search header -->
+      <div style="padding:44px 44px 0;">
+        <div style="font-size:13px; color:#8A8A92; margin-bottom:12px;"><span style="color:#DC1928; font-weight:700;">Home</span> › Search</div>
+        <h1 style="font-size:44px; font-weight:800; letter-spacing:-0.025em; margin:0 0 22px;">Search</h1>
+        <div style="display:flex; max-width:820px; margin-bottom:10px;">
+          <input style="flex:1; border:1.5px solid #DC1928; border-right:none; border-radius:999px 0 0 999px; padding:0 24px; height:60px; font-size:17px; font-family:inherit; box-shadow:0 0 0 3px rgba(220,25,40,.12); outline:none;" value="stamp" aria-label="Search the Newsroom">
+          <button style="border:none; background:#DC1928; color:#fff; border-radius:0 999px 999px 0; padding:0 34px; font-weight:700; font-size:16px; font-family:inherit; cursor:pointer;">Search</button>
+        </div>
+      </div>
+      <!-- body: facets + results -->
+      <div style="display:grid; grid-template-columns:248px 1fr; gap:40px; padding:28px 44px 64px;">
+        <!-- facets -->
+        <aside>
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8A8A92; margin-bottom:12px;">Content type</div>
+          <div style="display:inline-flex; background:#F4F4F6; border-radius:999px; padding:4px; gap:4px; margin-bottom:28px;">
+            <span style="background:#DC1928; color:#fff; border-radius:999px; padding:7px 16px; font-weight:700; font-size:13.5px;">All</span>
+            <span style="color:#44444C; border-radius:999px; padding:7px 16px; font-weight:600; font-size:13.5px;">News</span>
+            <span style="color:#44444C; border-radius:999px; padding:7px 16px; font-weight:600; font-size:13.5px;">Stamps</span>
+          </div>
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8A8A92; margin-bottom:12px;">Year</div>
+          <div style="border:1.5px solid #E2E2E6; border-radius:999px; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 18px; margin-bottom:28px;"><span style="font-size:14.5px; font-weight:600;">All years</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A6A6A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8A8A92; margin-bottom:14px;">Category</div>
+          <div style="display:flex; flex-direction:column; gap:13px;">
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; background:#DC1928; display:flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Stamps <span style="color:#8A8A92;">(118)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>Arts and Culture <span style="color:#8A8A92;">(34)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>History <span style="color:#8A8A92;">(29)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>Indigenous <span style="color:#8A8A92;">(21)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>Natural World <span style="color:#8A8A92;">(18)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>Sport <span style="color:#8A8A92;">(15)</span></label>
+            <label style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#33333A; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #CFCFD6;"></span>Legends <span style="color:#8A8A92;">(12)</span></label>
+          </div>
+        </aside>
+        <!-- results -->
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:12px;">
+            <div style="font-size:15px; color:#55555C;"><strong style="color:#15151A;">263 results</strong> for "stamp"</div>
+            <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#8A8A92;">Sort <span style="border:1.5px solid #E2E2E6; border-radius:999px; padding:7px 14px; font-weight:600; color:#33333A; display:inline-flex; align-items:center; gap:7px;">Relevance <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A6A6A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+          </div>
+          <!-- active facet chips -->
+          <div style="display:flex; gap:8px; margin-bottom:20px;"><span style="display:inline-flex; align-items:center; gap:7px; background:#FCE9EA; color:#DC1928; border-radius:999px; padding:6px 14px; font-weight:600; font-size:13px;">Stamps ✕</span></div>
+          <!-- rows -->
+          <div style="display:flex; gap:20px; padding:20px 0; border-top:1px solid #EEE; align-items:center;">
+            <div style="flex:0 0 150px; height:96px; border-radius:12px; background:linear-gradient(135deg,#E8B89A,#C47C5B);"></div>
+            <div style="flex:1;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Stamps · 2024</div><div style="font-size:21px; font-weight:700; line-height:1.2; letter-spacing:-0.01em; margin-bottom:6px;">2024 Stamp Releases</div><div style="font-size:14.5px; line-height:1.5; color:#55555C;">Explore the complete collection of stamps issued in 2024, from sporting heroes to the natural world.</div></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </div>
+          <div style="display:flex; gap:20px; padding:20px 0; border-top:1px solid #EEE; align-items:center;">
+            <div style="flex:0 0 150px; height:96px; border-radius:12px; background:linear-gradient(135deg,#A6D6B8,#5BA47C);"></div>
+            <div style="flex:1;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Stamps · 2023</div><div style="font-size:21px; font-weight:700; line-height:1.2; letter-spacing:-0.01em; margin-bottom:6px;">2023 Stamp Releases</div><div style="font-size:14.5px; line-height:1.5; color:#55555C;">The full 2023 stamp program, including commemorative and definitive issues.</div></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </div>
+          <div style="display:flex; gap:20px; padding:20px 0; border-top:1px solid #EEE; align-items:center;">
+            <div style="flex:0 0 150px; height:96px; border-radius:12px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8);"></div>
+            <div style="flex:1;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Stamps — Sport</div><div style="font-size:21px; font-weight:700; line-height:1.2; letter-spacing:-0.01em; margin-bottom:6px;">Stamps — Sport</div><div style="font-size:14.5px; line-height:1.5; color:#55555C;">Celebrating Australian sporting achievement across decades of stamp issues.</div></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </div>
+          <div style="display:flex; gap:20px; padding:20px 0; border-top:1px solid #EEE; border-bottom:1px solid #EEE; align-items:center;">
+            <div style="flex:0 0 150px; height:96px; border-radius:12px; background:linear-gradient(135deg,#D69AC4,#A45B8E);"></div>
+            <div style="flex:1;"><div style="font-size:12px; color:#8A8A92; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Stamps — Indigenous</div><div style="font-size:21px; font-weight:700; line-height:1.2; letter-spacing:-0.01em; margin-bottom:6px;">Stamps — Indigenous</div><div style="font-size:14.5px; line-height:1.5; color:#55555C;">Stamp issues honouring First Nations art, culture and history.</div></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:32px;">
+            <span style="width:40px; height:40px; border-radius:50%; background:#DC1928; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">1</span>
+            <span style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#44444C; font-weight:600;">2</span>
+            <span style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#44444C; font-weight:600;">3</span>
+            <span style="color:#8A8A92; padding:0 6px;">…</span>
+            <span style="width:40px; height:40px; border-radius:50%; border:1px solid #E2E2E6; display:flex; align-items:center; justify-content:center; color:#44444C;">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== STAMPS MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">E</span> Stamps — collection landing</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/stamps</div>
+    </div>
+    <div style="background:#fff;">
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span style="color:#DC1928;">Stamps</span><span>News</span><span>Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+      <!-- stamps hero -->
+      <div style="padding:48px 44px 0;">
+        <div style="font-size:13px; color:#8A8A92; margin-bottom:14px;"><span style="color:#DC1928; font-weight:700;">Home</span> › Stamps</div>
+        <h1 style="font-size:52px; font-weight:800; letter-spacing:-0.025em; margin:0 0 14px;">Stamps &amp; collectables</h1>
+        <p style="font-size:18px; line-height:1.5; color:#55555C; max-width:640px; margin:0 0 28px;">Every stamp release tells an Australian story. Browse issues by year, or explore by theme.</p>
+        <div style="display:flex; gap:9px; flex-wrap:wrap;">
+          <span style="background:#DC1928; color:#fff; border-radius:999px; padding:9px 17px; font-weight:700; font-size:13.5px;">By year</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Arts &amp; Culture</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Natural World</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Sport</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Indigenous</span>
+          <span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Legends</span>
+        </div>
+      </div>
+      <!-- year grid -->
+      <div style="padding:36px 44px 64px;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px;">
+          <div style="border-radius:18px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:200px; background:linear-gradient(135deg,#E8B89A,#C47C5B); display:flex; align-items:flex-end; padding:18px;"><span style="background:#fff; color:#DC1928; border-radius:999px; padding:7px 15px; font-weight:800; font-size:14px;">2024</span></div><div style="padding:18px 20px 22px;"><div style="font-size:18px; font-weight:700; margin-bottom:4px;">2024 Stamp Releases</div><div style="font-size:13.5px; color:#8A8A92;">42 issues</div></div></div>
+          <div style="border-radius:18px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:200px; background:linear-gradient(135deg,#A6D6B8,#5BA47C); display:flex; align-items:flex-end; padding:18px;"><span style="background:#fff; color:#DC1928; border-radius:999px; padding:7px 15px; font-weight:800; font-size:14px;">2023</span></div><div style="padding:18px 20px 22px;"><div style="font-size:18px; font-weight:700; margin-bottom:4px;">2023 Stamp Releases</div><div style="font-size:13.5px; color:#8A8A92;">38 issues</div></div></div>
+          <div style="border-radius:18px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:200px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8); display:flex; align-items:flex-end; padding:18px;"><span style="background:#fff; color:#DC1928; border-radius:999px; padding:7px 15px; font-weight:800; font-size:14px;">2022</span></div><div style="padding:18px 20px 22px;"><div style="font-size:18px; font-weight:700; margin-bottom:4px;">2022 Stamp Releases</div><div style="font-size:13.5px; color:#8A8A92;">40 issues</div></div></div>
+          <div style="border-radius:18px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:200px; background:linear-gradient(135deg,#D69AC4,#A45B8E); display:flex; align-items:flex-end; padding:18px;"><span style="background:#fff; color:#DC1928; border-radius:999px; padding:7px 15px; font-weight:800; font-size:14px;">2021</span></div><div style="padding:18px 20px 22px;"><div style="font-size:18px; font-weight:700; margin-bottom:4px;">2021 Stamp Releases</div><div style="font-size:13.5px; color:#8A8A92;">36 issues</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== VIDEO MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">F</span> Video gallery</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/video</div>
+    </div>
+    <div style="background:#fff;">
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span style="color:#DC1928;">Video</span><span>Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+      <!-- featured video -->
+      <div style="padding:44px 44px 0;">
+        <div style="font-size:13px; color:#8A8A92; margin-bottom:14px;"><span style="color:#DC1928; font-weight:700;">Home</span> › Video</div>
+        <h1 style="font-size:44px; font-weight:800; letter-spacing:-0.025em; margin:0 0 24px;">Video</h1>
+        <div style="border-radius:20px; overflow:hidden; position:relative; height:420px; background:linear-gradient(135deg,#5B5BA4,#15151A); display:flex; align-items:flex-end; padding:36px;">
+          <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;"><span style="width:84px; height:84px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="#DC1928"><polygon points="8 5 19 12 8 19"/></svg></span></div>
+          <div style="position:relative;"><span style="background:#DC1928; color:#fff; border-radius:999px; padding:6px 14px; font-weight:700; font-size:12.5px;">Featured</span><div style="font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#fff; margin-top:14px; max-width:560px;">Behind the scenes: delivering 25 million Connection Postcards</div></div>
+        </div>
+      </div>
+      <!-- video grid -->
+      <div style="padding:36px 44px 64px;">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+          <div style="border-radius:16px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:180px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8); position:relative;"><span style="position:absolute; inset:0; margin:auto; width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#DC1928"><polygon points="8 5 19 12 8 19"/></svg></span><span style="position:absolute; right:12px; bottom:12px; background:rgba(0,0,0,.78); color:#fff; border-radius:6px; padding:3px 8px; font-size:12px; font-weight:600;">2:14</span></div><div style="padding:18px 20px 22px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">06 May 2026</div><div style="font-size:17.5px; font-weight:700; line-height:1.25;">Bluey arrives at Australia Post — for real life</div></div></div>
+          <div style="border-radius:16px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:180px; background:linear-gradient(135deg,#A6D6B8,#5BA47C); position:relative;"><span style="position:absolute; inset:0; margin:auto; width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#DC1928"><polygon points="8 5 19 12 8 19"/></svg></span><span style="position:absolute; right:12px; bottom:12px; background:rgba(0,0,0,.78); color:#fff; border-radius:6px; padding:3px 8px; font-size:12px; font-weight:600;">3:48</span></div><div style="padding:18px 20px 22px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">30 Apr 2026</div><div style="font-size:17.5px; font-weight:700; line-height:1.25;">Inside our new Blacktown parcel facility</div></div></div>
+          <div style="border-radius:16px; overflow:hidden; border:1px solid #EAEAEE; box-shadow:0 1px 3px rgba(0,0,0,.08);"><div style="height:180px; background:linear-gradient(135deg,#9A9AE8,#5B5BA4); position:relative;"><span style="position:absolute; inset:0; margin:auto; width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#DC1928"><polygon points="8 5 19 12 8 19"/></svg></span><span style="position:absolute; right:12px; bottom:12px; background:rgba(0,0,0,.78); color:#fff; border-radius:6px; padding:3px 8px; font-size:12px; font-weight:600;">1:32</span></div><div style="padding:18px 20px 22px;"><div style="font-size:12.5px; color:#8A8A92; font-weight:600; margin-bottom:8px;">18 Jul 2025</div><div style="font-size:17.5px; font-weight:700; line-height:1.25;">Our electric delivery fleet in action</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== PHOTOS / MEDIA LIBRARY MOCKUP ====== -->
+  <div style="font-weight:700; font-size:15px; color:#15151A; margin-bottom:12px; display:flex; align-items:center; gap:10px;"><span style="background:#15151A; color:#fff; font-size:12px; font-weight:700; border-radius:6px; padding:4px 9px;">G</span> Photos — downloadable media library</div>
+  <div style="border-radius:16px 16px 0 0; overflow:hidden; border:1px solid #DDD; box-shadow:0 14px 40px rgba(0,0,0,.12); margin-bottom:96px;">
+    <div style="background:#E8E8EC; padding:11px 16px; display:flex; align-items:center; gap:14px; border-bottom:1px solid #D6D6DA;">
+      <div style="display:flex; gap:7px;"><span style="width:11px; height:11px; border-radius:50%; background:#FF5F57;"></span><span style="width:11px; height:11px; border-radius:50%; background:#FEBC2E;"></span><span style="width:11px; height:11px; border-radius:50%; background:#28C840;"></span></div>
+      <div style="flex:1; background:#fff; border-radius:8px; height:30px; display:flex; align-items:center; padding:0 14px; font-size:12.5px; color:#7A7A82; font-family:'JetBrains Mono',monospace;">newsroom.auspost.com.au/photos</div>
+    </div>
+    <div style="background:#fff;">
+      <div style="display:flex; align-items:center; gap:30px; padding:18px 44px; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:11px;"><div style="width:34px; height:34px; border-radius:50%; background:#DC1928; color:#fff; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center;">P</div><div style="display:flex; align-items:baseline; gap:9px;"><span style="font-weight:900; color:#DC1928; font-size:18px; letter-spacing:-0.01em;">Australia Post</span><span style="width:1px; height:17px; background:#D8D8DC; transform:translateY(2px);"></span><span style="font-weight:700; font-size:18px; color:#15151A;">Newsroom</span></div></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex; gap:24px; color:#2A2A30; font-weight:600; font-size:15px;"><span>Home</span><span>News</span><span>Stamps</span><span>Video</span><span style="color:#DC1928;">Photos</span></div>
+        <div style="display:flex; align-items:center; gap:8px; background:#F4F4F6; border-radius:999px; padding:9px 16px; min-width:200px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8A92" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span style="font-size:14px; color:#8A8A92;">Search Newsroom</span></div>
+      </div>
+      <div style="padding:44px 44px 0;">
+        <div style="font-size:13px; color:#8A8A92; margin-bottom:14px;"><span style="color:#DC1928; font-weight:700;">Home</span> › Photos</div>
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+          <div><h1 style="font-size:44px; font-weight:800; letter-spacing:-0.025em; margin:0 0 10px;">Media images</h1><p style="font-size:17px; color:#55555C; margin:0; max-width:520px;">High-resolution, press-ready imagery. Free to use with attribution to Australia Post.</p></div>
+          <div style="display:flex; gap:9px;"><span style="background:#15151A; color:#fff; border-radius:999px; padding:9px 17px; font-weight:700; font-size:13.5px;">All</span><span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Operations</span><span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">People</span><span style="background:#F4F4F6; color:#44444C; border-radius:999px; padding:9px 17px; font-weight:600; font-size:13.5px;">Stamps</span></div>
+        </div>
+      </div>
+      <!-- masonry-ish grid -->
+      <div style="padding:32px 44px 64px;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+          <div style="border-radius:14px; overflow:hidden; position:relative; height:200px; background:linear-gradient(135deg,#F0A39C,#DC1928);"><div style="position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.5),transparent 50%);"></div><div style="position:absolute; left:14px; right:14px; bottom:12px; display:flex; align-items:center; justify-content:space-between;"><span style="color:#fff; font-size:13px; font-weight:600;">Postie on delivery</span><span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span></div></div>
+          <div style="border-radius:14px; overflow:hidden; position:relative; height:200px; background:linear-gradient(135deg,#9AC9E8,#5B8FB8);"><div style="position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.5),transparent 50%);"></div><div style="position:absolute; left:14px; right:14px; bottom:12px; display:flex; align-items:center; justify-content:space-between;"><span style="color:#fff; font-size:13px; font-weight:600;">Parcel facility</span><span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span></div></div>
+          <div style="border-radius:14px; overflow:hidden; position:relative; height:200px; background:linear-gradient(135deg,#A6D6B8,#5BA47C);"><div style="position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.5),transparent 50%);"></div><div style="position:absolute; left:14px; right:14px; bottom:12px; display:flex; align-items:center; justify-content:space-between;"><span style="color:#fff; font-size:13px; font-weight:600;">EV delivery fleet</span><span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span></div></div>
+          <div style="border-radius:14px; overflow:hidden; position:relative; height:200px; background:linear-gradient(135deg,#C9B79A,#A4895B);"><div style="position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.5),transparent 50%);"></div><div style="position:absolute; left:14px; right:14px; bottom:12px; display:flex; align-items:center; justify-content:space-between;"><span style="color:#fff; font-size:13px; font-weight:600;">Post Office counter</span><span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC1928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ 05 EDS BLOCK INVENTORY ============================ -->
+  <div data-sec id="inventory"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">05 — EDS BLOCK INVENTORY</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">Current blocks → new design</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:760px; margin:0 0 32px;">The redesign stays inside the EDS document-authored block model. Each row maps a block in the Newsroom project to its redesigned counterpart, the action required, and the authoring table that produces it.</p>
+
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; overflow:hidden; margin-bottom:36px;">
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; background:#15151A; color:#fff; font-size:12.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;">
+      <div style="padding:14px 20px;">Current block</div><div style="padding:14px 20px;">New component</div><div style="padding:14px 20px;">Action</div><div style="padding:14px 20px;">EDS notes</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">header (nav)</div><div style="padding:16px 20px; font-weight:600;">Newsroom header + search</div><div style="padding:16px 20px;"><span style="background:#FBF0E6; color:#A55A12; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Rework</span></div><div style="padding:16px 20px; color:#55555C;">Driven by <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">/nav</span> doc. Add wordmark lockup + search icon; keep block name.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">hero</div><div style="padding:16px 20px; font-weight:600;">Red hero + overlapping lead</div><div style="padding:16px 20px;"><span style="background:#FCE9EA; color:#DC1928; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Redesign</span></div><div style="padding:16px 20px; color:#55555C;">Variant class <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">hero (newsroom)</span>. Red section + featured card pulled up via negative margin.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">cards (Latest)</div><div style="padding:16px 20px; font-weight:600;">Article grid + filter</div><div style="padding:16px 20px;"><span style="background:#FCE9EA; color:#DC1928; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Redesign</span></div><div style="padding:16px 20px; color:#55555C;">Keep <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">cards</span> block; add <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">.cards.articles</span> variant + category tabs (JS decorate).</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">quick links</div><div style="padding:16px 20px; font-weight:600;">Topic / quick-links rail</div><div style="padding:16px 20px;"><span style="background:#FBF0E6; color:#A55A12; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Rework</span></div><div style="padding:16px 20px; color:#55555C;">Convert chevron list to arrow rows; unify with text-link component.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">empty "Read more"</div><div style="padding:16px 20px; font-weight:600;">Newsletter CTA band</div><div style="padding:16px 20px;"><span style="background:#FCE9EA; color:#DC1928; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Replace</span></div><div style="padding:16px 20px; color:#55555C;">Remove the broken block; introduce a <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">cta</span> block with subscribe field.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">— (none)</div><div style="padding:16px 20px; font-weight:600;">Article header / share</div><div style="padding:16px 20px;"><span style="background:#EAF6EE; color:#1E7A43; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">New</span></div><div style="padding:16px 20px; color:#55555C;">New <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">article-header</span> block; reads page metadata (title, date, category, author).</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">footer</div><div style="padding:16px 20px; font-weight:600;">Dark footer + acknowledgement</div><div style="padding:16px 20px;"><span style="background:#FBF0E6; color:#A55A12; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Rework</span></div><div style="padding:16px 20px; color:#55555C;">Driven by <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">/footer</span> doc. 4-column + Country acknowledgement strip.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">search</div><div style="padding:16px 20px; font-weight:600;">Faceted search results</div><div style="padding:16px 20px;"><span style="background:#FCE9EA; color:#DC1928; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Redesign</span></div><div style="padding:16px 20px; color:#55555C;">Reads <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">query-index.json</span>; facets = content type · year · category. Client-side filter, no backend.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">— (Stamps page)</div><div style="padding:16px 20px; font-weight:600;">Stamps collection grid</div><div style="padding:16px 20px;"><span style="background:#FCE9EA; color:#DC1928; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">Redesign</span></div><div style="padding:16px 20px; color:#55555C;"><span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">.cards.collection</span> variant — year/theme cards. Reuses card JS with a 4-col grid.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">— (Video page)</div><div style="padding:16px 20px; font-weight:600;">Video gallery + player</div><div style="padding:16px 20px;"><span style="background:#EAF6EE; color:#1E7A43; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">New</span></div><div style="padding:16px 20px; color:#55555C;">New <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">video</span> block — play overlay + duration badge; lazy-embeds the player on click.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1.1fr 0.8fr 1.4fr; border-top:1px solid #EEE; font-size:14px;">
+      <div style="padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:13px;">— (Photos page)</div><div style="padding:16px 20px; font-weight:600;">Downloadable media library</div><div style="padding:16px 20px;"><span style="background:#EAF6EE; color:#1E7A43; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700;">New</span></div><div style="padding:16px 20px; color:#55555C;">New <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">gallery</span> block — image grid, hover download button, category filter.</div>
+    </div>
+  </div>
+
+  <!-- EDS authoring table example -->
+  <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:14px;">Authoring example — the article grid block</div>
+  <div style="background:#15151A; border-radius:16px; padding:26px 28px; margin-bottom:14px; overflow-x:auto;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.7; color:#E2E2E6;">
+      <div style="color:#8A8A92;"># In the Newsroom document, a block is a table whose first cell names it:</div>
+      <div style="margin-top:12px; border:1px solid #2C2C32; border-radius:8px; overflow:hidden; display:inline-block; min-width:480px;">
+        <div style="background:#DC1928; color:#fff; padding:8px 14px; font-weight:600;">Cards (articles)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid #2C2C32;"><div style="padding:8px 14px; border-right:1px solid #2C2C32; color:#9A9AA2;">:image: hero.jpg</div><div style="padding:8px 14px; color:#9A9AA2;">Category: Community</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid #2C2C32;"><div style="padding:8px 14px; border-right:1px solid #2C2C32; color:#E2E2E6;">Headline text + link</div><div style="padding:8px 14px; color:#9A9AA2;">Date: 07 May 2026</div></div>
+      </div>
+      <div style="margin-top:14px; color:#8A8A92;"># block name → CSS class <span style="color:#E8443B;">.cards.articles</span>; <span style="color:#E8443B;">scripts/cards.js</span> decorates rows into cards + category tabs.</div>
+    </div>
+  </div>
+  <p style="font-size:14px; color:#7A7A82; margin:0 0 96px; max-width:760px;">Authors keep editing in Google Docs / Word. Only <span style="font-family:'JetBrains Mono',monospace; font-size:13px;">blocks/*/*.css</span> and <span style="font-family:'JetBrains Mono',monospace; font-size:13px;">.js</span> change — no template migration, preserving the EDS performance model.</p>
+
+  <!-- ============================ 06 REDLINES + A11Y ============================ -->
+  <div data-sec id="redlines"></div>
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#DC1928;">06 — REDLINES &amp; ACCESSIBILITY</span>
+    <div style="flex:1; height:1px; background:#D8D8DC;"></div>
+  </div>
+  <h2 style="font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px;">Build specs</h2>
+  <p style="font-size:18px; line-height:1.55; color:#44444C; max-width:740px; margin:0 0 32px;">Measurements for the two highest-traffic components, plus the WCAG 2.1 AA checklist the implementation must satisfy.</p>
+
+  <!-- redline: featured card -->
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:30px 32px; margin-bottom:16px;">
+    <div style="font-weight:700; font-size:16px; margin-bottom:20px;">Featured lead story — redlines</div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px 40px;">
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Card radius</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">24px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Overlap (negative margin)</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">-56px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Text padding</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">46 / 48px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Headline size</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">34 / 800 / -2%</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Grid split</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">1.05fr / 1fr</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Shadow</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">0 14 40 /.13</span></div>
+    </div>
+  </div>
+
+  <!-- redline: article card -->
+  <div style="background:#fff; border:1px solid #E6E6EA; border-radius:18px; padding:30px 32px; margin-bottom:36px;">
+    <div style="font-weight:700; font-size:16px; margin-bottom:20px;">Article card — redlines</div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px 40px;">
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Card radius</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">16px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Image ratio</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">16:9</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Body padding</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">20 / 22 / 24px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Grid gap</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">24px</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Title clamp</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">2 lines</span></div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px dashed #E2E2E6;"><span style="font-size:14.5px; color:#44444C;">Hover lift</span><span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#DC1928;">-4px / .18s</span></div>
+    </div>
+  </div>
+
+  <!-- a11y -->
+  <div style="font-weight:700; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; color:#8A8A92; margin-bottom:16px;">WCAG 2.1 AA checklist</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:48px;">
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; padding:20px 22px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;"><span style="color:#1E7A43; font-weight:800;">✓</span><span style="font-weight:700; font-size:15px;">Contrast</span></div><div style="font-size:14px; line-height:1.55; color:#55555C;">Red #DC1928 on white = 5.3:1. White on red hero = 5.3:1. Body #44444C on white = 9.1:1. All pass AA.</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; padding:20px 22px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;"><span style="color:#1E7A43; font-weight:800;">✓</span><span style="font-weight:700; font-size:15px;">Keyboard &amp; focus</span></div><div style="font-size:14px; line-height:1.55; color:#55555C;">Category tabs use <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">role=tablist</span> + arrow keys. Visible 3px focus ring on every interactive element.</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; padding:20px 22px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;"><span style="color:#1E7A43; font-weight:800;">✓</span><span style="font-weight:700; font-size:15px;">Semantics</span></div><div style="font-size:14px; line-height:1.55; color:#55555C;">Cards are <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">&lt;article&gt;</span> with a single <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">&lt;a&gt;</span> wrapping the heading; one H1 per page; landmark regions.</div></div>
+    <div style="background:#fff; border:1px solid #E6E6EA; border-radius:14px; padding:20px 22px;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;"><span style="color:#1E7A43; font-weight:800;">✓</span><span style="font-weight:700; font-size:15px;">Target size &amp; motion</span></div><div style="font-size:14px; line-height:1.55; color:#55555C;">All controls ≥ 44px. Hover lift respects <span style="font-family:'JetBrains Mono',monospace; font-size:12.5px;">prefers-reduced-motion</span>. Alt text required on authored images.</div></div>
+  </div>
+
+  <!-- handoff footer -->
+  <div style="background:#15151A; color:#fff; border-radius:20px; padding:40px 44px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:#9A9AA2; font-weight:600; margin-bottom:14px;">For Claude Code</div>
+    <div style="font-size:24px; font-weight:800; letter-spacing:-0.015em; margin-bottom:14px; max-width:640px;">Everything here is literal and buildable.</div>
+    <div style="font-size:16px; line-height:1.6; color:#C8C8CE; max-width:680px;">Read tokens from §02 into <span style="font-family:'JetBrains Mono',monospace; font-size:14px; color:#fff;">styles/styles.css</span>, build the components in §03 as EDS blocks, follow the §05 mapping to refactor existing blocks, and match the §06 redlines. The interactive homepage prototype ships as a separate file for behaviour reference.</div>
+  </div>
+</x-dc>
+</body>
+</html>
