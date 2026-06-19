@@ -70,6 +70,11 @@
   --radius-input:  8px;
   --radius-card:   16px;
   --radius-hero:   24px;
+
+  /* ---- Component bridge tokens (intentional points between the base scale) ---- */
+  --fs-hero-newsroom:     54px;  /* newsroom hero headline */
+  --fs-article-title:     44px;  /* article page h1 */
+  --fs-section-title:     34px;  /* prominent section headings (cards, gallery, featured) */
   --shadow-card:    0 1px 3px rgb(0 0 0 / 8%);
   --shadow-raised:  0 6px 16px rgb(0 0 0 / 10%);
   --shadow-overlay: 0 14px 30px rgb(0 0 0 / 14%);

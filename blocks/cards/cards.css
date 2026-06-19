@@ -27,7 +27,7 @@ main .cards-wrapper {
 }
 
 .cards.articles .cards-section-title {
-  font: 800 34px / 1 var(--font-family-heading);
+  font: var(--fw-h2) var(--fs-section-title) / 1 var(--font-family-heading);
   letter-spacing: -0.02em;
   color: var(--ap-ink);
   margin: 0;
@@ -126,7 +126,7 @@ main .cards-wrapper {
 }
 
 .cards .card-stamp .card-media {
-  background: #f5f5f5;
+  background: var(--ap-surface);
 }
 
 .cards .card-stamp .card-media img { object-fit: contain; }
@@ -352,7 +352,7 @@ main .cards.collection {
 
 .cards.collection .collection-desc {
   font: 400 18px / 1.5 var(--font-family-body);
-  color: #55555C;
+  color: var(--ap-body);
   max-width: 640px;
   margin: 0 0 28px;
 }
@@ -369,7 +369,7 @@ main .cards.collection {
   border: none;
   border-radius: var(--radius-pill);
   background: var(--ap-surface);
-  color: #44444C;
+  color: var(--ap-body);
   font: 600 13.5px / 1 var(--font-family-body);
   cursor: pointer;
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
@@ -398,7 +398,7 @@ main .cards.collection {
 }
 
 .cards.collection .collection-card {
-  border-radius: 18px;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border: 1px solid var(--ap-hairline);
   box-shadow: var(--shadow-card);

@@ -8,7 +8,7 @@ main .article-header-wrapper {
 main .article-header {
   max-width: 760px;
   margin: 0 auto;
-  padding: 48px var(--sp-lg) 0;
+  padding: var(--sp-lg) var(--sp-lg) 0;
 }
 
 /* ── Breadcrumb ── */
@@ -16,7 +16,7 @@ main .article-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  font: 400 13.5px / 1 var(--font-family-body);
+  font: var(--fw-body) var(--fs-eyebrow) / 1 var(--font-family-body);
   color: var(--ap-muted);
   margin-bottom: 22px;
   list-style: none;
@@ -46,14 +46,14 @@ main .article-header {
   color: var(--ap-white);
   border-radius: var(--radius-pill);
   padding: 7px 15px;
-  font: 700 13px / 1 var(--font-family-body);
+  font: var(--fw-eyebrow) var(--fs-eyebrow) / 1 var(--font-family-body);
 }
 
 .article-header .ah-type-badge {
-  background: #FCF2F3;
+  background: var(--ap-red-50);
   color: var(--ap-red);
   border: 1px solid #F2C0C4;
-  border-radius: 6px;
+  border-radius: var(--radius-input);
   padding: 6px 11px;
   font: 700 12px / 1 var(--font-family-body);
   letter-spacing: 0.04em;
@@ -62,7 +62,7 @@ main .article-header {
 
 /* ── H1 ── */
 .article-header .ah-title {
-  font: 800 44px / 1.08 var(--font-family-heading);
+  font: var(--fw-h1) var(--fs-article-title) / var(--lh-h1) var(--font-family-heading);
   letter-spacing: -0.025em;
   color: var(--ap-ink);
   margin: 0 0 24px;
@@ -96,7 +96,7 @@ main .article-header {
 }
 
 .article-header .ah-author-name {
-  font: 700 14.5px / 1 var(--font-family-body);
+  font: var(--fw-title) var(--fs-meta) / 1 var(--font-family-body);
   color: var(--ap-ink);
   margin: 0 0 5px;
 }
@@ -147,16 +147,16 @@ main .article-header-wrapper ~ .section .default-content-wrapper {
 }
 
 main .article-header-wrapper ~ .section .default-content-wrapper > p {
-  font: 400 17.5px / 1.7 var(--font-family-body);
-  color: #33333A;
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-family-body);
+  color: var(--ap-body);
   margin: 0 0 22px;
 }
 
 main .article-header-wrapper ~ .section .default-content-wrapper > p:first-child {
-  font-size: 21px;
+  font-size: var(--fs-title);
   font-weight: 500;
-  line-height: 1.55;
-  color: #2A2A30;
+  line-height: var(--lh-title);
+  color: var(--ap-ink);
 }
 
 main .article-header-wrapper ~ .section .default-content-wrapper > p:first-child em {

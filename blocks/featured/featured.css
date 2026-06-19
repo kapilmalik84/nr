@@ -67,35 +67,35 @@ main .featured .featured-category {
   background: var(--ap-white);
   color: var(--ap-red);
   border-radius: var(--radius-pill);
-  padding: 8px 16px;
-  font: 700 13px / 1 var(--font-family-body);
+  padding: var(--sp-xs) var(--sp-sm);
+  font: var(--fw-eyebrow) var(--fs-eyebrow) / 1 var(--font-family-body);
   z-index: 1;
   pointer-events: none;
 }
 
 /* ── Text panel ── */
 main .featured .featured-text {
-  padding: 46px 48px;
+  padding: var(--sp-lg);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 main .featured .featured-date {
-  font: 600 13px / 1 var(--font-family-body);
+  font: var(--fw-eyebrow) var(--fs-eyebrow) / 1 var(--font-family-body);
   color: var(--ap-muted);
   margin: 0 0 14px;
 }
 
 main .featured .featured-headline {
-  font: 800 34px / 1.12 var(--font-family-heading);
+  font: var(--fw-h2) var(--fs-section-title) / 1.12 var(--font-family-heading);
   letter-spacing: -0.02em;
   color: var(--ap-ink);
   margin: 0 0 16px;
 }
 
 main .featured .featured-excerpt {
-  font: 400 16.5px / 1.55 var(--font-family-body);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-family-body);
   color: var(--ap-body);
   margin: 0 0 28px;
 }
@@ -155,7 +155,7 @@ main .featured .featured-link:hover .featured-cta {
   }
 
   main .featured .featured-headline {
-    font-size: 28px;
+    font-size: var(--fs-h2);
   }
 }
 

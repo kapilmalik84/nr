@@ -6,7 +6,7 @@ main .gallery-wrapper { padding: 0; }
 main .gallery {
   max-width: 1264px;
   margin: 0 auto;
-  padding: 44px var(--sp-lg) var(--sp-section);
+  padding: var(--sp-lg) var(--sp-lg) var(--sp-section);
 }
 
 /* ── Header row: title left, filters right ── */
@@ -14,7 +14,7 @@ main .gallery {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
+  gap: var(--sp-md);
   flex-wrap: wrap;
   margin-bottom: 32px;
 }
@@ -23,15 +23,15 @@ main .gallery {
 
 /* ── Page title ── */
 .gallery .gallery-page-title {
-  font: 800 44px / 1 var(--font-family-heading);
+  font: var(--fw-h1) var(--fs-article-title) / 1 var(--font-family-heading);
   letter-spacing: -0.025em;
   color: var(--ap-ink);
   margin: 0 0 10px;
 }
 
 .gallery .gallery-desc {
-  font: 400 17px / 1.5 var(--font-family-body);
-  color: #55555C;
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-family-body);
+  color: var(--ap-body);
   max-width: 520px;
   margin: 0;
 }
@@ -49,7 +49,7 @@ main .gallery {
   border: none;
   border-radius: var(--radius-pill);
   background: var(--ap-surface);
-  color: #44444C;
+  color: var(--ap-body);
   font: 600 13.5px / 1 var(--font-family-body);
   cursor: pointer;
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
@@ -76,7 +76,7 @@ main .gallery {
 
 .gallery .gallery-img-wrap {
   position: relative;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   overflow: hidden;
   height: 200px;
   background: var(--ap-surface);
@@ -125,25 +125,25 @@ main .gallery {
 }
 
 .gallery.photo-grid .photo-card-info {
-  padding: 0.75rem 1rem;
+  padding: var(--sp-xs) var(--sp-sm);
 }
 
 .gallery.photo-grid .photo-card-meta {
   margin: 0 0 0.25rem;
-  font: 400 var(--body-font-size-xs, 0.75rem) / 1 var(--font-family-body);
+  font: var(--fw-body) var(--fs-eyebrow) / 1 var(--font-family-body);
   color: var(--ap-muted);
 }
 
 .gallery.photo-grid .photo-card-caption {
   margin: 0;
-  font: 500 var(--body-font-size-s, 0.875rem) / 1.4 var(--font-family-body);
+  font: 500 var(--fs-meta) / 1.4 var(--font-family-body);
   color: var(--ap-ink);
 }
 
 .gallery.photo-grid .photo-card-link {
   display: inline-block;
   margin-top: 0.5rem;
-  font: 500 var(--body-font-size-s, 0.875rem) / 1 var(--font-family-body);
+  font: 500 var(--fs-meta) / 1 var(--font-family-body);
   color: var(--ap-red);
 }
 
@@ -248,7 +248,7 @@ main .gallery {
   display: flex;
   align-items: center;
   gap: 8px;
-  font: 400 13px / 1 var(--font-family-body);
+  font: var(--fw-body) var(--fs-eyebrow) / 1 var(--font-family-body);
   color: var(--ap-muted);
   margin-bottom: 10px;
 }
