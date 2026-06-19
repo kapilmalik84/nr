@@ -1,4 +1,45 @@
 export default function decorate(block) {
+  if (block.classList.contains('newsroom')) {
+    decorateNewsroomHero(block);
+    return;
+  }
+  decorateImageHero(block);
+}
+
+/* ── Newsroom variant: red full-bleed section ── */
+function decorateNewsroomHero(block) {
+  const heading = block.querySelector('h1, h2');
+  const allParas = [...block.querySelectorAll('p')];
+  const eyebrowP = allParas[0];
+  const subtitleParas = allParas.slice(1);
+
+  block.textContent = '';
+
+  const inner = document.createElement('div');
+  inner.className = 'hero-inner';
+
+  if (eyebrowP) {
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'hero-eyebrow';
+    eyebrow.textContent = eyebrowP.textContent.trim();
+    inner.append(eyebrow);
+  }
+
+  if (heading) {
+    heading.removeAttribute('class');
+    inner.append(heading);
+  }
+
+  subtitleParas.forEach((p) => {
+    p.className = 'hero-subtitle';
+    inner.append(p);
+  });
+
+  block.append(inner);
+}
+
+/* ── Standard hero: image background + text card ── */
+function decorateImageHero(block) {
   const picture = block.querySelector('picture');
   const heading = block.querySelector('h1, h2');
   const cta = block.querySelector('a');
@@ -28,9 +69,6 @@ export default function decorate(block) {
 
   block.textContent = '';
 
-  // Use a <picture> element as the background so AEM's image optimisation CDN
-  // applies and the browser's native fallback chain handles load errors.
-  // fetchpriority="high" + loading="eager" ensures this is treated as LCP.
   if (picture) {
     const bg = document.createElement('div');
     bg.className = 'hero-bg';
