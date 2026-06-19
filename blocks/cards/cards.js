@@ -133,20 +133,31 @@ export function buildCard(data, isList = false) {
   }
 
   const excerptText = data.excerpt || data.description || '';
-  if (excerptText && !isList) {
+  if (excerptText) {
     const p = document.createElement('p');
     p.className = 'card-excerpt';
     p.textContent = excerptText;
     body.append(p);
   }
 
-  const cta = document.createElement('span');
-  cta.className = 'card-cta';
-  cta.setAttribute('aria-hidden', 'true');
-  cta.innerHTML = 'Read more <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
-  body.append(cta);
+  if (!isList) {
+    const cta = document.createElement('span');
+    cta.className = 'card-cta';
+    cta.setAttribute('aria-hidden', 'true');
+    cta.innerHTML = 'Read more <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+    body.append(cta);
+  }
 
   a.append(body);
+
+  if (isList) {
+    const arrow = document.createElement('span');
+    arrow.className = 'card-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+    a.append(arrow);
+  }
+
   article.append(a);
   return article;
 }

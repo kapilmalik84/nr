@@ -3,6 +3,12 @@
 
 main .hero-wrapper {
   padding: 0;
+  max-width: none;
+  margin: 0;
+}
+
+main .section:has(.hero.newsroom) {
+  padding: 0;
 }
 
 /* ── Standard image-background hero ── */

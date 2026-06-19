@@ -1,2 +1,14 @@
 /* article-list block — card rendering and pagination handled by cards.css */
 @import url('../cards/cards.css');
+
+/* Listing pages: remove top section padding (listing-intro section provides it) */
+main .section:has(.article-list-wrapper) {
+  padding-top: 0;
+  padding-bottom: var(--sp-lg);
+}
+
+main .section .article-list-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0 var(--sp-lg);
+}

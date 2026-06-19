@@ -2,6 +2,10 @@
  * Relies on --ap-* tokens in /styles/styles.css :root */
 
 /* ── Section padding ── */
+main .section:has(.cards-wrapper) {
+  padding: 0;
+}
+
 main .cards-wrapper {
   padding: 80px var(--sp-lg) var(--sp-section);
 }
@@ -221,7 +225,7 @@ main .cards-wrapper {
 
 .cards.list .card {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 200px 1fr auto;
   gap: var(--sp-md);
   align-items: center;
   border: 0;
@@ -229,12 +233,14 @@ main .cards-wrapper {
   border-radius: 0;
   box-shadow: none;
   overflow: visible;
+  padding: 24px 0;
 }
 
 .cards.list .card:hover {
   transform: none;
   box-shadow: none;
 }
+
 .cards.list .card-link { display: contents; }
 
 .cards.list .card-media {
@@ -246,6 +252,19 @@ main .cards-wrapper {
 
 .cards.list .card-title { font-size: 23px; }
 .cards.list .card-category { display: none; }
+
+.cards.list .card-excerpt {
+  font-size: 15px;
+  -webkit-line-clamp: 2;
+}
+
+.cards.list .card-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--ap-red);
+  flex-shrink: 0;
+  padding: 0 var(--sp-xs);
+}
 
 /* ── Responsive ── */
 @media (width <= 900px) {
@@ -266,6 +285,8 @@ main .cards-wrapper {
     width: 100%;
     height: 180px;
   }
+
+  .cards.list .card-arrow { display: none; }
   .cards.articles .cards-section-title { font-size: 26px; }
 }
 

@@ -1,9 +1,14 @@
 /* Featured block — Lead story card that overlaps the newsroom hero
  * Relies on --ap-* tokens in /styles/styles.css :root */
 
+main .section:has(.featured) {
+  padding: 0;
+}
+
 main .featured-wrapper {
   padding: 0 var(--sp-lg);
-  margin-top: -56px;
+  max-width: none;
+  margin: -56px 0 0;
   position: relative;
   z-index: 2;
 }

@@ -1,6 +1,10 @@
 /* CTA block — newsletter band
  * Relies on --ap-* tokens in /styles/styles.css :root */
 
+main .section:has(.cta-wrapper) {
+  padding: 0;
+}
+
 main .cta-wrapper {
   padding: 64px var(--sp-lg) 80px;
 }
