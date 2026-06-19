@@ -112,15 +112,18 @@ export default async function decorate(block) {
 
       grid.innerHTML = '';
       pageArticles.forEach((article) => {
+        const isStamp = isStampPage || (article.path || '').startsWith('/section/stamps');
         const data = {
           path: article.path,
-          image: resolveImage(article.image, isStampPage),
+          image: resolveImage(article.image, isStamp),
           category: article.category || '',
           titleText: article.title,
           date: formatDate(article.date),
           description: article.description,
         };
-        grid.append(buildCard(data));
+        const cardEl = buildCard(data);
+        if (isStamp) cardEl.classList.add('card-stamp');
+        grid.append(cardEl);
       });
 
       const existingNav = block.querySelector('.article-list-pagination');

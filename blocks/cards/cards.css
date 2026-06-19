@@ -125,6 +125,12 @@ main .cards-wrapper {
   display: block;
 }
 
+.cards .card-stamp .card-media {
+  background: #f5f5f5;
+}
+
+.cards .card-stamp .card-media img { object-fit: contain; }
+
 .cards .card-category {
   position: absolute;
   top: 14px;
